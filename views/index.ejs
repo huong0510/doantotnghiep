@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lớp học tiếng Nhật</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f4f4f9; margin:0; }
+
+    /* ====== Chatbot ====== */
+    #chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #e60012;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    #chatbot-container {
+  display: none !important;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+#chatbot-container.active {
+  display: flex !important;
+  visibility: visible;
+  opacity: 1;
+  flex-direction: column;
+}
+
+    #chatbot-toggle img { width: 30px; height: 30px; }
+
+    #chatbot-container {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 320px;
+      height: 420px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .chat-header {
+      background: #e60012;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #f9f9f9;
+    }
+    .message {
+      max-width: 75%;
+      margin: 5px 0;
+      padding: 8px 12px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    .user { background: #0084ff; color: #fff; margin-left:auto; border-bottom-right-radius: 4px; }
+    .bot { background: #e5e5ea; color: #000; margin-right:auto; border-bottom-left-radius: 4px; }
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    .chat-input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+    }
+    .chat-input button {
+      border: none;
+      background: #e60012;
+      color: #fff;
+      padding: 0 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ====== Nội dung học ====== -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h1 style="font-family:'Roboto',sans-serif;font-size:2.8rem;font-weight:700;color:#1a2233;letter-spacing:1px;">
+        <p style="color: red;">Chào mừng đến với lớp học tiếng Nhật</p>
+      </h1>
+      <p class="lead" style="color:#101010;max-width:600px;margin:16px auto 0;">
+        Học tiếng Nhật hiện đại, tinh tế, trải nghiệm cùng chúng tôi nào.
+      </p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      
+      <!-- Hiragana Card -->
+      <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+        <div class="card shadow-sm border-0 fade-in" style="border-radius:20px;">
+          <div class="card-body text-center py-5">
+            <h3 class="card-title mb-2">Học Hiragana</h3>
+            <p class="text-muted mb-4">Học bảng chữ cái Hiragana cơ bản và nâng cao</p>
+            <a href="/alphabets/hiragana" class="btn btn-lg btn-outline-dark px-4 py-2">Bắt đầu học</a>
+          </div>
+        </div>
+      </div>
+      <!-- Katakana Card -->
+      <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+        <div class="card shadow-sm border-0 fade-in" style="border-radius:20px;">
+          <div class="card-body text-center py-5">
+            <h3 class="card-title mb-2">Học Katakana</h3>
+            <p class="text-muted mb-4">Học bảng chữ cái Katakana cơ bản và nâng cao</p>
+            <a href="/alphabets/katakana" class="btn btn-lg btn-outline-dark px-4 py-2">Bắt đầu học</a>
+          </div>
+        </div>
+      </div>
+      <!-- Vocabulary Card -->
+      <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+        <div class="card shadow-sm border-0 fade-in" style="border-radius:20px;">
+          <div class="card-body text-center py-5">
+            <h3 class="card-title mb-2">Từ vựng</h3>
+            <p class="text-muted mb-4">Học từ vựng theo giáo trình Minna no Nihongo</p>
+            <a href="/vocabulary" class="btn btn-lg btn-outline-dark px-4 py-2 mb-3">Xem từ vựng</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<div class="register-full">
+  <div class="register-box">
+    <h2 class="text-center fw-bold text-pink mb-3">Đăng ký tài khoản 🎌</h2>
+ 
+
+    <form id="registerForm">
+       <div class="form-group">
+      <label>Tên đăng nhập</label>
+      <input type="text" name="username" class="form-control" required />
+    </div>
+      <div class="mb-3">
+        <label class="form-label">Họ và Tên</label>
+        <input type="text" class="form-control" name="fullname" placeholder="Nhập họ tên" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Số điện thoại</label>
+        <input type="text" class="form-control" name="phone" placeholder="Nhập số điện thoại" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Mật khẩu</label>
+        <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Nhập lại mật khẩu</label>
+        <input type="password" class="form-control" name="confirm" placeholder="Xác nhận mật khẩu" required>
+      </div>
+
+      <button type="submit" class="btn btn-pink w-100 py-2">Đăng ký</button>
+
+      <div class="text-center text-muted mt-3">
+        Đã có tài khoản?
+        <a href="/auth/login" class="text-pink fw-semibold text-decoration-none">Đăng nhập ngay</a>
+      </div>
+    </form>
+  </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+  // Reset lỗi khi người dùng gõ
+  $('input').on('input', function () {
+    $(this).removeClass('is-invalid');
+    $(this).next('.invalid-feedback').remove();
+  });
+
+  $('#registerForm').on('submit', function (e) {
+    e.preventDefault();
+
+    // Xóa lỗi cũ
+    $('input').removeClass('is-invalid');
+    $('.invalid-feedback').remove();
+
+    // Lấy dữ liệu form (đã thêm confirm)
+    const formData = {
+      username: $('input[name="username"]').val().trim(),
+      fullname: $('input[name="fullname"]').val().trim(),
+      phone: $('input[name="phone"]').val().trim(),
+      password: $('input[name="password"]').val(),
+      confirm: $('input[name="confirm"]').val()
+    };
+
+    let hasError = false;
+
+    // Kiểm tra từng trường
+    if (!formData.username) {
+      $('input[name="username"]').addClass('is-invalid')
+        .after('<div class="invalid-feedback">Vui lòng nhập tên đăng nhập</div>');
+      hasError = true;
+    }
+
+    if (!formData.fullname) {
+      $('input[name="fullname"]').addClass('is-invalid')
+        .after('<div class="invalid-feedback">Vui lòng nhập họ tên</div>');
+      hasError = true;
+    }
+
+    if (!formData.phone) {
+      $('input[name="phone"]').addClass('is-invalid')
+        .after('<div class="invalid-feedback">Vui lòng nhập số điện thoại</div>');
+      hasError = true;
+    }
+
+    if (!formData.password) {
+      $('input[name="password"]').addClass('is-invalid')
+        .after('<div class="invalid-feedback">Vui lòng nhập mật khẩu</div>');
+      hasError = true;
+    }
+
+    if (!formData.confirm) {
+      $('input[name="confirm"]').addClass('is-invalid')
+        .after('<div class="invalid-feedback">Vui lòng xác nhận mật khẩu</div>');
+      hasError = true;
+    }
+
+    if (!hasError && formData.password !== formData.confirm) {
+      $('input[name="confirm"]').addClass('is-invalid')
+        .after('<div class="invalid-feedback">Mật khẩu xác nhận không khớp</div>');
+      hasError = true;
+    }
+
+    if (hasError) return;
+
+    // Gửi dữ liệu đăng ký (không gửi confirm)
+    $.ajax({
+      url: '/auth/register',
+      type: 'POST',
+      data: {
+        username: formData.username,
+        fullname: formData.fullname,
+        phone: formData.phone,
+        password: formData.password
+      },
+      success: function () {
+        alert('Đăng ký thành công!');
+        window.location.href = '/auth/login';
+      },
+      error: function (xhr) {
+        const error = xhr.responseJSON?.error || 'Lỗi đăng ký';
+        if (xhr.responseJSON?.details) {
+          Object.entries(xhr.responseJSON.details).forEach(([field, message]) => {
+            if (message) {
+              $(`input[name="${field}"]`).addClass('is-invalid')
+                .after(`<div class="invalid-feedback">${message}</div>`);
+            }
+          });
+        } else {
+          alert(error);
+        }
+      }
+    });
+  });
+});
+</script>
+<style>
+    body {
+  margin: 0;
+  font-family: "Poppins", "Noto Sans JP", sans-serif;
+}
+
+/* Toàn trang nền hồng */
+.register-full {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  width: 100%;
+}
+
+/* Hộp form đăng ký */
+.register-box {
+  background: #ffffff;
+  border-radius: 25px;
+  padding: 30px 50px;
+  width: 70%;
+  max-width: 400px;
+  box-shadow: 0 15px 40px rgba(255, 105, 180, 0.15);
+  animation: fadeIn 0.8s ease;
+}
+
+/* Hiệu ứng xuất hiện */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Màu hồng */
+.text-pink {
+  color: #ff66a3;
+}
+
+.btn-pink {
+  background: linear-gradient(90deg, #ff8fc7, #ffa4d2);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.btn-pink:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Input */
+.form-label {
+  font-weight: 500;
+  color: #444;
+}
+
+.form-control {
+  border: 2px solid #ffe3ec;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.form-control:focus {
+  border-color: #ff8fc7;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 167, 196, 0.4);
+}
+
+/* Responsive cho mobile */
+@media (max-width: 576px) {
+  .register-box {
+    padding: 30px 25px;
+  }
+}
+</style>

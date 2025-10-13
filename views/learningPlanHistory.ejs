@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch sử kế hoạch học</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <h2 class="text-center mb-4">📜 Lịch sử kế hoạch học</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên học viên</th>
+                <th>Trình độ</th>
+                <th>Ngày tạo</th>
+                <th>Chi tiết</th>
+                <th>Hành động</th>
+
+            </tr>
+        </thead>
+        <tbody id="planList">
+            <tr><td colspan="5" class="text-center">Đang tải dữ liệu...</td></tr>
+        </tbody>
+    </table>
+
+<a href="/learning-plan" class="btn btn-secondary mt-3">⬅ Quay lại tạo kế hoạch</a>
+</div>
+
+<!-- Modal xem chi tiết kế hoạch -->
+<div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="planModalLabel">Chi tiết kế hoạch học</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="planDetail">Đang tải...</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+async function loadPlans() {
+    const res = await fetch('/learning-plan/history');
+    const plans = await res.json();
+    const tbody = document.getElementById('planList');
+    tbody.innerHTML = '';
+
+    if (plans.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Chưa có kế hoạch nào.</td></tr>';
+        return;
+    }
+
+    plans.forEach(plan => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+    <td>${plan.id}</td>
+    <td>${plan.student_name}</td>
+    <td>${plan.level}</td>
+    <td>${new Date(plan.created_at).toLocaleString()}</td>
+    <td>
+        <button class="btn btn-sm btn-primary" onclick="viewPlan(${plan.id})">Xem</button>
+    </td>
+    <td>
+        <button class="btn btn-sm btn-danger" onclick="deletePlan(${plan.id})">🗑 Xóa</button>
+    </td>
+`;
+        tbody.appendChild(tr);
+    });
+}
+
+async function viewPlan(id) {
+    const res = await fetch('/learning-plan/' + id);
+    const plan = await res.json();
+    document.getElementById('planDetail').innerText = plan.plan || 'Không có nội dung.';
+    const modal = new bootstrap.Modal(document.getElementById('planModal'));
+    modal.show();
+}
+async function deletePlan(id) {
+    if (!confirm('Bạn có chắc muốn xóa kế hoạch này không?')) return;
+
+    const res = await fetch('/learning-plan/' + id, {
+        method: 'DELETE'
+    });
+
+    if (res.ok) {
+        alert('✅ Đã xóa kế hoạch thành công!');
+        loadPlans(); // tải lại danh sách
+    } else {
+        alert('❌ Lỗi khi xóa kế hoạch.');
+    }
+}
+
+// Load danh sách khi trang mở
+loadPlans();
+</script>
+</body>
+</html>

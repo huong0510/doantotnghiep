@@ -1,0 +1,21 @@
+-- Bài 24
+INSERT INTO vocabulary (lesson, word, romaji, audio, type, kanji, kanji_reading, meaning) VALUES
+(24, 'くれます', 'kuremasu', 'audio/minna/bai24/kuremasu.mp3', '', '', '', 'cho, tặng (tôi)'),
+(24, 'つれていきます', 'tsureteikimasu', 'audio/minna/bai24/tsureteikimasu.mp3', '', '連れて行きます', 'LIÊN HÀNH', 'dẫn đi'),
+(24, 'つれてきます', 'tsuretekimasu', 'audio/minna/bai24/tsuretekimasu.mp3', '', '連れて来ます', 'LIÊN LAI', 'dẫn đến'),
+(24, '[ひとを～]おくります', '[hitowo～]okurimasu', 'audio/minna/bai24/okurimasu.mp3', '', '[人を～]送ります', 'NHÂN TỐNG', 'đưa đi, đưa đến, tiễn [một ai đó]'),
+(24, 'しょうかいします', 'shoukaishimasu', 'audio/minna/bai24/syoukaishimasu.mp3', '', '紹介します', 'THIỆU GIỚI', 'giới thiệu'),
+(24, 'あんないします', 'annaishimasu', 'audio/minna/bai24/annaishimasu.mp3', '', '案内します', 'ÁN NỘI', 'hướng dẫn, giới thiệu, dẫn đường'),
+(24, 'せつめいします', 'setsumeishimasu', 'audio/minna/bai24/setsumeishimasu.mp3', '', '説明します', 'THUYẾT MINH', 'giải thích, trình bày'),
+(24, '[コーヒーを～]いれます', '[koｰhiｰwo～]iremasu', 'audio/minna/bai24/iremasu.mp3', '', '', '', 'pha [cà-phê]'),
+(24, 'おじいさん／おじいちゃん', 'ojiisan/ojiichan', 'audio/minna/bai24/ojiichan.mp3', '', '', '', 'ông nội, ông ngoại, ông'),
+(24, 'おばあさん／おばあちゃん', 'obaasan/obaachan', 'audio/minna/bai24/obaachan.mp3', '', '', '', 'bà nội, bà ngoại, bà'),
+(24, 'じゅんび', 'junbi', 'audio/minna/bai24/junbi.mp3', '', '準備', 'CHUẨN BỊ', 'chuẩn bị [～します:chuẩn bị]'),
+(24, 'いみ', 'imi', 'audio/minna/bai24/imi.mp3', '', '意味', 'Ý VỊ', 'ý nghĩa'),
+(24, '[お]かし', '[o]kashi', 'audio/minna/bai24/okashi.mp3', '', '[お]菓子', 'QUẢ TỬ', 'bánh kẹo'),
+(24, 'ぜんぶ', 'zenbu', 'audio/minna/bai24/zenbu.mp3', '', '全部', 'TOÀN BỘ', 'toàn bộ, tất cả'),
+(24, 'じぶんで', 'jibunde', 'audio/minna/bai24/jibunde.mp3', '', '自分で', 'TỰ PHÂN', 'tự (mình)'),
+(24, 'ほかに', 'hokani', 'audio/minna/bai24/hokani.mp3', '', '', '', 'ngoài ra, bên cạnh đó'),
+(24, 'ワゴンしゃ', 'wagonsha', 'audio/minna/bai24/k_wagonsya.mp3', '', 'ワゴン車', 'XA', 'xe ô-tô kiểu Wagon (có thùng đóng kín)'),
+(24, '「お」べんとう', '｢o｣bentou', 'audio/minna/bai24/obentou.mp3', '', '[お]弁当', 'BIỆN ĐƯƠNG', 'cơm hộp'),
+(24, 'ははのひ', 'hahanohi', 'audio/minna/bai24/hahanohi.wav', '', '母の日', 'MẪU NHẬT', 'ngày Mẹ');

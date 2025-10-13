@@ -1,0 +1,158 @@
+<%- include('partials/header', { title: 'Kế hoạch học tập AI' }) %>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4" style="font-family: 'Playfair Display', serif;">🧠 Kế hoạch học tập AI</h1>
+
+  <form id="planForm" class="card p-4 shadow-sm">
+    <div class="mb-3">
+      <label>Tên học viên</label>
+      <input type="text" name="name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Trình độ hiện tại</label>
+      <select name="level" class="form-select">
+        <option value="N5">N5</option>
+        <option value="N4">N4</option>
+        <option value="N3">N3</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label>Mục tiêu học tập</label>
+      <input type="text" name="goals" class="form-control" placeholder="Ví dụ: Giao tiếp cơ bản, thi JLPT N4...">
+    </div>
+
+    <div class="mb-3">
+      <label>Kỹ năng yếu</label>
+      <input type="text" name="weakPoints" class="form-control" placeholder="Ví dụ: ngữ pháp...">
+    </div>
+
+    <div class="mb-3">
+      <label>Thời gian học mỗi ngày</label>
+      <input type="text" name="availableTime" class="form-control" placeholder="Ví dụ: 30 phút/ngày">
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">✨ Tạo kế hoạch học tập</button>
+  </form>
+
+  <div id="planResult" class="mt-5">
+    <div id="loading" class="text-center" style="display:none;">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">Đang tạo kế hoạch học tập cho bạn...</p>
+    </div>
+    <div id="planCards" class="row gy-4"></div>
+
+    <!-- ✅ Thêm nút lưu và xem lịch sử -->
+    <div class="text-center mt-4">
+      <button id="savePlanBtn" class="btn btn-success d-none">💾 Lưu kế hoạch</button>
+<a href="/learning-plan/history-view" class="btn btn-info">📜 Xem lịch sử</a>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentPlan = null;
+
+document.querySelector("#planForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = Object.fromEntries(new FormData(e.target).entries());
+  const btn = e.target.querySelector("button[type='submit']");
+  const loading = document.querySelector("#loading");
+  const cardContainer = document.querySelector("#planCards");
+
+  cardContainer.innerHTML = "";
+  loading.style.display = "block";
+  btn.disabled = true;
+
+  try {
+    const res = await fetch("/learning-plan/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+    let planText = data.plan || "❌ Không tạo được kế hoạch học.";
+
+    // ✅ Lưu lại kế hoạch hiện tại để có thể lưu DB
+    currentPlan = {
+      student_name: formData.name,
+      level: formData.level,
+      plan: planText
+    };
+
+    // Hiện nút “Lưu kế hoạch”
+    document.getElementById("savePlanBtn").classList.remove("d-none");
+
+    // Tách kế hoạch theo "Ngày", "Buổi", hoặc "Bài"
+    const sections = planText.split(/(?=Ngày\s*\d+|Buổi\s*\d+|Bài\s*\d+)/gi);
+
+    if (sections.length <= 1) {
+      // Nếu không tách được → hiển thị dạng văn bản
+      cardContainer.innerHTML = `<div class="alert alert-info">${planText.replace(/\n/g, "<br>")}</div>`;
+    } else {
+      sections.forEach((section, index) => {
+        const titleMatch = section.match(/(Ngày\s*\d+|Buổi\s*\d+|Bài\s*\d+)/i);
+        const title = titleMatch ? titleMatch[0] : `Phần ${index + 1}`;
+        const content = section
+          .replace(title, "")
+          .replace(/\n/g, "<br>")
+          .replace(/\[(.*?)\]\((.*?)\)/g, `<a href="$2" target="_blank">$1</a>`)
+          .replace(/\b(ngữ pháp|từ vựng|nghe|nói|đọc hiểu|ôn tập|mục tiêu)\b/gi,
+                   `<span class="fw-bold text-success">$1</span>`);
+
+        const cardHTML = `
+          <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+              <div class="card-header bg-primary text-white fw-bold">${title}</div>
+              <div class="card-body">${content}</div>
+            </div>
+          </div>
+        `;
+        cardContainer.insertAdjacentHTML("beforeend", cardHTML);
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    cardContainer.innerHTML = `<div class="alert alert-danger">❌ Lỗi khi gọi AI hoặc server không phản hồi.</div>`;
+  } finally {
+    loading.style.display = "none";
+    btn.disabled = false;
+  }
+});
+
+// ✅ Xử lý khi bấm “Lưu kế hoạch”
+document.getElementById("savePlanBtn").addEventListener("click", async () => {
+  if (!currentPlan) return alert("⚠ Không có kế hoạch để lưu!");
+
+  const res = await fetch("/learning-plan/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(currentPlan)
+  });
+
+  if (res.ok) {
+    alert("✅ Đã lưu kế hoạch thành công!");
+    document.getElementById("savePlanBtn").classList.add("d-none");
+  } else {
+    alert("❌ Lỗi khi lưu kế hoạch!");
+  }
+});
+</script>
+
+<style>
+.card-header {
+  font-size: 1.1rem;
+}
+a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+</style>
+
+<%- include('partials/footer') %>

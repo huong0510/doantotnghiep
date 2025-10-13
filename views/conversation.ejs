@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AI Dạy Hội Thoại</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .chat-box { height: 60vh; overflow-y: auto; background:#fbfbfe; padding:12px; border-radius:8px; border:1px solid #eee; }
+    .msg.user { text-align: right; }
+    .msg.assistant { text-align: left; }
+    .bubble { display:inline-block; padding:10px 12px; border-radius:14px; margin:6px 0; max-width:82%; }
+    .bubble.user { background:#0084ff; color:white; border-bottom-right-radius:4px; }
+    .bubble.assistant { background:#f1f1f1; color:#111; border-bottom-left-radius:4px; }
+    .scenario-btn { cursor:pointer; }
+  </style>
+</head>
+<body class="p-4">
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h3>AI Dạy Hội Thoại — Roleplay</h3>
+      <p>Chọn tình huống, nhập câu bạn muốn nói và thực hành. AI sẽ trả lời bằng tiếng Nhật + dịch + chỉnh sửa ngắn.</p>
+
+      <!-- 🔥 Tạo nút động -->
+      <div id="scenario-buttons" class="btn-group" role="group"></div>
+      <small class="text-muted ms-2" id="currentScenarioLabel">Tình huống: ...</small>
+
+      <div class="chat-box" id="convBox"></div>
+
+      <form id="convForm" class="d-flex mt-3">
+        <input type="hidden" id="userId" value="<%= user ? user.id : '' %>">
+        <input type="text" id="convInput" class="form-control me-2" placeholder="Nhập câu muốn luyện (VD: こんにちは、私は学生です)" autocomplete="off">
+        <button class="btn btn-primary" id="sendBtn">Gửi</button>
+        <button type="button" class="btn btn-secondary ms-2" id="clearBtn">Xóa</button>
+      </form>
+
+      <div class="mt-3 text-muted">
+        <small>Gợi ý: Bạn có thể viết bằng tiếng Việt/romaji/từ vựng, AI sẽ phản hồi bằng tiếng Nhật và dịch.</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+let currentScenario = 'greeting';
+
+async function loadScenarios() {
+  try {
+    const res = await fetch('/api/conversation/scenarios');
+    const data = await res.json();
+    if (!data.success) return;
+
+    const container = document.getElementById('scenario-buttons');
+    container.innerHTML = '';
+
+    data.scenarios.forEach(sc => {
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-outline-primary';
+      btn.innerText = sc.title;
+      btn.dataset.scenario = sc.key;
+      if (sc.key === currentScenario) btn.classList.add('active');
+
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#scenario-buttons button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentScenario = sc.key;
+        document.getElementById('currentScenarioLabel').textContent = 'Tình huống: ' + sc.title;
+
+        // Xóa hội thoại khi đổi tình huống
+        fetch('/api/conversation/clear', { method: 'POST' });
+        document.getElementById('convBox').innerHTML = '';
+      });
+
+      container.appendChild(btn);
+    });
+
+    document.getElementById('currentScenarioLabel').textContent =
+      'Tình huống: ' + (data.scenarios.find(s => s.key === currentScenario)?.title || '');
+  } catch (e) {
+    console.error('Không tải được danh sách tình huống:', e);
+  }
+}
+
+function speakJapanese(text) {
+  if ('speechSynthesis' in window) {
+    speechSynthesis.cancel(); // 🔧 fix đọc 2 lần
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ja-JP';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    speechSynthesis.speak(utterance);
+  } else {
+    alert("Trình duyệt không hỗ trợ đọc giọng nói.");
+  }
+}
+
+const convBox = $('#convBox');
+
+function appendMessage(role, text) {
+  const c = $('<div>').addClass('msg ' + (role === 'user' ? 'user' : 'assistant'));
+  const bubble = $('<div>').addClass('bubble ' + (role === 'user' ? 'user' : 'assistant'));
+
+  if (role === 'assistant') {
+    const lines = text.split('\n');
+    const jpText = lines[0];
+    const otherText = lines.slice(1).join('<br>');
+    bubble.html(`
+      <span>${jpText}</span>
+      <button class="btn btn-sm btn-link p-0 ms-2 play-audio" data-text="${jpText}">🔊</button>
+      ${otherText ? "<div style='margin-top:4px; font-size:0.9em; color:#555'>" + otherText + "</div>" : ""}
+    `);
+  } else {
+    bubble.html(text.replace(/\n/g,'<br>'));
+  }
+
+  c.append(bubble);
+  convBox.append(c);
+  convBox.scrollTop(convBox[0].scrollHeight);
+}
+
+$(document).on('click', '.play-audio', function() {
+  const txt = $(this).data('text');
+  speakJapanese(txt);
+});
+
+$('#convForm').on('submit', async function(e) {
+  e.preventDefault();
+  const txt = $('#convInput').val().trim();
+  if (!txt) return;
+  appendMessage('user', txt);
+  $('#convInput').val('');
+  appendMessage('assistant', '<em>Đang suy nghĩ...</em>');
+
+  try {
+    const res = await fetch('/api/conversation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scenario: currentScenario, message: txt })
+    });
+    const data = await res.json();
+    convBox.children().last().remove();
+
+    if (data.success && data.reply) {
+      appendMessage('assistant', data.reply);
+    } else if (data.error) {
+      appendMessage('assistant', '<span style="color:crimson">Lỗi: ' + data.error + '</span>');
+    } else {
+      appendMessage('assistant', '<span style="color:crimson">Không nhận được phản hồi</span>');
+    }
+  } catch (err) {
+    convBox.children().last().remove();
+    appendMessage('assistant', '<span style="color:crimson">Lỗi kết nối: ' + err.message + '</span>');
+  }
+});
+
+$('#clearBtn').click(function() {
+  $('#convBox').empty();
+});
+
+loadScenarios();
+</script>
+</body>
+</html>

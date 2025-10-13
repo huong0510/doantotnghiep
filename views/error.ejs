@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      background-color: #f9fafb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .error-container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    .error-logo {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+    .error-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #dc2626;
+      margin-bottom: 10px;
+    }
+    .error-message {
+      font-size: 1rem;
+      color: #4b5563;
+      margin-bottom: 20px;
+    }
+    .home-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #2563eb;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .home-btn:hover {
+      background-color: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <!-- Nếu bạn có logo trong public/images thì sửa đường dẫn dưới đây -->
+    <img src="/images/logo.png" alt="Logo" class="error-logo">
+
+    <div class="error-title"><%= title %></div>
+    <div class="error-message"><%= message %></div>
+
+    <a href="/" class="home-btn">Về trang chủ</a>
+  </div>
+</body>
+</html>

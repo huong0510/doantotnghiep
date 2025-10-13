@@ -1,0 +1,187 @@
+<section class="py-4">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 style="font-family:'Roboto',sans-serif;font-size:2.2rem;font-weight:700;color:#1a2233;">Từ vựng theo bài</h1>
+            <p class="lead" style="font-family:'Roboto',sans-serif;color:#444;max-width:600px;margin:16px auto 0;">Chọn bài học để xem danh sách từ vựng tương ứng.</p>
+        </div>
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <select id="lessonSelect" class="form-select form-select-lg" style="font-family:'Roboto',sans-serif;">
+                    <% if (typeof lessons !=='undefined' && lessons && lessons.length> 0) { %>
+                        <% lessons.forEach(function(l) { %>
+                            <option value="<%= l %>" <%=l===lesson ? 'selected' : '' %>>Bài <%= l %>
+                            </option>
+                            <% }) %>
+                                <% } %>
+                </select>
+            </div>
+        </div>
+        <div class="card shadow-sm border-0" style="border-radius:18px;">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <div id="loadingOverlay" class="loading-overlay d-none">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <table class="table align-middle mb-0" style="font-family:'Roboto',sans-serif;">
+                        <thead class="bg-white">
+                            <tr style="border-bottom:2px solid #E60012;">
+                                <th class="text-center">#</th>
+                                <th class="text-center">Từ vựng</th>
+                                <th class="text-center">Romaji</th>
+                                <th class="text-center">Phát âm</th>
+                                <th class="text-center">Hán tự</th>
+                                <th class="text-center">Âm Hán</th>
+                                <th class="text-center">Nghĩa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (vocabulary && vocabulary.length> 0) { %>
+                                <% vocabulary.forEach((item, idx)=> { %>
+                                    <tr>
+                                        <td class="text-center">
+                                            <%= idx+1 %>
+                                        </td>
+                                        <td class="text-center" style="font-size:1.2rem;color:#E60012;font-weight:500;">
+                                            <%= item.word %>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= item.romaji %>
+                                        </td>
+                                        <td class="text-center">
+                                           <button class="play-audio" data-audio="<%= item.audio %>"></button>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= item.kanji %>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= item.kanji_reading %>
+                                        </td>
+                                        <td class="text-center">
+                                            <%= item.meaning %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted">Không có từ vựng cho bài này.</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.getElementById('lessonSelect').addEventListener('change', function () {
+        const lesson = this.value;
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        loadingOverlay.classList.remove('d-none');
+        window.location.href = `/vocabulary?lesson=${lesson}`;
+    });
+
+    // Thêm xử lý phát âm
+   document.querySelectorAll('.play-audio').forEach(button => {
+    button.addEventListener('click', function () {
+        const audio = new Audio(this.dataset.audio);
+
+        // reset các nút khác
+        document.querySelectorAll('.play-audio').forEach(btn => btn.classList.remove('active'));
+
+        // bật class active cho nút hiện tại
+        this.classList.add('active');
+
+        audio.play();
+        audio.onended = () => {
+            this.classList.remove('active');
+        };
+    });
+});
+</script>
+<style>
+    
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table th {
+        color: #E60012;
+        font-weight: 700;
+    }
+
+    .table tr {
+        transition: background 0.15s;
+    }
+
+    .table tr:hover {
+        background: #fff0f0;
+    }
+
+    .form-select:focus {
+        border-color: #E60012;
+        box-shadow: 0 0 0 0.15rem rgba(230, 0, 18, 0.15);
+    }
+.play-audio {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #E60012;
+    border-radius: 50%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+}
+
+/* Tam giác ▶ */
+.play-audio::before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 12px solid #E60012;   /* màu tam giác */
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    margin-left: 3px; /* chỉnh cho nhìn cân */
+}
+
+/* Hai gạch ⏸ */
+.play-audio.pause::before {
+    content: "";
+    width: 14px;
+    height: 16px;
+    background: #E60012;
+    box-shadow: 6px 0 0 #E60012;
+    border: none;
+    margin-left: 0;
+}
+.play-audio:hover {
+ background: #E60012;
+}
+
+
+
+    .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .table-responsive {
+        position: relative;
+    }
+    
+</style>

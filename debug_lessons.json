@@ -1,0 +1,708 @@
+{
+  "lessons": [
+    {
+      "lesson": 1
+    },
+    {
+      "lesson": 2
+    },
+    {
+      "lesson": 3
+    },
+    {
+      "lesson": 4
+    },
+    {
+      "lesson": 5
+    },
+    {
+      "lesson": 6
+    },
+    {
+      "lesson": 7
+    },
+    {
+      "lesson": 8
+    },
+    {
+      "lesson": 9
+    },
+    {
+      "lesson": 10
+    },
+    {
+      "lesson": 11
+    },
+    {
+      "lesson": 12
+    },
+    {
+      "lesson": 13
+    },
+    {
+      "lesson": 14
+    },
+    {
+      "lesson": 15
+    },
+    {
+      "lesson": 16
+    },
+    {
+      "lesson": 17
+    },
+    {
+      "lesson": 18
+    },
+    {
+      "lesson": 19
+    },
+    {
+      "lesson": 20
+    },
+    {
+      "lesson": 21
+    },
+    {
+      "lesson": 22
+    },
+    {
+      "lesson": 23
+    },
+    {
+      "lesson": 24
+    },
+    {
+      "lesson": 25
+    },
+    {
+      "lesson": 26
+    },
+    {
+      "lesson": 27
+    },
+    {
+      "lesson": 28
+    },
+    {
+      "lesson": 29
+    },
+    {
+      "lesson": 30
+    },
+    {
+      "lesson": 31
+    },
+    {
+      "lesson": 32
+    },
+    {
+      "lesson": 33
+    },
+    {
+      "lesson": 34
+    },
+    {
+      "lesson": 35
+    },
+    {
+      "lesson": 36
+    },
+    {
+      "lesson": 37
+    },
+    {
+      "lesson": 38
+    },
+    {
+      "lesson": 39
+    },
+    {
+      "lesson": 40
+    },
+    {
+      "lesson": 41
+    },
+    {
+      "lesson": 42
+    },
+    {
+      "lesson": 43
+    },
+    {
+      "lesson": 44
+    },
+    {
+      "lesson": 45
+    },
+    {
+      "lesson": 46
+    },
+    {
+      "lesson": 47
+    },
+    {
+      "lesson": 48
+    },
+    {
+      "lesson": 49
+    },
+    {
+      "lesson": 50
+    }
+  ],
+  "vocabulary": [
+    {
+      "id": 2203,
+      "lesson": 50,
+      "word": "まいります",
+      "romaji": "mairimasu",
+      "audio": "audio/minna/bai50/mairimasu.mp3",
+      "type": "",
+      "kanji": "参ります",
+      "kanji_reading": "THAM",
+      "meaning": "đi, đến (khiêm nhường ngữ của いきます và きます)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2204,
+      "lesson": 50,
+      "word": "おります",
+      "romaji": "orimasu",
+      "audio": "audio/minna/bai50/orimasu.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "ở, có (khiêm nhường ngữ của います)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2205,
+      "lesson": 50,
+      "word": "いただきます",
+      "romaji": "itadakimasu",
+      "audio": "audio/minna/bai50/itadakimasu.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "ăn, uống, nhận (khiêm nhường ngữ của たべます、のみます　và もらいます)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2206,
+      "lesson": 50,
+      "word": "もうします",
+      "romaji": "moushimasu",
+      "audio": "audio/minna/bai50/moushimasu.mp3",
+      "type": "",
+      "kanji": "申します",
+      "kanji_reading": "THÂN",
+      "meaning": "nói (khiêm nhường ngữ của いいます)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2207,
+      "lesson": 50,
+      "word": "いたします",
+      "romaji": "itashimasu",
+      "audio": "audio/minna/bai50/itashimasu.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "làm (khiêm nhường ngữ của します)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2208,
+      "lesson": 50,
+      "word": "はいけんします",
+      "romaji": "haikenshimasu",
+      "audio": "audio/minna/bai50/haikenshimasu.mp3",
+      "type": "",
+      "kanji": "拝見します",
+      "kanji_reading": "BÁI KIẾN",
+      "meaning": "xem, nhìn (khiêm nhường ngữ của みます)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2209,
+      "lesson": 50,
+      "word": "ぞんじます",
+      "romaji": "zonjimasu",
+      "audio": "audio/minna/bai50/zonjimasu.mp3",
+      "type": "",
+      "kanji": "存じます",
+      "kanji_reading": "TỒN",
+      "meaning": "biết (khiêm nhường ngữ của しります)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2210,
+      "lesson": 50,
+      "word": "うかがいます",
+      "romaji": "ukagaimasu",
+      "audio": "audio/minna/bai50/ukagamasu.mp3",
+      "type": "",
+      "kanji": "伺います",
+      "kanji_reading": "TÝ/TỬ",
+      "meaning": "hỏi, nghe, đến thăm(khiêm nhường ngữ của ききます và いきます)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2211,
+      "lesson": 50,
+      "word": "おめにかかります",
+      "romaji": "omenikakarimasu",
+      "audio": "audio/minna/bai50/omenikakarimasu.mp3",
+      "type": "",
+      "kanji": "お目にかかります",
+      "kanji_reading": "MỤC",
+      "meaning": "gặp (khiêm nhường ngữ của あいます)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2212,
+      "lesson": 50,
+      "word": "ございます",
+      "romaji": "gozaimasu",
+      "audio": "audio/minna/bai50/gozaimasu.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "có (thể lịch sự của あります)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2213,
+      "lesson": 50,
+      "word": "～でございます",
+      "romaji": "～degozaimasu",
+      "audio": "audio/minna/bai50/degozaimasu.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "là (thể lịch sự của ～です)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2214,
+      "lesson": 50,
+      "word": "わたくし",
+      "romaji": "watakushi",
+      "audio": "audio/minna/bai50/watakushi.mp3",
+      "type": "",
+      "kanji": "私",
+      "kanji_reading": "TƯ",
+      "meaning": "tôi (khiêm nhường ngữ của わたし)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2215,
+      "lesson": 50,
+      "word": "ガイド",
+      "romaji": "gaido",
+      "audio": "audio/minna/bai50/k_gaido.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "người hướng dẫn, hướng dẫn viên",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2216,
+      "lesson": 50,
+      "word": "おたく",
+      "romaji": "otaku",
+      "audio": "audio/minna/bai50/otaku.mp3",
+      "type": "",
+      "kanji": "お宅",
+      "kanji_reading": "TRẠCH",
+      "meaning": "nhà (dùng cho người khác)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2217,
+      "lesson": 50,
+      "word": "こうがい",
+      "romaji": "kougai",
+      "audio": "audio/minna/bai50/kougai.mp3",
+      "type": "",
+      "kanji": "郊外",
+      "kanji_reading": "GIAO NGOẠI",
+      "meaning": "ngoại ô",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2218,
+      "lesson": 50,
+      "word": "アルバム",
+      "romaji": "arubamu",
+      "audio": "audio/minna/bai50/k_arubamu.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "an-bum (ca nhạc)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2219,
+      "lesson": 50,
+      "word": "さらいしゅう",
+      "romaji": "saraishuu",
+      "audio": "audio/minna/bai50/saraisyuu.mp3",
+      "type": "",
+      "kanji": "再来週",
+      "kanji_reading": "TÁI LAI CHU",
+      "meaning": "tuần sau nữa",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2220,
+      "lesson": 50,
+      "word": "さらいげつ",
+      "romaji": "saraigetsu",
+      "audio": "audio/minna/bai50/saraigetsu.mp3",
+      "type": "",
+      "kanji": "再来月",
+      "kanji_reading": "TÁI LAI NGUYỆT",
+      "meaning": "tháng sau nữa",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2221,
+      "lesson": 50,
+      "word": "さらいねん",
+      "romaji": "sarainen",
+      "audio": "audio/minna/bai50/sarainen.mp3",
+      "type": "",
+      "kanji": "再来年",
+      "kanji_reading": "TÁI LAI NIÊN",
+      "meaning": "năm sau nữa",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2222,
+      "lesson": 50,
+      "word": "はんとし",
+      "romaji": "hantoshi",
+      "audio": "audio/minna/bai50/hantoshi.mp3",
+      "type": "",
+      "kanji": "半年",
+      "kanji_reading": "BÁN NIÊN",
+      "meaning": "nửa năm",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2223,
+      "lesson": 50,
+      "word": "さいしょに",
+      "romaji": "saishoni",
+      "audio": "audio/minna/bai50/saisyoni.mp3",
+      "type": "",
+      "kanji": "最初に",
+      "kanji_reading": "TỐI SƠ",
+      "meaning": "đầu tiên, trước hết",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2224,
+      "lesson": 50,
+      "word": "さいごに",
+      "romaji": "saigoni",
+      "audio": "audio/minna/bai50/saigoni.mp3",
+      "type": "",
+      "kanji": "最後に",
+      "kanji_reading": "TỐI HẬU",
+      "meaning": "cuối cùng",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2225,
+      "lesson": 50,
+      "word": "ただいま",
+      "romaji": "tadaima",
+      "audio": "audio/minna/bai50/tadaima.mp3",
+      "type": "",
+      "kanji": "ただ今",
+      "kanji_reading": "KIM",
+      "meaning": "bây giờ (thể lịch sự củaいま)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2226,
+      "lesson": 50,
+      "word": "えどとうきょうはくぶつかん",
+      "romaji": "edotoukyouhakubutsukan",
+      "audio": "audio/minna/bai50/edotoukyouhakubutukan.mp3",
+      "type": "",
+      "kanji": "江戸東京博物館",
+      "kanji_reading": "GIANG HỘ ĐÔNG KINH BÁC VẬT QUÁN",
+      "meaning": "bảo tàng Edo-Tokyo",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2227,
+      "lesson": 50,
+      "word": "きんちょうします",
+      "romaji": "kinchoushimasu",
+      "audio": "audio/minna/bai50/kinnchoushimasu.mp3",
+      "type": "",
+      "kanji": "緊張します",
+      "kanji_reading": "KHẨN TRƯƠNG",
+      "meaning": "căng thẳng, hồi hộp",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2228,
+      "lesson": 50,
+      "word": "ほうそうします",
+      "romaji": "housoushimasu",
+      "audio": "audio/minna/bai50/housoushimasu.mp3",
+      "type": "",
+      "kanji": "放送します",
+      "kanji_reading": "PHÓNG TỐNG",
+      "meaning": "phát thanh, truyền hình",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2229,
+      "lesson": 50,
+      "word": "[ビデオに～]とります",
+      "romaji": "［bideoni～］torimasu",
+      "audio": "audio/minna/bai50/torimasu.mp3",
+      "type": "",
+      "kanji": "[ビデオに～]撮ります",
+      "kanji_reading": "TOÁT",
+      "meaning": "thu [video], quay",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2230,
+      "lesson": 50,
+      "word": "しょうきん",
+      "romaji": "shoukin",
+      "audio": "audio/minna/bai50/syoukin.mp3",
+      "type": "",
+      "kanji": "賞金",
+      "kanji_reading": "THƯỞNG KIM",
+      "meaning": "tiền thưởng",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2231,
+      "lesson": 50,
+      "word": "しぜん",
+      "romaji": "shizen",
+      "audio": "audio/minna/bai50/shizen.mp3",
+      "type": "",
+      "kanji": "自然",
+      "kanji_reading": "TỰ NHIÊN",
+      "meaning": "tự nhiên, thiên nhiên",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2232,
+      "lesson": 50,
+      "word": "きりん",
+      "romaji": "kirin",
+      "audio": "audio/minna/bai50/kirin.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "con hươu cao cổ",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2233,
+      "lesson": 50,
+      "word": "ぞう",
+      "romaji": "zou",
+      "audio": "audio/minna/bai50/zou.mp3",
+      "type": "",
+      "kanji": "像",
+      "kanji_reading": "TƯỢNG",
+      "meaning": "con voi",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2234,
+      "lesson": 50,
+      "word": "ころ",
+      "romaji": "koro",
+      "audio": "audio/minna/bai50/koro.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "hồi, thời",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2235,
+      "lesson": 50,
+      "word": "「ゆめが～」かないます",
+      "romaji": "「yumega～」kanaimasu",
+      "audio": "audio/minna/bai50/kanaimasu.mp3",
+      "type": "",
+      "kanji": "[夢が～]かないます",
+      "kanji_reading": "MỘNG",
+      "meaning": "thành hiện thực, được thực hiện [mơ ước ~]",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2236,
+      "lesson": 50,
+      "word": "ひとことよろしいでしょうか。",
+      "romaji": "hitokotoyoroshiideshouka",
+      "audio": "audio/minna/bai50/hitokotoyoroshidesyouka.mp3",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "Tôi xin phép nói vài lời có được không ạ?",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2237,
+      "lesson": 50,
+      "word": "きょうりょくします",
+      "romaji": "kyouryokushimasu",
+      "audio": "audio/minna/bai50/kyouryokushimasu.mp3",
+      "type": "",
+      "kanji": "協力します",
+      "kanji_reading": "HIỆP LỰC",
+      "meaning": "hợp tác",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2238,
+      "lesson": 50,
+      "word": "こころから",
+      "romaji": "kokorokara",
+      "audio": "audio/minna/bai50/kokorokara.mp3",
+      "type": "",
+      "kanji": "心から",
+      "kanji_reading": "TÂM",
+      "meaning": "từ trái tim, từ đáy lòng",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2239,
+      "lesson": 50,
+      "word": "かんしゃします",
+      "romaji": "kanshashimasu",
+      "audio": "audio/minna/bai50/kansyashimasu.mp3",
+      "type": "",
+      "kanji": "感謝します",
+      "kanji_reading": "CẢM TẠ",
+      "meaning": "cám ơn, cảm tạ",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2240,
+      "lesson": 50,
+      "word": "「お」れい",
+      "romaji": "「o」rei",
+      "audio": "audio/minna/bai50/orei.wav",
+      "type": "",
+      "kanji": "[お]礼",
+      "kanji_reading": "LỄ",
+      "meaning": "lời cám ơn, sự cám ơn",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2241,
+      "lesson": 50,
+      "word": "はいけい",
+      "romaji": "haikei",
+      "audio": "audio/minna/bai50/haikei.wav",
+      "type": "",
+      "kanji": "拝啓",
+      "kanji_reading": "BÁI KHẢI",
+      "meaning": "kính gửi",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2242,
+      "lesson": 50,
+      "word": "うつくしい",
+      "romaji": "utsukushii",
+      "audio": "audio/minna/bai50/utsukushii.wav",
+      "type": "",
+      "kanji": "美しい",
+      "kanji_reading": "MỸ",
+      "meaning": "đẹp",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2243,
+      "lesson": 50,
+      "word": "おげんきでいらっしゃいますか",
+      "romaji": "ogenkideirasshaimasuka",
+      "audio": "audio/minna/bai50/ogenkideirasshaimasuka.wav",
+      "type": "",
+      "kanji": "お元気でいらっしゃいますか。",
+      "kanji_reading": "NGUYÊN KHÍ",
+      "meaning": "Anh/chị có khỏe không ạ? (tôn kính ngữ của おげんきですか)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2244,
+      "lesson": 50,
+      "word": "めいわくを　かけます",
+      "romaji": "meiwakuwo　kakemasu",
+      "audio": "audio/minna/bai50/meiwakuwokakemasu.wav",
+      "type": "",
+      "kanji": "迷惑をかけます",
+      "kanji_reading": "",
+      "meaning": "làm phiền",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2245,
+      "lesson": 50,
+      "word": "いかします",
+      "romaji": "ikashimasu",
+      "audio": "audio/minna/bai50/ikashimasu.wav",
+      "type": "",
+      "kanji": "生かします",
+      "kanji_reading": "",
+      "meaning": "tận dụng, phát huy, dùng",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2246,
+      "lesson": 50,
+      "word": "「お」しろ",
+      "romaji": "「o」shiro",
+      "audio": "audio/minna/bai50/oshiro.wav",
+      "type": "",
+      "kanji": "[お]城",
+      "kanji_reading": "",
+      "meaning": "lâu đài",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2247,
+      "lesson": 50,
+      "word": "けいぐ",
+      "romaji": "keigu",
+      "audio": "audio/minna/bai50/keigu.wav",
+      "type": "",
+      "kanji": "敬具",
+      "kanji_reading": "",
+      "meaning": "kính thư",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    },
+    {
+      "id": 2248,
+      "lesson": 50,
+      "word": "ミュンヘン",
+      "romaji": "myunhen",
+      "audio": "audio/minna/bai50/myunhen.wav",
+      "type": "",
+      "kanji": "",
+      "kanji_reading": "",
+      "meaning": "Munich (ở Đức)",
+      "created_at": "2025-09-15T05:27:24.000Z"
+    }
+  ]
+}

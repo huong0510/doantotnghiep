@@ -1,0 +1,419 @@
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    <i class="ti ti-gamepad me-2"></i>
+                    Game Học Katakana
+                </h2>
+                <div class="text-muted mt-1">
+                    Luyện tập nhận biết chữ Katakana qua trò chơi tương tác
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body" style="background: #fafbfc; min-height:100vh;">
+    <div class="container-xl">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Start Screen -->
+                <div class="card card-lg border-0 shadow-sm rounded-4 mt-5" id="startScreen">
+                    <div class="card-body text-center py-5">
+                        <div class="display-3 mb-4" style="color:#e53935; font-family: 'Noto Sans JP', 'Arial', sans-serif;">カ</div>
+                        <h2 class="mb-3 fw-bold">Game Katakana</h2>
+                        <p class="text-muted mb-4">Luyện tập nhận biết chữ Katakana qua trò chơi tương tác</p>
+                        <button class="btn btn-danger btn-lg rounded-pill px-5" id="startBtn">
+                            Bắt đầu
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Screen -->
+                <div class="card card-lg border-0 shadow-sm rounded-4 mt-3" id="gameScreen" style="display: none;">
+                    <div class="card-body">
+                        <!-- Đồng hồ tổng 5 phút, Level, Combo, HP -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="fw-bold text-danger" style="font-size:1.2rem;">
+                                <i class="ti ti-timer"></i> <span id="totalTimer">05:00</span>
+                            </div>
+                            <div class="fw-bold" style="font-size:1.2rem;">
+                                Level: <span id="level">1</span>
+                            </div>
+                            <div class="fw-bold" style="font-size:1.2rem;">
+                                Điểm: <span id="score">0</span>
+                            </div>
+                        </div>
+                        <!-- HP Bar -->
+                        <div class="d-flex align-items-center mb-2" style="gap:10px;">
+                            <span style="font-weight:bold;color:#e53935;font-size:1.1rem;"><i class="ti ti-heart-filled"></i> HP</span>
+                            <div class="progress flex-grow-1" style="height: 22px; background:#ffeaea;">
+                                <div id="hpBar" class="progress-bar bg-danger" role="progressbar" style="width: 100%; font-weight:bold; font-size:1.1rem;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><span id="hp">100</span></div>
+                            </div>
+                        </div>
+                        <!-- Combo -->
+                        <div class="text-center mb-2">
+                            <span id="comboDisplay" class="fw-bold" style="font-size:1.3rem; color:#e53935; display:none;">Combo x1</span>
+                        </div>
+                        <!-- Game Info -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="card bg-success-lt border-0">
+                                    <div class="card-body text-center p-2">
+                                        <div class="h4 mb-0" id="correctCount">0</div>
+                                        <div class="text-muted small">Đúng</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card bg-danger-lt border-0">
+                                    <div class="card-body text-center p-2">
+                                        <div class="h4 mb-0" id="wrongCount">0</div>
+                                        <div class="text-muted small">Sai</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Character Display & Countdown -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="card border-0">
+                                    <div class="card-body text-center p-4">
+                                        <div class="display-1 mb-2" id="currentChar" style="display: none; font-size: 6rem; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; max-width: 200px; margin: 0 auto;">カ</div>
+                                        <div class="d-flex justify-content-center align-items-center mb-2" id="charHint" style="display: none;">
+                                            <span class="text-muted me-3">Nhập romaji tương ứng</span>
+                                            <span class="badge bg-danger text-white" id="questionTimer" style="font-size:1.1rem;">10s</span>
+                                        </div>
+                                        <div class="alert alert-info mt-2" id="answerAlert" style="display: none;">
+                                            Đáp án đúng là: <strong id="correctAnswer"></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Input -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <input type="text" class="form-control form-control-lg text-center rounded-pill"
+                                       id="answerInput" placeholder="Nhập romaji..." disabled>
+                            </div>
+                        </div>
+                        <!-- Controls -->
+                        <div class="row">
+                            <div class="col text-center">
+                                <button class="btn btn-outline-danger rounded-pill px-4" id="stopBtn" disabled>Dừng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popup tổng kết và hiệu ứng hoa -->
+<div id="endGameModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4 position-relative">
+            <div id="confettiContainer" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2;"></div>
+            <h3 class="fw-bold mb-3" id="endGameTitle"></h3>
+            <div class="mb-2">Điểm: <span class="fw-bold text-danger" id="endGameScore"></span></div>
+            <div class="mb-2">Level: <span class="fw-bold" id="endGameLevel"></span></div>
+            <div class="mb-2">Combo cao nhất: <span class="fw-bold text-primary" id="endGameCombo"></span></div>
+            <button class="btn btn-danger rounded-pill mt-3 px-4" onclick="restartGame()">Chơi lại</button>
+        </div>
+    </div>
+</div>
+
+<!-- Giữ nguyên toàn bộ phần HTML UI (start screen, game screen, modal) -->
+<!-- Chỉ sửa phần script bên dưới -->
+
+<script>
+let gameState = {
+    score: 0,
+    correctCount: 0,
+    wrongCount: 0,
+    currentChar: null,
+    isPlaying: false,
+    totalTime: 300, // 5 phút
+    totalTimerInterval: null,
+    questionTime: 30,
+    questionTimerInterval: null,
+    currentLevel: 1,
+    combo: 1,
+    maxCombo: 1,
+    hp: 100,
+    hpMax: 100,
+    comboToLevelUp: 10
+};
+
+function updateStats() {
+    $('#score').text(gameState.score);
+    $('#correctCount').text(gameState.correctCount);
+    $('#wrongCount').text(gameState.wrongCount);
+    $('#level').text(gameState.currentLevel);
+    $('#hp').text(gameState.hp);
+    $('#hpBar').css('width', gameState.hp + '%').attr('aria-valuenow', gameState.hp);
+    if (gameState.combo > 1) {
+        $('#comboDisplay').text('Combo x' + gameState.combo).fadeIn(100).addClass('combo-animate');
+    } else {
+        $('#comboDisplay').fadeOut(100).removeClass('combo-animate');
+    }
+}
+
+function formatTime(sec) {
+    const m = Math.floor(sec / 60).toString().padStart(2, '0');
+    const s = (sec % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+}
+
+function startTotalTimer() {
+    $('#totalTimer').text(formatTime(gameState.totalTime));
+    gameState.totalTimerInterval = setInterval(() => {
+        gameState.totalTime--;
+        $('#totalTimer').text(formatTime(gameState.totalTime));
+        if (gameState.totalTime <= 0 || gameState.hp <= 0) {
+            clearInterval(gameState.totalTimerInterval);
+            stopGame(true);
+        }
+    }, 1000);
+}
+
+function startQuestionTimer() {
+    let t = gameState.questionTime;
+    $('#questionTimer').text(t + 's');
+    if (gameState.questionTimerInterval) clearInterval(gameState.questionTimerInterval);
+    gameState.questionTimerInterval = setInterval(() => {
+        t--;
+        $('#questionTimer').text(t + 's');
+        if (t <= 0) {
+            clearInterval(gameState.questionTimerInterval);
+            handleWrongAnswer(true);
+        }
+    }, 1000);
+}
+
+function getRandomChar() {
+    return $.get('/alphabets/random/katakana');
+}
+
+function startGame() {
+    gameState.isPlaying = true;
+    gameState.score = 0;
+    gameState.correctCount = 0;
+    gameState.wrongCount = 0;
+    gameState.totalTime = 300;
+    gameState.currentLevel = 1;
+    gameState.combo = 1;
+    gameState.maxCombo = 1;
+    gameState.hp = 100;
+    updateStats();
+    $('#startScreen').fadeOut(200, () => $('#gameScreen').fadeIn(200));
+    $('#startBtn').prop('disabled', true);
+    $('#stopBtn').prop('disabled', false);
+    $('#answerInput').prop('disabled', false).val('').focus();
+    $('#currentChar').show();
+    $('#charHint').show();
+    $('#answerAlert').hide();
+    startTotalTimer();
+    getNextChar();
+}
+
+// ✅ Sửa lại: stopGame bây giờ nhận tham số saveScore (true/false)
+function stopGame(saveScore = false) {
+    gameState.isPlaying = false;
+    $('#gameScreen').fadeOut(200, () => $('#startScreen').fadeIn(200));
+    $('#startBtn').prop('disabled', false);
+    $('#stopBtn').prop('disabled', true);
+    $('#answerInput').prop('disabled', true);
+    $('#currentChar').hide();
+    $('#charHint').hide();
+    $('#answerAlert').hide();
+    if (gameState.totalTimerInterval) clearInterval(gameState.totalTimerInterval);
+    if (gameState.questionTimerInterval) clearInterval(gameState.questionTimerInterval);
+
+    if (saveScore) {
+        saveScoreToServer();
+    }
+}
+
+// ✅ Viết hàm gửi điểm lên server
+function saveScoreToServer() {
+    $.post('/games/save-score', {
+        gameType: 'katakana',
+        score: gameState.score,
+        correctAnswers: gameState.correctCount,
+        wrongAnswers: gameState.wrongCount,
+        maxCombo: gameState.maxCombo,
+        level: gameState.currentLevel
+    })
+    .done(response => {
+        if (response.success) {
+            console.log('Điểm đã được lưu thành công');
+            window.location.href = '/games/leaderboard/katakana';
+        } else {
+            console.error('Lỗi khi lưu điểm:', response.error);
+            alert('Không thể lưu điểm: ' + response.error);
+        }
+    })
+    .fail((jqXHR, textStatus, errorThrown) => {
+        console.error('Lỗi khi gửi điểm:', textStatus, errorThrown);
+        alert('Lỗi khi gửi điểm: ' + textStatus);
+    });
+}
+
+function handleCorrectAnswer() {
+    gameState.combo++;
+    if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
+    let point = 10 * gameState.combo;
+    gameState.score += point;
+    gameState.correctCount++;
+    gameState.hp = Math.min(gameState.hp + 5 * gameState.combo, gameState.hpMax);
+    if (gameState.correctCount % gameState.comboToLevelUp === 0) {
+        gameState.currentLevel++;
+        gameState.questionTime = Math.max(5, 30 - (gameState.currentLevel - 1) * 2);
+        $('#level').addClass('text-success');
+        setTimeout(() => $('#level').removeClass('text-success'), 800);
+    }
+    updateStats();
+    $('#answerInput').addClass('is-valid').removeClass('is-invalid');
+    $('#answerAlert').hide();
+    $('#answerInput').val('');
+    if (gameState.questionTimerInterval) clearInterval(gameState.questionTimerInterval);
+    launchMiniConfetti();
+    getNextChar();
+}
+
+let justLostCombo = false;
+function handleWrongAnswer(timeout = false) {
+    if (gameState.combo > 1) {
+        gameState.combo = 1;
+        justLostCombo = true;
+    } else {
+        gameState.hp = Math.max(0, gameState.hp - 10);
+        justLostCombo = false;
+    }
+    gameState.wrongCount++;
+    updateStats();
+    $('#answerInput').addClass('is-invalid').removeClass('is-valid');
+    $('#correctAnswer').text(gameState.currentChar.romaji);
+    $('#answerAlert').show();
+    showSadFace();
+    $('#hpBar').addClass('bg-warning');
+    setTimeout(() => $('#hpBar').removeClass('bg-warning'), 500);
+    if (gameState.questionTimerInterval) clearInterval(gameState.questionTimerInterval);
+    setTimeout(getNextChar, timeout ? 1200 : 1000);
+}
+
+function showSadFace() {
+    $('#currentChar').html('<span style="font-size:6rem;">😢</span>');
+    setTimeout(() => {
+        if (gameState.currentChar && gameState.currentChar.char) {
+            $('#currentChar').text(gameState.currentChar.char);
+        }
+    }, 700);
+}
+
+function launchMiniConfetti() {
+    const charBox = document.getElementById('currentChar');
+    if (!charBox) return;
+    const rect = charBox.getBoundingClientRect();
+    for (let i = 0; i < 18; i++) {
+        const conf = document.createElement('span');
+        conf.className = 'confetti mini';
+        conf.style.left = (rect.width / 2 + Math.random() * 40 - 20) + 'px';
+        conf.style.top = (rect.height / 2 + Math.random() * 20 - 10) + 'px';
+        conf.style.background = `hsl(${Math.random() * 360},90%,60%)`;
+        conf.style.animationDelay = (Math.random() * 0.3) + 's';
+        charBox.appendChild(conf);
+        setTimeout(() => conf.remove(), 1200);
+    }
+}
+
+function checkAnswer() {
+    const answer = $('#answerInput').val().toLowerCase();
+    if (answer === gameState.currentChar.romaji) {
+        handleCorrectAnswer();
+    } else {
+        handleWrongAnswer();
+    }
+}
+
+function getNextChar() {
+    $('#answerInput').removeClass('is-valid is-invalid').val('').focus();
+    $('#answerAlert').hide();
+    gameState.questionTime = Math.max(5, 30 - (gameState.currentLevel - 1) * 2);
+    getRandomChar().then(response => {
+        gameState.currentChar = response;
+        $('#currentChar').text(response.char);
+        startQuestionTimer();
+    });
+}
+
+$(document).ready(function () {
+    $('#startBtn').click(startGame);
+    $('#stopBtn').click(() => stopGame(true)); // ✅ Gửi điểm khi bấm dừng
+    $('#answerInput').on('keypress', function (e) {
+        if (e.which === 13 && gameState.isPlaying) {
+            checkAnswer();
+        }
+    });
+});
+</script>
+
+<style>
+    .combo-animate {
+        animation: comboPop 0.4s;
+    }
+
+    @keyframes comboPop {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.3);
+            color: #ff9800;
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .confetti {
+        position: absolute;
+        top: -20px;
+        width: 12px;
+        height: 18px;
+        border-radius: 3px;
+        opacity: 0.85;
+        animation: confettiDrop 1.8s cubic-bezier(.62, .09, .36, 1.01) forwards;
+        z-index: 10;
+    }
+
+    @keyframes confettiDrop {
+        to {
+            top: 100%;
+            transform: rotate(360deg);
+            opacity: 0.7;
+        }
+    }
+
+    .confetti.mini {
+        width: 7px;
+        height: 12px;
+        border-radius: 2px;
+        opacity: 0.85;
+        animation: confettiDropMini 0.9s cubic-bezier(.62, .09, .36, 1.01) forwards;
+        z-index: 10;
+    }
+
+    @keyframes confettiDropMini {
+        to {
+            transform: translateY(40px) rotate(360deg);
+            opacity: 0.7;
+        }
+    }
+</style>

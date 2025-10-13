@@ -1,0 +1,280 @@
+<h1><%= title %></h1>
+
+<!-- Form chọn bài -->
+<form method="get" action="">
+  <div class="custom-select-wrapper">
+    <select name="lesson" id="lesson" class="custom-select" onchange="this.form.submit()">
+      <% for (let i = 1; i <= totalLessons; i++) { %>
+        <option value="<%= i %>" <%= i == currentLesson ? 'selected' : '' %>>
+          Bài <%= i %>
+        </option>
+      <% } %>
+    </select>
+  </div>
+</form>
+
+<!-- Audio -->
+<audio controls style="margin-top:10px;">
+  <source src="<%= lessons[0].audio %>" type="audio/mpeg">
+  Trình duyệt không hỗ trợ audio.
+</audio>
+
+<!-- Nhập transcript -->
+<textarea id="userAnswer" class="form-control" placeholder="Nhập transcript..." rows="8" style="width: 100%;"></textarea>
+
+<!-- Progress (feedback %) -->
+<div class="progress" style="height: 30px; margin-top: 20px;">
+  <div id="progress" class="progress-bar" style="width:0%">0%</div>
+</div>
+
+<div id="feedback" style="margin-top: 15px; font-weight: bold; color: #444;"></div>
+
+<button id="submitBtn" class="btn btn-primary mt-2">Nộp bài</button>
+
+<!-- Highlight đáp án -->
+<div id="result" style="margin-top: 20px; font-size: 18px;"></div>
+
+<!-- Feedback AI -->
+<div id="aiResult" class="mt-3"></div>
+
+<!-- Progress Bar điểm -->
+<div class="progress mt-3" style="height: 25px; display:none;" id="scoreBarWrapper">
+  <div id="scoreBar" class="progress-bar" 
+       role="progressbar" style="width: 0%;" 
+       aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+    0%
+  </div>
+</div>
+
+<!-- Box kết quả -->
+<div id="result-box" class="card mt-4" style="display:none;">
+  <div class="card-body">
+    <h5 class="card-title">Kết quả</h5>
+    <div class="mb-3">
+      <label><strong>Điểm:</strong></label>
+      <div class="progress" style="height: 25px;">
+        <div id="score-bar" class="progress-bar bg-success" role="progressbar" 
+             style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          0/100
+        </div>
+      </div>
+    </div>
+    <p><strong>Feedback:</strong> <span id="feedback-text"></span></p>
+    <p><strong>Highlight:</strong> <span id="highlight-text"></span></p>
+  </div>
+</div>
+
+<script>
+  const correctAnswer = `<%= lessons[0].answer %>`; // transcript chuẩn
+
+  // 🔧 Chuẩn hóa chuỗi trước khi so sánh
+function normalizeText(text) {
+  return text
+    .replace(/\s+/g, '')       // bỏ khoảng trắng, xuống dòng
+    .replace(/[。、．]/g, '。') // chuẩn hóa dấu câu tiếng Nhật
+    .trim();
+}
+
+  // Highlight từ sai
+ function highlightMistakes(userText, correctText) {
+  userText = normalizeText(userText);
+  correctText = normalizeText(correctText);
+
+  let result = "";
+  const maxLen = Math.max(userText.length, correctText.length);
+
+  for (let i = 0; i < maxLen; i++) {
+    if (userText[i] === correctText[i]) {
+      result += correctText[i] || "";
+    } else {
+      if (correctText[i]) {
+        result += `<span style="color:red">${correctText[i]}</span>`;
+      }
+    }
+  }
+  return result;
+}
+
+
+  // Render đáp án chuẩn + highlight lỗi
+  function renderAnswer(userText) {
+    const resultDiv = document.getElementById("result");
+    const sentences = correctAnswer.split("。");
+    let output = "";
+
+    sentences.forEach((sentence) => {
+      if (sentence.trim()) {
+        let highlighted = highlightMistakes(userText, sentence.trim());
+        output += `
+          <p style="color: black; font-size:16px;">
+            <button onclick="speakSentence('${sentence.trim()}')" 
+                    style="border:none; background:none; cursor:pointer; font-size:18px;">🔊</button>
+            ${highlighted}。
+          </p>
+        `;
+      }
+    });
+
+    resultDiv.innerHTML = `
+      <p><strong>Đáp án & highlight lỗi:</strong></p>
+      <div class="answer">${output}</div>
+    `;
+  }
+
+  // Text-to-Speech tiếng Nhật
+  function speakSentence(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "ja-JP";
+    speechSynthesis.speak(utterance);
+  }
+
+  // ✅ Hàm submit cũ (giữ nguyên, dùng cho /listening/feedback)
+  async function submitAnswerOld() {
+    const userAnswer = document.querySelector("#userAnswer").value;
+    const correctAnswer = "<%= lessons[0].text %>"; // lấy từ server render
+
+    const res = await fetch("/listening/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userAnswer, correctAnswer }),
+    });
+
+    const data = await res.json();
+// Nếu server trả JSON thô, chuyển nó về đối tượng
+if (typeof data === "string") {
+  try {
+    const parsed = JSON.parse(data);
+    data = parsed;
+  } catch {
+    console.warn("⚠️ Không parse được JSON:", data);
+  }
+}
+
+    if (data.success) {
+      const match = data.feedback.match(/(\d{1,3})\/?100?/);
+      let score = match ? parseInt(match[1]) : 0;
+
+      document.querySelector("#feedback").innerText = data.feedback;
+      document.querySelector("#progress").style.width = score + "%";
+      document.querySelector("#progress").innerText = score + "%";
+    }
+  }
+// ✅ Hàm submit mới (chấm điểm AI + highlight)
+async function submitAnswerNew() {
+  const userAnswerRaw = document.getElementById("userAnswer").value.trim();
+  renderAnswer(userAnswerRaw); // render highlight so sánh với đáp án
+
+  // 🧠 Không chuẩn hóa khi gửi lên AI — giữ nguyên bản gốc
+  const res = await fetch("/api/evaluate-answer", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userAnswer: userAnswerRaw,
+      correctAnswer: correctAnswer
+    })
+  });
+
+  let data;
+  try {
+    data = await res.json();
+  } catch (err) {
+    console.error("❌ JSON parse lỗi:", err);
+    document.getElementById("aiResult").innerHTML =
+      `<div class="alert alert-danger">Lỗi đọc phản hồi từ server.</div>`;
+    return;
+  }
+
+  // 🧩 Kiểm tra nếu AI trả JSON thô (bị lỗi)
+  if (!data.success || typeof data.score !== "number") {
+    document.getElementById("aiResult").innerHTML =
+      `<div class="alert alert-warning">⚠️ AI chưa chấm được. Thử lại sau.</div>`;
+    console.warn("Dữ liệu AI trả về:", data);
+    return;
+  }
+
+/// ✅ Nếu thành công → hiển thị kết quả
+if (data.success) {
+  document.getElementById("result-box").style.display = "block";
+
+  const scoreBar = document.getElementById("score-bar");
+  scoreBar.style.width = data.score + "%";
+  scoreBar.innerText = data.score + "/100";
+  scoreBar.setAttribute("aria-valuenow", data.score);
+
+  const fbEl = document.getElementById("feedback-text");
+  const hlEl = document.getElementById("highlight-text");
+
+  // Helper: escape HTML
+  function escapeHtml(str) {
+    if (!str) return "";
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // --- Hàm xoá chữ "Feedback:" chỉ khi đứng trước "Điểm:" ---
+  function cleanLabel(str) {
+    if (!str) return "";
+    return str
+      .replace(/Feedback:\s*(?=Điểm:)/gi, "") // chỉ xoá nếu đứng trước Điểm:
+      .replace(/^\s*Feedback:\s*/i, "")        // xoá luôn nếu đứng đầu chuỗi
+      .replace(/\n{2,}/g, "\n")
+      .trim();
+  }
+
+  try {
+    let fb = data.feedback || "";
+    let hl = data.highlight || "";
+
+    // Nếu feedback là JSON string (AI trả về dạng chuỗi JSON)
+    if (typeof fb === "string" && fb.includes("{")) {
+      try {
+        const parsed = JSON.parse(fb.match(/\{[\s\S]*\}/)[0]);
+        fb = parsed.feedback || "";
+        hl = parsed.highlight || "";
+        if (parsed.score) data.score = parsed.score;
+      } catch (e) {
+        console.warn("Không parse được JSON trong feedback:", e);
+      }
+    }
+
+    // 🧹 Làm sạch nhãn trước khi hiển thị
+    fb = cleanLabel(fb);
+    hl = cleanLabel(hl);
+
+    // --- Gán nội dung sau khi xử lý ---
+    fbEl.innerHTML = `<strong>Điểm:</strong> ${data.score}/100<br>${escapeHtml(fb)}`;
+    if (/<[^>]+>/.test(hl)) {
+      hlEl.innerHTML = hl;
+    } else {
+      hlEl.innerText = hl || "Không có lỗi";
+    }
+
+  } catch (err) {
+    console.error("❌ Lỗi hiển thị feedback:", err);
+    fbEl.innerText = data.feedback ?? "Không thể hiển thị feedback.";
+    hlEl.innerText = data.highlight ?? "Không có lỗi";
+  }
+
+  // Progress bar nhỏ phía trên
+  const scoreBarWrapper = document.getElementById("scoreBarWrapper");
+  scoreBarWrapper.style.display = "block";
+  const scoreBar2 = document.getElementById("scoreBar");
+  scoreBar2.style.width = data.score + "%";
+  scoreBar2.innerText = data.score + "%";
+} else {
+  document.getElementById("aiResult").innerHTML =
+    `<div class="alert alert-danger">❌ Lỗi AI: ${data.error || 'Không chấm được'}</div>`;
+}
+
+}
+
+  // Khi bấm nút Nộp bài → gọi API mới
+  document.getElementById("submitBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    submitAnswerNew();
+  });
+</script>

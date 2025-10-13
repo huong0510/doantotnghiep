@@ -1,0 +1,262 @@
+<div class="login-container">
+  <div class="login-left">
+    <img src="/assets/hoc-tieng-nhat.jpg" alt="Học tiếng Nhật" />
+  </div>
+
+  <div class="login-right">
+    <div class="login-box">
+      <h2>Chào mừng quay lại! 🎌</h2>
+      <p class="sub-text">Cùng ôn luyện tiếng Nhật nào~</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Họ và Tên</label>
+          <input type="text" name="username" class="form-control" placeholder="Nhập họ tên" required>
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu</label>
+          <input type="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required>
+        </div>
+        <button type="submit" class="btn-login">Đăng nhập</button>
+      </form>
+      <div class="text-small">
+        Chưa có tài khoản? <a href="/auth/register">Đăng ký ngay</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+/>
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Poppins", "Noto Sans JP", sans-serif;
+    background-color: #fffafc;
+  }
+
+  .login-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+
+  /* Ảnh bên trái tràn full màn hình */
+  .login-left {
+    flex: 1;
+    background-color: #fff5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+.login-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* giữ nguyên tỷ lệ ảnh, không bị cắt */
+  object-position: left center; /* canh ảnh sát bên trái */
+  border-radius: 0;
+  background-color: #fff; /* nếu ảnh không full chiều cao thì nền trắng lấp chỗ trống */
+}
+
+
+  /* Form bên phải */
+  .login-right {
+    flex: 1;
+    position: relative;
+    background: url("/assets/hoc-tieng-nhat.jpg") center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ✅ Thêm lớp mờ mờ phía sau form */
+  .login-right::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(12px) brightness(1.1);
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .login-box {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 25px;
+    padding: 40px 50px;
+    width: 85%;
+    max-width: 380px;
+    box-shadow: 0 15px 40px rgba(255, 105, 180, 0.2);
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .login-box h2 {
+    color: #ff66a3;
+    font-weight: 700;
+  }
+
+  .sub-text {
+    color: #777;
+    font-size: 15px;
+    margin-bottom: 25px;
+  }
+
+  .form-group {
+    text-align: left;
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #ffe3ec;
+    border-radius: 12px;
+    transition: 0.3s;
+    font-size: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .form-control:focus {
+    border-color: #ff8fc7;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 167, 196, 0.4);
+  }
+
+  .btn-login {
+    background: linear-gradient(90deg, #ff8fc7, #ffa4d2);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    width: 100%;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .btn-login:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  .text-small {
+    font-size: 14px;
+    color: #666;
+    margin-top: 15px;
+  }
+
+  .text-small a {
+    color: #ff66a3;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .text-small a:hover {
+    text-decoration: underline;
+  }
+
+  /* 📱 Responsive */
+  @media (max-width: 900px) {
+    .login-container {
+      flex-direction: column;
+    }
+
+    .login-left {
+      height: 40vh;
+    }
+
+    .login-right {
+      height: 60vh;
+    }
+
+  
+
+    .login-right::before {
+      backdrop-filter: blur(6px);
+    }
+  }
+</style>
+
+<script>
+    $(document).ready(function () {
+        // Reset trạng thái lỗi khi người dùng bắt đầu nhập
+        $('input').on('input', function () {
+            $(this).removeClass('is-invalid');
+            $(this).next('.invalid-feedback').hide();
+        });
+
+        $('#loginForm').on('submit', function (e) {
+            e.preventDefault();
+
+            // Reset tất cả trạng thái lỗi
+            $('input').removeClass('is-invalid');
+            $('.invalid-feedback').hide();
+
+            const formData = {
+                username: $('input[name="username"]').val(),
+                password: $('input[name="password"]').val()
+            };
+
+            // Kiểm tra từng trường
+            let hasError = false;
+            if (!formData.username) {
+                $('input[name="username"]').addClass('is-invalid')
+                    .after('<div class="invalid-feedback">Vui lòng nhập tên</div>');
+                hasError = true;
+            }
+            if (!formData.password) {
+                $('input[name="password"]').addClass('is-invalid')
+                    .after('<div class="invalid-feedback">Vui lòng nhập mật khẩu</div>');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            $.ajax({
+                url: '/auth/login',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    window.location.href = '/';
+                },
+                error: function (xhr) {
+                    const error = xhr.responseJSON?.error || 'Lỗi đăng nhập';
+                    if (xhr.responseJSON?.details) {
+                        // Hiển thị lỗi chi tiết cho từng trường
+                        Object.entries(xhr.responseJSON.details).forEach(([field, message]) => {
+                            if (message) {
+                                $(`input[name="${field}"]`).addClass('is-invalid')
+                                    .after(`<div class="invalid-feedback">${message}</div>`);
+                            }
+                        });
+                    } else {
+                        alert(error);
+                    }
+                }
+            });
+        });
+    });
+</script>

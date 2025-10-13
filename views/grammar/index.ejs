@@ -1,0 +1,40 @@
+<%- include('../partials/header') %>
+
+<div class="container py-4">
+  <h1 class="mb-4 text-center fw-bold">📘 Ngữ pháp <%= level %></h1>
+
+  <!-- Dropdown chọn level -->
+  <div class="mb-4 text-center">
+    <form id="levelForm" method="get" action="/grammar">
+      <select name="level" id="levelSelect" class="form-select w-auto d-inline-block">
+        <option value="n5" <%= level === 'N5' ? 'selected' : '' %>>N5</option>
+        <option value="n4" <%= level === 'N4' ? 'selected' : '' %>>N4</option>
+        <option value="n3" <%= level === 'N3' ? 'selected' : '' %>>N3</option>
+      </select>
+    </form>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <% grammars.forEach(item => { %>
+      <div class="col">
+        <a href="/grammar/<%= item.id %>" class="text-decoration-none">
+          <div class="card shadow-sm h-100 border-0 rounded-3 hover-card">
+            <div class="card-body">
+              <h5 class="card-title text-primary"><%= item.structure %></h5>
+              <p class="card-text text-muted"><%= item.meaning %></p>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<script>
+  // submit form khi chọn level
+  document.getElementById('levelSelect').addEventListener('change', function() {
+    window.location.href = '/grammar/' + this.value;
+  });
+</script>
+
+<%- include('../partials/footer') %>

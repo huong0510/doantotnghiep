@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= typeof title !== 'undefined' ? title : "Welcome lớp học tiếng Nhật" %></title>
+    <!-- Fonts & CSS -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Thêm dòng này để icon Font Awesome hiện -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<link href="/css/style.css" rel="stylesheet">
+<%- typeof style !=='undefined' ? style : '' %>
+
+
+    <style>
+      
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f7f7f9;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+         /* Nút mở chatbot */
+         #chatbot-toggle, #chatbot-box {
+  pointer-events: auto !important;
+  z-index: 99999 !important;
+}
+  #chatbot-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+    background: #409bf1;
+    color: #fff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.3s;
+    z-index: 999;
+  }
+  #chatbot-toggle:hover {
+    background: #b51210;
+  }
+
+  /* Hộp chat */
+  #chatbot-box {
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+    width: 340px;
+    height: 450px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+   overflow-x: hidden;
+  overflow-y: auto;
+    z-index: 1000;
+  }
+  #chatbot-box.hidden {
+    display: none;
+  }
+
+  /* Header chatbot */
+  #chatbot-header {
+    background: #2483e2;
+    color: #fff;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 15px;
+  }
+ 
+  #chatbot-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  /* Khu tin nhắn */
+  #chatbot-messages {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background: #f5f6f8;
+  }
+  .chat-message {
+    margin: 8px 0;
+    display: flex;
+  }
+  .chat-user {
+    justify-content: flex-end;
+  }
+  .chat-bot {
+    justify-content: flex-start;
+  }
+
+  /* Bong bóng tin nhắn */
+  .chat-message div {
+    padding: 10px 14px;
+    border-radius: 16px;
+    max-width: 75%;
+    word-wrap: break-word;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .chat-user div {
+    background: #007bff;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .chat-bot div {
+    background: #eaeaea;
+    color: #222;
+    border-bottom-left-radius: 4px;
+  }
+
+  /* Hiệu ứng "đang gõ" */
+  .typing {
+    font-style: italic;
+    color: #666;
+    font-size: 13px;
+    margin-left: 5px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0.5; }
+  }
+
+  /* Ô nhập */
+  #chatbot-input {
+    border: none;
+    border-top: 1px solid #ddd;
+    padding: 10px;
+    font-size: 14px;
+    outline: none;
+  }
+
+    </style>
+</head>
+<body>
+  
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm">
+  <div class="container">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Trang chủ</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/games">Trò chơi</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/practice/conversation">Luyện hội thoại (AI)</a>
+      </li>
+      <li class="nav-item">
+  <a class="nav-link" href="/listening">
+    <i class="fa-solid fa-headphones"></i> Listening
+  </a>
+</li>
+ <li class="nav-item">
+        <a class="nav-link" href="/grammar">Ngữ pháp</a>
+      </li>
+      <li class="nav-item">
+  <a class="nav-link" href="/learning-plan">Kế hoạch học</a>
+</li>
+
+ <li class="nav-item">
+        <a class="nav-link text-danger fw-bold" href="/logout">Đăng xuất</a>
+      </li>
+     
+     
+
+    </ul>
+  </div>
+</nav>
+
+    <!-- Nội dung trang -->
+<main class="container">
+    <%- body %>
+</main>
+    <!-- Chatbot -->
+   <!-- Nút icon chatbot nổi -->
+<div id="chatbot-toggle">
+  <i class="ri-robot-2-line"></i>
+</div>
+
+<!-- Hộp chat ẩn ban đầu -->
+<div id="chatbot-box" class="hidden">
+  <div id="chatbot-header">
+    <span> Al Support🤖</span>
+    <button id="chatbot-close">&times;</button>
+  </div>
+  <div id="chatbot-messages"></div>
+  <input type="text" id="chatbot-input" placeholder="Nhập câu hỏi..." />
+</div>
+
+
+    <!-- Scripts -->
+    <!-- ⚡ Thêm jQuery để login/register dùng AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Chatbot Script -->
+<script>
+  const chatbotToggle = document.getElementById("chatbot-toggle");
+  const chatbotBox = document.getElementById("chatbot-box");
+  const chatbotMessages = document.getElementById("chatbot-messages");
+  const chatbotInput = document.getElementById("chatbot-input");
+  const chatbotClose = document.getElementById("chatbot-close");
+
+  chatbotToggle.addEventListener("click", () => {
+    chatbotBox.classList.toggle("hidden");
+  });
+
+  chatbotClose.addEventListener("click", () => {
+    chatbotBox.classList.add("hidden");
+  });
+
+  chatbotInput.addEventListener("keypress", async (e) => {
+    if (e.key === "Enter" && chatbotInput.value.trim()) {
+      const userMsg = chatbotInput.value.trim();
+      appendMessage(userMsg, "user");
+      chatbotInput.value = "";
+
+      // Hiển thị “bot đang gõ…”
+      const typingEl = showTyping();
+
+      const botReply = await callChatAPI(userMsg);
+
+      // Ẩn hiệu ứng typing
+      typingEl.remove();
+
+      appendMessage(botReply, "bot");
+    }
+  });
+
+  function appendMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.classList.add("chat-message", sender === "user" ? "chat-user" : "chat-bot");
+
+    const bubble = document.createElement("div");
+    bubble.innerText = text;
+
+    msg.appendChild(bubble);
+    chatbotMessages.appendChild(msg);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }
+
+  function showTyping() {
+    const typing = document.createElement("div");
+    typing.classList.add("chat-message", "chat-bot");
+    typing.innerHTML = `<div class="typing">🤖 Bot đang gõ...</div>`;
+    chatbotMessages.appendChild(typing);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    return typing;
+  }
+
+  async function callChatAPI(message) {
+    try {
+      const res = await fetch("/api/chat-ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      const data = await res.json();
+      return data.reply || "Mình chưa có câu trả lời.";
+    } catch (err) {
+      return "❌ Lỗi khi gọi API.";
+    }
+  }
+</script>
+
+
+    <!-- Script riêng của từng trang -->
+    <%- typeof script !=='undefined' ? script : '' %>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">📘 Danh sách kế hoạch học đã lưu</h2>
+
+  <% if (plans.length === 0) { %>
+    <div class="alert alert-info text-center">Chưa có kế hoạch học nào.</div>
+  <% } else { %>
+    <div class="row gy-4">
+      <% plans.forEach(plan => { %>
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-primary text-white fw-bold">
+              <%= plan.student_name %> - Trình độ: <%= plan.level %>
+            </div>
+            <div class="card-body">
+              <p><strong>Mục tiêu:</strong> <%= plan.goals %></p>
+              <p><strong>Kỹ năng yếu:</strong> <%= plan.weak_points %></p>
+              <p><strong>Thời gian học:</strong> <%= plan.available_time %></p>
+              <hr>
+              <div style="white-space: pre-wrap;"><%= plan.plan %></div>
+            </div>
+            <div class="card-footer text-muted small text-end">
+              🕒 <%= plan.created_at.toLocaleString() %>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

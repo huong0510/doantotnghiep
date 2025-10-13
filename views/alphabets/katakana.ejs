@@ -1,0 +1,202 @@
+<section class="py-4">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:#1a2233;">Học Katakana</h1>
+            <p class="lead" style="font-family:'Inter',sans-serif;color:#444;max-width:600px;margin:16px auto 0;">Học bảng chữ cái Katakana cơ bản và nâng cao</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 fade-in" style="border-radius:20px;">
+                    <div class="card-header bg-white border-0" style="border-radius:20px 20px 0 0;">
+                        <h3 class="card-title mb-0" style="font-family:'Playfair Display',serif;font-size:1.25rem;">Katakana Cơ bản</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <% const rows=[['ア', 'イ' , 'ウ' , 'エ' , 'オ' ],['カ', 'キ' , 'ク' , 'ケ' , 'コ' ],['サ', 'シ' , 'ス' , 'セ' , 'ソ' ],['タ', 'チ' , 'ツ' , 'テ' , 'ト' ],['ナ', 'ニ' , 'ヌ' , 'ネ' , 'ノ' ],['ハ', 'ヒ' , 'フ' , 'ヘ' , 'ホ' ],['マ', 'ミ' , 'ム' , 'メ' , 'モ' ],['ヤ', '' , 'ユ' , '' , 'ヨ' ],['ラ', 'リ' , 'ル' , 'レ' , 'ロ' ],['ワ', '' , '' , '' , 'ヲ' ],['ン', '' , '' , '' , '' ]]; rows.forEach(function(row) { %>
+                                <div class="row g-1 mb-1">
+                                    <% row.forEach(function(char) { if (char) { const charData=data.basic.find(c=> c.char === char); if (charData) { %>
+                                        <div class="col">
+                                            <div class="card border-0 shadow-sm" style="border-radius:12px;">
+                                                <div class="card-body p-1 text-center">
+                                                    <div class="h3 mb-0" style="font-family:'Playfair Display',serif;">
+                                                        <%= charData.char %>
+                                                    </div>
+                                                    <div class="text-muted small">
+                                                        <%= charData.romaji %>
+                                                    </div>
+                                                    <button class="btn btn-writing mt-1" onclick="showWriting('<%= charData.char %>')">Cách Viết</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% } else { %>
+                                            <div class="col"></div>
+                                            <% } } else { %>
+                                                <div class="col"></div>
+                                                <% } %>
+                                                    <% }); %>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 fade-in" style="border-radius:20px;">
+                    <div class="card-header bg-white border-0" style="border-radius:20px 20px 0 0;">
+                        <h3 class="card-title mb-0" style="font-family:'Playfair Display',serif;font-size:1.25rem;">Katakana với Tenten</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <% const tentenRows=[['ガ', 'ギ' , 'グ' , 'ゲ' , 'ゴ' ],['ザ', 'ジ' , 'ズ' , 'ゼ' , 'ゾ' ],['ダ', 'ヂ' , 'ヅ' , 'デ' , 'ド' ],['バ', 'ビ' , 'ブ' , 'ベ' , 'ボ' ],['パ', 'ピ' , 'プ' , 'ペ' , 'ポ' ]]; tentenRows.forEach(function(row) { %>
+                                <div class="row g-1 mb-1">
+                                    <% row.forEach(function(char) { const charData=data.tenten.find(c=> c.char === char); if (charData) { %>
+                                        <div class="col">
+                                            <div class="card border-0 shadow-sm" style="border-radius:12px;">
+                                                <div class="card-body p-1 text-center">
+                                                    <div class="h3 mb-0" style="font-family:'Playfair Display',serif;">
+                                                        <%= charData.char %>
+                                                    </div>
+                                                    <div class="text-muted small">
+                                                        <%= charData.romaji %>
+                                                    </div>
+                                                    <button class="btn btn-writing mt-1" onclick="showWriting('<%= charData.char %>')">Cách Viết</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% } }); %>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-sm border-0 fade-in mt-4" style="border-radius:20px;">
+                    <div class="card-header bg-white border-0" style="border-radius:20px 20px 0 0;">
+                        <h3 class="card-title mb-0" style="font-family:'Playfair Display',serif;font-size:1.25rem;">Katakana với Maru</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <% data.maru.forEach(function(char) { %>
+                                <div class="col">
+                                    <div class="card border-0 shadow-sm" style="border-radius:12px;">
+                                        <div class="card-body p-1 text-center">
+                                            <div class="h3 mb-0" style="font-family:'Playfair Display',serif;">
+                                                <%= char.char %>
+                                            </div>
+                                            <div class="text-muted small">
+                                                <%= char.romaji %>
+                                            </div>
+                                            <button class="btn btn-writing mt-1" onclick="showWriting('<%= char.char %>')">Cách Viết</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal hiển thị cách viết -->
+<div class="modal modal-blur fade" id="writingModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cách viết chữ <span id="charDisplay"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <img id="writingImage" src="" alt="Cách viết" class="img-fluid">
+                    </div>
+                    <div class="col-md-6">
+                        <video id="writingVideo" autoplay loop muted class="w-100" style="aspect-ratio: 1/1; object-fit: cover;">
+                            <source src="" type="video/webm">
+                            Trình duyệt của bạn không hỗ trợ video.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hàm chuyển đổi ký tự tiếng Nhật sang romaji
+    function getRomaji(char) {
+        const katakanaMap = {
+            'ア': 'a', 'イ': 'i', 'ウ': 'u', 'エ': 'e', 'オ': 'o',
+            'カ': 'ka', 'キ': 'ki', 'ク': 'ku', 'ケ': 'ke', 'コ': 'ko',
+            'サ': 'sa', 'シ': 'shi', 'ス': 'su', 'セ': 'se', 'ソ': 'so',
+            'タ': 'ta', 'チ': 'chi', 'ツ': 'tsu', 'テ': 'te', 'ト': 'to',
+            'ナ': 'na', 'ニ': 'ni', 'ヌ': 'nu', 'ネ': 'ne', 'ノ': 'no',
+            'ハ': 'ha', 'ヒ': 'hi', 'フ': 'fu', 'ヘ': 'he', 'ホ': 'ho',
+            'マ': 'ma', 'ミ': 'mi', 'ム': 'mu', 'メ': 'me', 'モ': 'mo',
+            'ヤ': 'ya', 'ユ': 'yu', 'ヨ': 'yo',
+            'ラ': 'ra', 'リ': 'ri', 'ル': 'ru', 'レ': 're', 'ロ': 'ro',
+            'ワ': 'wa', 'ヲ': 'wo', 'ン': 'n',
+            'ガ': 'ga', 'ギ': 'gi', 'グ': 'gu', 'ゲ': 'ge', 'ゴ': 'go',
+            'ザ': 'za', 'ジ': 'ji', 'ズ': 'zu', 'ゼ': 'ze', 'ゾ': 'zo',
+            'ダ': 'da', 'ヂ': 'ji', 'ヅ': 'zu', 'デ': 'de', 'ド': 'do',
+            'バ': 'ba', 'ビ': 'bi', 'ブ': 'bu', 'ベ': 'be', 'ボ': 'bo',
+            'パ': 'pa', 'ピ': 'pi', 'プ': 'pu', 'ペ': 'pe', 'ポ': 'po'
+        };
+        return katakanaMap[char] || char;
+    }
+
+    function showWriting(char) {
+        const modal = new bootstrap.Modal(document.getElementById('writingModal'));
+        document.getElementById('charDisplay').textContent = char;
+        const romaji = getRomaji(char);
+        document.getElementById('writingImage').src = `/assets/images/katakana/${romaji}.png`;
+        const video = document.getElementById('writingVideo');
+        document.getElementById('writingVideo').querySelector('source').src = `/assets/videos/katakana/${romaji}.webm`;
+        document.getElementById('writingVideo').load();
+        video.playbackRate = 3.0; // Tăng tốc độ phát lên 2x
+        modal.show();
+    }
+</script>
+
+<style>
+    .fade-in {
+        opacity: 0;
+        transform: translateY(24px);
+        animation: fadeInUp 0.8s cubic-bezier(.4, 0, .2, 1) forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+
+    .card {
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 32px 0 rgba(34, 34, 34, 0.12);
+        transform: translateY(-4px) scale(1.02);
+    }
+
+    .btn-writing {
+        font-size: 0.95rem;
+        padding: 2px 14px;
+        border-radius: 6px;
+        border: 2px solid #E60012;
+        background: #fff;
+        color: #E60012;
+        font-weight: 500;
+        transition: all 0.18s;
+    }
+
+    .btn-writing:hover,
+    .btn-writing:focus {
+        background: #E60012;
+        color: #fff;
+        border-color: #E60012;
+    }
+</style>

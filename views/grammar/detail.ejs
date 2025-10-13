@@ -1,0 +1,18 @@
+<%- include('../partials/header') %>
+
+<div class="container py-5">
+  <div class="card shadow border-0 rounded-3">
+    <div class="card-body">
+      <h2 class="text-primary mb-3"><%= grammar.structure %></h2>
+      <p class="fs-5"><strong>Ý nghĩa:</strong> <%= grammar.meaning %></p>
+      <p class="mb-2"><strong>Ví dụ:</strong></p>
+      <blockquote class="border-start ps-3 text-dark">
+        <p class="mb-1"><%= grammar.example %></p>
+        <small class="text-muted">👉 <%= grammar.translation %></small>
+      </blockquote>
+      <a href="/grammar" class="btn btn-outline-primary mt-3">⬅ Quay lại danh sách</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

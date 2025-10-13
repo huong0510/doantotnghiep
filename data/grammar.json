@@ -1,0 +1,996 @@
+{
+  "n5": [
+    {
+      "id": 1,
+      "structure": "これは〜です",
+      "meaning": "Đây là ~",
+      "example": "これは本です。",
+      "translation": "Đây là sách.",
+      "level": "N5"
+    },
+    {
+      "id": 2,
+      "structure": "それは〜です",
+      "meaning": "Đó là ~",
+      "example": "それは辞書です。",
+      "translation": "Đó là từ điển.",
+      "level": "N5"
+    },
+    {
+      "id": 3,
+      "structure": "〜じゃありません",
+      "meaning": "Không phải là ~",
+      "example": "私は学生じゃありません。",
+      "translation": "Tôi không phải là học sinh.",
+      "level": "N5"
+    },
+    {
+      "id": 4,
+      "structure": "〜ですか",
+      "meaning": "Có phải ~ không?",
+      "example": "これはペンですか。",
+      "translation": "Đây có phải là cây bút không?",
+      "level": "N5"
+    },
+    {
+      "id": 5,
+      "structure": "〜の",
+      "meaning": "Của ~",
+      "example": "これは私の本です。",
+      "translation": "Đây là sách của tôi."
+    },
+    {
+      "id": 6,
+      "structure": "ここ／そこ／あそこ",
+      "meaning": "Ở đây / ở đó / ở kia",
+      "example": "ここは学校です。",
+      "translation": "Đây là trường học."
+    },
+    {
+      "id": 7,
+      "structure": "〜も",
+      "meaning": "Cũng ~",
+      "example": "私も学生です。",
+      "translation": "Tôi cũng là học sinh."
+    },
+    {
+      "id": 8,
+      "structure": "〜の〜",
+      "meaning": "~ của ~",
+      "example": "日本の車です。",
+      "translation": "Xe của Nhật."
+    },
+    {
+      "id": 9,
+      "structure": "〜ます",
+      "meaning": "Động từ thể lịch sự hiện tại",
+      "example": "毎日勉強します。",
+      "translation": "Tôi học mỗi ngày."
+    },
+    {
+      "id": 10,
+      "structure": "〜ません",
+      "meaning": "Không (lịch sự hiện tại)",
+      "example": "私は肉を食べません。",
+      "translation": "Tôi không ăn thịt."
+    },
+    {
+      "id": 11,
+      "structure": "〜ました",
+      "meaning": "Đã (lịch sự quá khứ)",
+      "example": "昨日勉強しました。",
+      "translation": "Hôm qua tôi đã học."
+    },
+    {
+      "id": 12,
+      "structure": "〜ませんでした",
+      "meaning": "Đã không ~",
+      "example": "昨日勉強しませんでした。",
+      "translation": "Hôm qua tôi đã không học."
+    },
+    {
+      "id": 13,
+      "structure": "〜に行きます",
+      "meaning": "Đi để ~",
+      "example": "図書館に本を借りに行きます。",
+      "translation": "Tôi đi thư viện để mượn sách."
+    },
+    {
+      "id": 14,
+      "structure": "〜があります／います",
+      "meaning": "Có (vật / người)",
+      "example": "庭に木があります。",
+      "translation": "Trong vườn có cây."
+    },
+    {
+      "id": 15,
+      "structure": "〜から〜まで",
+      "meaning": "Từ ~ đến ~",
+      "example": "９時から５時まで働きます。",
+      "translation": "Tôi làm việc từ 9h đến 5h."
+    },
+    {
+      "id": 16,
+      "structure": "〜と〜",
+      "meaning": "Và ~",
+      "example": "水とパンをください。",
+      "translation": "Cho tôi nước và bánh mì."
+    },
+    {
+      "id": 17,
+      "structure": "〜でしょう",
+      "meaning": "Có lẽ ~",
+      "example": "明日は雨でしょう。",
+      "translation": "Ngày mai có lẽ trời mưa."
+    },
+    {
+      "id": 18,
+      "structure": "〜たいです",
+      "meaning": "Muốn ~",
+      "example": "日本へ行きたいです。",
+      "translation": "Tôi muốn đi Nhật."
+    },
+    {
+      "id": 19,
+      "structure": "〜てください",
+      "meaning": "Hãy ~",
+      "example": "これを読んでください。",
+      "translation": "Hãy đọc cái này."
+    },
+    {
+      "id": 20,
+      "structure": "〜てもいいです",
+      "meaning": "Được phép ~",
+      "example": "ここで写真を撮ってもいいです。",
+      "translation": "Bạn có thể chụp ảnh ở đây."
+    },
+    {
+      "id": 21,
+      "structure": "〜てはいけません",
+      "meaning": "Không được phép ~",
+      "example": "ここでたばこを吸ってはいけません。",
+      "translation": "Không được hút thuốc ở đây."
+    },
+    {
+      "id": 22,
+      "structure": "〜ましょう",
+      "meaning": "Hãy cùng ~",
+      "example": "一緒に行きましょう。",
+      "translation": "Cùng đi nào."
+    },
+    {
+      "id": 23,
+      "structure": "〜ましょうか",
+      "meaning": "Tôi ~ nhé?",
+      "example": "手伝いましょうか。",
+      "translation": "Tôi giúp nhé?"
+    },
+    {
+      "id": 24,
+      "structure": "〜ている",
+      "meaning": "Đang ~",
+      "example": "本を読んでいます。",
+      "translation": "Tôi đang đọc sách."
+    },
+    {
+      "id": 25,
+      "structure": "〜に〜があります",
+      "meaning": "Ở ~ có ~",
+      "example": "机の上に本があります。",
+      "translation": "Trên bàn có sách."
+    },
+    {
+      "id": 26,
+      "structure": "〜が好きです",
+      "meaning": "Thích ~",
+      "example": "私は音楽が好きです。",
+      "translation": "Tôi thích âm nhạc."
+    },
+    {
+      "id": 27,
+      "structure": "〜より〜のほうが〜",
+      "meaning": "~ hơn ~",
+      "example": "コーヒーよりお茶のほうが好きです。",
+      "translation": "Tôi thích trà hơn cà phê."
+    },
+    {
+      "id": 28,
+      "structure": "〜の中で〜が一番〜",
+      "meaning": "Trong số ~ thì ~ nhất",
+      "example": "スポーツの中でサッカーが一番好きです。",
+      "translation": "Trong các môn thể thao, tôi thích bóng đá nhất."
+    },
+    {
+      "id": 29,
+      "structure": "〜からです",
+      "meaning": "Bởi vì ~",
+      "example": "日本語を勉強します。日本へ行きたいからです。",
+      "translation": "Tôi học tiếng Nhật. Vì tôi muốn đi Nhật."
+    },
+    {
+      "id": 30,
+      "structure": "〜けど／が",
+      "meaning": "Nhưng ~",
+      "example": "日本語は難しいけど、面白いです。",
+      "translation": "Tiếng Nhật khó nhưng thú vị."
+    }
+  ],
+  "n4": [
+    {
+      "id": 31,
+      "structure": "〜たことがある",
+      "meaning": "Đã từng ~",
+      "example": "日本へ行ったことがあります。",
+      "translation": "Tôi đã từng đi Nhật.",
+      "level": "N4"
+    },
+    {
+      "id": 32,
+      "structure": "〜ようになる",
+      "meaning": "Trở nên ~",
+      "example": "日本語が話せるようになりました。",
+      "translation": "Tôi đã có thể nói tiếng Nhật."
+    },
+    {
+      "id": 33,
+      "structure": "〜ようにする",
+      "meaning": "Cố gắng ~",
+      "example": "毎日勉強するようにしています。",
+      "translation": "Tôi cố gắng học mỗi ngày."
+    },
+    {
+      "id": 34,
+      "structure": "〜みたい",
+      "meaning": "Giống như ~",
+      "example": "彼は先生みたいです。",
+      "translation": "Anh ấy giống như thầy giáo."
+    },
+    {
+      "id": 35,
+      "structure": "〜らしい",
+      "meaning": "Có vẻ như ~",
+      "example": "彼は学生らしいです。",
+      "translation": "Anh ấy có vẻ là học sinh."
+    },
+    {
+      "id": 36,
+      "structure": "〜たらどうですか",
+      "meaning": "Nên thử ~",
+      "example": "もっと勉強したらどうですか。",
+      "translation": "Bạn nên học nhiều hơn."
+    },
+    {
+      "id": 37,
+      "structure": "〜てしまう",
+      "meaning": "Làm xong / chẳng may ~",
+      "example": "宿題を忘れてしまいました。",
+      "translation": "Tôi đã quên làm bài tập."
+    },
+    {
+      "id": 38,
+      "structure": "〜てあげる",
+      "meaning": "Làm ~ cho ai đó",
+      "example": "友達に本を貸してあげました。",
+      "translation": "Tôi đã cho bạn mượn sách."
+    },
+    {
+      "id": 39,
+      "structure": "〜てもらう",
+      "meaning": "Nhận được ~ từ ai đó",
+      "example": "先生に手伝ってもらいました。",
+      "translation": "Tôi được thầy giúp."
+    },
+    {
+      "id": 40,
+      "structure": "〜てくれる",
+      "meaning": "Ai đó làm ~ cho mình",
+      "example": "友達が本を貸してくれました。",
+      "translation": "Bạn tôi đã cho mượn sách."
+    },
+
+    {
+      "id": 41,
+      "structure": "〜てはいけない",
+      "meaning": "Không được ~",
+      "example": "ここで写真を撮ってはいけません。",
+      "translation": "Không được chụp ảnh ở đây."
+    },
+    {
+      "id": 42,
+      "structure": "〜ながら",
+      "meaning": "Vừa ~ vừa ~",
+      "example": "音楽を聞きながら勉強します。",
+      "translation": "Tôi vừa nghe nhạc vừa học."
+    },
+    {
+      "id": 43,
+      "structure": "〜たり〜たりする",
+      "meaning": "Làm ~ rồi lại ~",
+      "example": "週末は映画を見たり、買い物をしたりします。",
+      "translation": "Cuối tuần tôi xem phim, đi mua sắm…"
+    },
+    {
+      "id": 44,
+      "structure": "〜そうです（伝聞）",
+      "meaning": "Nghe nói ~",
+      "example": "明日は雨が降るそうです。",
+      "translation": "Nghe nói ngày mai trời sẽ mưa."
+    },
+    {
+      "id": 45,
+      "structure": "〜そうです（様子）",
+      "meaning": "Trông có vẻ ~",
+      "example": "このケーキはおいしそうです。",
+      "translation": "Cái bánh này trông ngon."
+    },
+    {
+      "id": 46,
+      "structure": "〜すぎる",
+      "meaning": "Quá ~",
+      "example": "食べすぎました。",
+      "translation": "Tôi đã ăn quá nhiều."
+    },
+    {
+      "id": 47,
+      "structure": "〜かもしれない",
+      "meaning": "Có thể ~",
+      "example": "明日は雨かもしれません。",
+      "translation": "Ngày mai có thể trời mưa."
+    },
+    {
+      "id": 48,
+      "structure": "〜でしょう / 〜だろう",
+      "meaning": "Chắc là ~",
+      "example": "彼は来るでしょう。",
+      "translation": "Chắc anh ấy sẽ đến."
+    },
+    {
+      "id": 49,
+      "structure": "〜にくい",
+      "meaning": "Khó ~",
+      "example": "この漢字は覚えにくいです。",
+      "translation": "Chữ Hán này khó nhớ."
+    },
+    {
+      "id": 50,
+      "structure": "〜やすい",
+      "meaning": "Dễ ~",
+      "example": "この本は読みやすいです。",
+      "translation": "Cuốn sách này dễ đọc."
+    },
+    {
+      "id": 51,
+      "structure": "〜ておく",
+      "meaning": "Làm trước ~",
+      "example": "明日のために準備しておきます。",
+      "translation": "Tôi sẽ chuẩn bị trước cho ngày mai."
+    },
+    {
+      "id": 52,
+      "structure": "〜てみる",
+      "meaning": "Thử ~",
+      "example": "この料理を作ってみます。",
+      "translation": "Tôi sẽ thử nấu món này."
+    },
+    {
+      "id": 53,
+      "structure": "〜ようと思う",
+      "meaning": "Định ~",
+      "example": "明日、買い物に行こうと思います。",
+      "translation": "Tôi định đi mua sắm ngày mai."
+    },
+    {
+      "id": 54,
+      "structure": "〜つもり",
+      "meaning": "Dự định ~",
+      "example": "夏休みに日本へ行くつもりです。",
+      "translation": "Tôi dự định đi Nhật vào kỳ nghỉ hè."
+    },
+    {
+      "id": 55,
+      "structure": "〜ことにする",
+      "meaning": "Quyết định ~",
+      "example": "今日から運動することにしました。",
+      "translation": "Tôi đã quyết định bắt đầu tập thể dục từ hôm nay."
+    },
+    {
+      "id": 56,
+      "structure": "〜ことになる",
+      "meaning": "Được quyết định ~",
+      "example": "来月、日本へ行くことになりました。",
+      "translation": "Tôi được quyết định đi Nhật vào tháng tới."
+    },
+    {
+      "id": 57,
+      "structure": "〜ように言う",
+      "meaning": "Nói để ~",
+      "example": "先生は学生に宿題を出すように言いました。",
+      "translation": "Giáo viên bảo học sinh làm bài tập."
+    },
+    {
+      "id": 58,
+      "structure": "〜なければならない / 〜なきゃならない",
+      "meaning": "Phải ~",
+      "example": "毎日勉強しなければなりません。",
+      "translation": "Tôi phải học mỗi ngày."
+    },
+    {
+      "id": 59,
+      "structure": "〜なくてもいい",
+      "meaning": "Không cần ~",
+      "example": "宿題をしなくてもいいです。",
+      "translation": "Không cần làm bài tập."
+    },
+    {
+      "id": 60,
+      "structure": "〜たほうがいい",
+      "meaning": "Nên ~",
+      "example": "早く寝たほうがいいです。",
+      "translation": "Bạn nên đi ngủ sớm."
+    },
+    {
+      "id": 61,
+      "structure": "〜ないほうがいい",
+      "meaning": "Không nên ~",
+      "example": "そんなことを言わないほうがいいです。",
+      "translation": "Bạn không nên nói như vậy."
+    },
+    {
+      "id": 62,
+      "structure": "〜でしょうか / 〜だろうか",
+      "meaning": "Không biết có ~ không",
+      "example": "明日は雨でしょうか。",
+      "translation": "Không biết ngày mai có mưa không."
+    },
+    {
+      "id": 63,
+      "structure": "〜ているところ",
+      "meaning": "Đang trong lúc ~",
+      "example": "今、昼ご飯を食べているところです。",
+      "translation": "Bây giờ tôi đang ăn trưa."
+    },
+    {
+      "id": 64,
+      "structure": "〜ところ",
+      "meaning": "Sắp ~ / sắp sửa ~",
+      "example": "今、出かけるところです。",
+      "translation": "Tôi sắp đi ra ngoài."
+    },
+    {
+      "id": 65,
+      "structure": "〜そうにない",
+      "meaning": "Trông có vẻ không ~",
+      "example": "この問題は簡単そうにないです。",
+      "translation": "Vấn đề này trông có vẻ không dễ."
+    },
+    {
+      "id": 66,
+      "structure": "〜ようだ",
+      "meaning": "Hình như ~ / có vẻ ~",
+      "example": "雨が降るようです。",
+      "translation": "Hình như trời sắp mưa."
+    },
+    {
+      "id": 67,
+      "structure": "〜みたいだ",
+      "meaning": "Có vẻ như ~",
+      "example": "彼は元気みたいです。",
+      "translation": "Có vẻ anh ấy khỏe."
+    },
+    {
+      "id": 68,
+      "structure": "〜はずだ",
+      "meaning": "Chắc chắn ~",
+      "example": "彼は今家にいるはずです。",
+      "translation": "Anh ấy chắc chắn đang ở nhà."
+    },
+    {
+      "id": 69,
+      "structure": "〜はずがない",
+      "meaning": "Không thể nào ~",
+      "example": "彼が嘘をつくはずがない。",
+      "translation": "Anh ấy không thể nói dối được."
+    },
+    {
+      "id": 70,
+      "structure": "〜てほしい",
+      "meaning": "Muốn ai đó làm ~",
+      "example": "友達に手伝ってほしいです。",
+      "translation": "Tôi muốn bạn giúp."
+    },
+    {
+      "id": 71,
+      "structure": "〜てもかまわない",
+      "meaning": "Không sao nếu ~",
+      "example": "ここで休んでもかまいません。",
+      "translation": "Bạn có thể nghỉ ở đây cũng được."
+    },
+    {
+      "id": 72,
+      "structure": "〜しか〜ない",
+      "meaning": "Chỉ có ~",
+      "example": "水しか飲みません。",
+      "translation": "Tôi chỉ uống nước."
+    },
+    {
+      "id": 73,
+      "structure": "〜だけ〜",
+      "meaning": "Chỉ ~ thôi",
+      "example": "好きなだけ食べてください。",
+      "translation": "Hãy ăn bao nhiêu tùy thích."
+    },
+    {
+      "id": 74,
+      "structure": "〜によると",
+      "meaning": "Theo ~",
+      "example": "天気予報によると、明日は雨です。",
+      "translation": "Theo dự báo thời tiết, ngày mai trời mưa."
+    },
+    {
+      "id": 75,
+      "structure": "〜によれば",
+      "meaning": "Theo ~",
+      "example": "新聞によれば、経済が良くなるそうです。",
+      "translation": "Theo báo, kinh tế sẽ cải thiện."
+    },
+    {
+      "id": 76,
+      "structure": "〜てくる",
+      "meaning": "Đi ~ rồi trở về / dần dần ~",
+      "example": "友達が来てくる。",
+      "translation": "Bạn tôi sẽ đến."
+    },
+    {
+      "id": 77,
+      "structure": "〜ていく",
+      "meaning": "Đi ~ / dần dần ~",
+      "example": "これからも勉強していきます。",
+      "translation": "Từ nay tôi sẽ tiếp tục học."
+    },
+    {
+      "id": 78,
+      "structure": "〜おかげで",
+      "meaning": "Nhờ có ~",
+      "example": "先生のおかげで合格できました。",
+      "translation": "Nhờ thầy, tôi đã đỗ."
+    },
+    {
+      "id": 79,
+      "structure": "〜せいで",
+      "meaning": "Tại ~ (nguyên nhân xấu)",
+      "example": "雨のせいで遅れました。",
+      "translation": "Tôi đã trễ vì mưa."
+    },
+    {
+      "id": 80,
+      "structure": "〜たばかり",
+      "meaning": "Vừa mới ~",
+      "example": "日本に来たばかりです。",
+      "translation": "Tôi vừa mới đến Nhật."
+    }
+  ],
+
+  "n3": [
+    {
+      "id": 81,
+      "structure": "〜ようになる",
+      "meaning": "Trở nên ~",
+      "example": "毎日運動するようになりました。",
+      "translation": "Tôi đã bắt đầu vận động mỗi ngày."
+    },
+    {
+      "id": 82,
+      "structure": "〜ように言う",
+      "meaning": "Bảo / nhờ ai làm ~",
+      "example": "先生は学生に宿題を出すように言いました。",
+      "translation": "Giáo viên bảo học sinh làm bài tập."
+    },
+    {
+      "id": 83,
+      "structure": "〜ようにお願いする",
+      "meaning": "Nhờ vả ai làm ~",
+      "example": "友達に手伝うようにお願いしました。",
+      "translation": "Tôi nhờ bạn giúp."
+    },
+    {
+      "id": 84,
+      "structure": "〜ことにする",
+      "meaning": "Quyết định ~",
+      "example": "毎日日本語を勉強することにしました。",
+      "translation": "Tôi quyết định học tiếng Nhật mỗi ngày."
+    },
+    {
+      "id": 85,
+      "structure": "〜ことになる",
+      "meaning": "Được quyết định ~",
+      "example": "来月、東京に行くことになりました。",
+      "translation": "Tôi được quyết định đi Tokyo vào tháng tới."
+    },
+    {
+      "id": 86,
+      "structure": "〜ようにする",
+      "meaning": "Cố gắng ~",
+      "example": "毎日運動するようにしています。",
+      "translation": "Tôi cố gắng tập thể dục mỗi ngày."
+    },
+    {
+      "id": 87,
+      "structure": "〜たところ",
+      "meaning": "Vừa mới ~",
+      "example": "今、宿題を終えたところです。",
+      "translation": "Tôi vừa mới hoàn thành bài tập."
+    },
+    {
+      "id": 88,
+      "structure": "〜たばかり",
+      "meaning": "Vừa mới ~",
+      "example": "日本に来たばかりです。",
+      "translation": "Tôi vừa mới đến Nhật."
+    },
+    {
+      "id": 89,
+      "structure": "〜たほうがいい",
+      "meaning": "Nên ~",
+      "example": "もっと野菜を食べたほうがいいです。",
+      "translation": "Bạn nên ăn nhiều rau hơn."
+    },
+    {
+      "id": 90,
+      "structure": "〜ないほうがいい",
+      "meaning": "Không nên ~",
+      "example": "そんなことを言わないほうがいいです。",
+      "translation": "Bạn không nên nói như vậy."
+    },
+    {
+      "id": 91,
+      "structure": "〜ことがある",
+      "meaning": "Đã từng ~",
+      "example": "日本に行ったことがあります。",
+      "translation": "Tôi đã từng đi Nhật."
+    },
+    {
+      "id": 92,
+      "structure": "〜ことにしている",
+      "meaning": "Đã quyết định ~ (thói quen)",
+      "example": "毎朝ジョギングすることにしています。",
+      "translation": "Tôi quyết định chạy bộ mỗi sáng."
+    },
+    {
+      "id": 93,
+      "structure": "〜ことになっている",
+      "meaning": "Được quy định / dự kiến ~",
+      "example": "学校では毎日掃除をすることになっています。",
+      "translation": "Ở trường, việc dọn dẹp hàng ngày đã được quy định."
+    },
+    {
+      "id": 94,
+      "structure": "〜ように言われる",
+      "meaning": "Được bảo ~",
+      "example": "先生に宿題を出すように言われました。",
+      "translation": "Tôi được thầy bảo làm bài tập."
+    },
+    {
+      "id": 95,
+      "structure": "〜ようになる",
+      "meaning": "Trở nên có thể ~",
+      "example": "日本語が話せるようになりました。",
+      "translation": "Tôi đã có thể nói tiếng Nhật."
+    },
+    {
+      "id": 96,
+      "structure": "〜ながら",
+      "meaning": "Vừa ~ vừa ~",
+      "example": "音楽を聞きながら勉強します。",
+      "translation": "Tôi vừa nghe nhạc vừa học."
+    },
+    {
+      "id": 97,
+      "structure": "〜にくい",
+      "meaning": "Khó ~",
+      "example": "この漢字は覚えにくいです。",
+      "translation": "Chữ Hán này khó nhớ."
+    },
+    {
+      "id": 98,
+      "structure": "〜やすい",
+      "meaning": "Dễ ~",
+      "example": "この本は読みやすいです。",
+      "translation": "Cuốn sách này dễ đọc."
+    },
+    {
+      "id": 99,
+      "structure": "〜すぎる",
+      "meaning": "Quá ~",
+      "example": "食べすぎました。",
+      "translation": "Tôi đã ăn quá nhiều."
+    },
+    {
+      "id": 100,
+      "structure": "〜ておく",
+      "meaning": "Làm trước ~",
+      "example": "明日のために準備しておきます。",
+      "translation": "Tôi sẽ chuẩn bị trước cho ngày mai."
+    },
+    {
+      "id": 101,
+      "structure": "〜てみる",
+      "meaning": "Thử ~",
+      "example": "この料理を作ってみます。",
+      "translation": "Tôi sẽ thử nấu món này."
+    },
+    {
+      "id": 102,
+      "structure": "〜てしまう",
+      "meaning": "Làm xong / chẳng may ~",
+      "example": "宿題を忘れてしまいました。",
+      "translation": "Tôi đã quên làm bài tập."
+    },
+    {
+      "id": 103,
+      "structure": "〜てくれる",
+      "meaning": "Ai đó làm ~ cho mình",
+      "example": "友達が本を貸してくれました。",
+      "translation": "Bạn tôi đã cho mượn sách."
+    },
+    {
+      "id": 104,
+      "structure": "〜てもらう",
+      "meaning": "Nhận được ~ từ ai đó",
+      "example": "先生に手伝ってもらいました。",
+      "translation": "Tôi được thầy giúp."
+    },
+    {
+      "id": 105,
+      "structure": "〜てあげる",
+      "meaning": "Làm ~ cho ai đó",
+      "example": "友達に本を貸してあげました。",
+      "translation": "Tôi đã cho bạn mượn sách."
+    },
+    {
+      "id": 106,
+      "structure": "〜てほしい",
+      "meaning": "Muốn ai đó làm ~",
+      "example": "友達に手伝ってほしいです。",
+      "translation": "Tôi muốn bạn giúp."
+    },
+    {
+      "id": 107,
+      "structure": "〜によって",
+      "meaning": "Tùy theo ~",
+      "example": "意見は人によって違います。",
+      "translation": "Ý kiến khác nhau tùy theo mỗi người."
+    },
+    {
+      "id": 108,
+      "structure": "〜によると",
+      "meaning": "Theo ~",
+      "example": "天気予報によると、明日は雨です。",
+      "translation": "Theo dự báo, ngày mai trời mưa."
+    },
+    {
+      "id": 109,
+      "structure": "〜に対して",
+      "meaning": "Đối với ~",
+      "example": "先生は学生に対して優しいです。",
+      "translation": "Thầy giáo đối xử với học sinh rất tốt."
+    },
+    {
+      "id": 110,
+      "structure": "〜にとって",
+      "meaning": "Đối với ~ (từ quan điểm cá nhân)",
+      "example": "日本語は私にとって難しいです。",
+      "translation": "Tiếng Nhật đối với tôi khó."
+    },
+    {
+      "id": 111,
+      "structure": "〜につれて / 〜にしたがって",
+      "meaning": "Càng ~ càng ~",
+      "example": "年を取るにつれて体力がなくなる。",
+      "translation": "Càng lớn tuổi, sức khỏe càng giảm."
+    },
+    {
+      "id": 112,
+      "structure": "〜に関して / 〜に関する",
+      "meaning": "Liên quan đến ~",
+      "example": "環境問題に関して調べました。",
+      "translation": "Tôi đã tìm hiểu về vấn đề môi trường."
+    },
+    {
+      "id": 113,
+      "structure": "〜に加えて",
+      "meaning": "Ngoài ra còn ~",
+      "example": "雨に加えて風も強いです。",
+      "translation": "Ngoài mưa, gió cũng mạnh."
+    },
+    {
+      "id": 114,
+      "structure": "〜に基づいて",
+      "meaning": "Dựa trên ~",
+      "example": "データに基づいて分析します。",
+      "translation": "Phân tích dựa trên dữ liệu."
+    },
+    {
+      "id": 115,
+      "structure": "〜に応じて",
+      "meaning": "Tùy theo ~",
+      "example": "年齢に応じて運動をします。",
+      "translation": "Tùy theo tuổi, tập thể dục phù hợp."
+    },
+    {
+      "id": 116,
+      "structure": "〜のもとで",
+      "meaning": "Dưới ~",
+      "example": "先生のもとで勉強しています。",
+      "translation": "Tôi đang học dưới sự hướng dẫn của thầy."
+    },
+    {
+      "id": 117,
+      "structure": "〜にわたって",
+      "meaning": "Trong suốt ~",
+      "example": "日本全国にわたって調査しました。",
+      "translation": "Tôi đã khảo sát trên toàn Nhật Bản."
+    },
+    {
+      "id": 118,
+      "structure": "〜から〜にかけて",
+      "meaning": "Từ ~ đến ~",
+      "example": "東京から大阪にかけて雨が降った。",
+      "translation": "Từ Tokyo đến Osaka đã mưa."
+    },
+    {
+      "id": 119,
+      "structure": "〜において",
+      "meaning": "Ở ~ (địa điểm, thời gian, lĩnh vực)",
+      "example": "会議は東京において行われます。",
+      "translation": "Cuộc họp sẽ diễn ra tại Tokyo."
+    },
+    {
+      "id": 120,
+      "structure": "〜にかかわらず",
+      "meaning": "Bất kể ~",
+      "example": "年齢にかかわらず応募できます。",
+      "translation": "Bất kể tuổi tác, bạn đều có thể đăng ký."
+    },
+    {
+      "id": 121,
+      "structure": "〜につき",
+      "meaning": "Mỗi ~ / vì ~",
+      "example": "一枚につき100円です。",
+      "translation": "Mỗi tấm là 100 yên."
+    },
+    {
+      "id": 122,
+      "structure": "〜だけあって",
+      "meaning": "Quả đúng là ~",
+      "example": "彼は日本人だけあって、日本語が上手です。",
+      "translation": "Quả đúng là người Nhật, tiếng Nhật của anh ấy giỏi."
+    },
+    {
+      "id": 123,
+      "structure": "〜だけに",
+      "meaning": "Chính vì ~",
+      "example": "経験者だけに、仕事が早いです。",
+      "translation": "Chính vì là người có kinh nghiệm nên làm việc nhanh."
+    },
+    {
+      "id": 124,
+      "structure": "〜ものだから / 〜もので",
+      "meaning": "Vì ~ (lý do giải thích)",
+      "example": "遅れたものです。電車が遅れました。",
+      "translation": "Tôi đến muộn vì tàu trễ."
+    },
+    {
+      "id": 125,
+      "structure": "〜ことから",
+      "meaning": "Bởi vì ~ / từ ~ mà ...",
+      "example": "名前から想像することができます。",
+      "translation": "Có thể tưởng tượng từ tên gọi."
+    },
+    {
+      "id": 126,
+      "structure": "〜にしては",
+      "meaning": "So với ~ thì ...",
+      "example": "初心者にしては上手です。",
+      "translation": "So với người mới, bạn làm tốt."
+    },
+    {
+      "id": 127,
+      "structure": "〜にしても / 〜にしても",
+      "meaning": "Dù là ~ hay ~",
+      "example": "行くにしても行かないにしても連絡してください。",
+      "translation": "Dù đi hay không, hãy liên lạc."
+    },
+    {
+      "id": 128,
+      "structure": "〜からといって",
+      "meaning": "Không phải cứ vì ~ mà ...",
+      "example": "お金があるからといって幸せとは限らない。",
+      "translation": "Không phải cứ giàu là hạnh phúc."
+    },
+    {
+      "id": 129,
+      "structure": "〜ものの",
+      "meaning": "Nhưng ~",
+      "example": "約束したものの、行けませんでした。",
+      "translation": "Mặc dù đã hứa, tôi không thể đi."
+    },
+    {
+      "id": 130,
+      "structure": "〜ながらも",
+      "meaning": "Mặc dù ~",
+      "example": "忙しいながらも勉強しています。",
+      "translation": "Mặc dù bận, tôi vẫn học."
+    },
+    {
+      "id": 131,
+      "structure": "〜つつ",
+      "meaning": "Vừa ~ vừa ~ (trang trọng)",
+      "example": "考えつつ歩く。",
+      "translation": "Vừa đi vừa suy nghĩ."
+    },
+    {
+      "id": 132,
+      "structure": "〜にかけては",
+      "meaning": "Nếu nói về ~ thì ...",
+      "example": "料理にかけては彼は上手です。",
+      "translation": "Nếu nói về nấu ăn thì anh ấy giỏi."
+    },
+    {
+      "id": 133,
+      "structure": "〜にしても",
+      "meaning": "Ngay cả ~ cũng ...",
+      "example": "私にしても驚きました。",
+      "translation": "Ngay cả tôi cũng ngạc nhiên."
+    },
+    {
+      "id": 134,
+      "structure": "〜わけではない / 〜というわけではない",
+      "meaning": "Không hẳn là ~",
+      "example": "お金があるからといって幸せというわけではない。",
+      "translation": "Không hẳn là giàu thì hạnh phúc."
+    },
+    {
+      "id": 135,
+      "structure": "〜わけがない",
+      "meaning": "Không thể nào ~",
+      "example": "彼が嘘をつくわけがない。",
+      "translation": "Anh ấy không thể nói dối được."
+    },
+    {
+      "id": 136,
+      "structure": "〜というものではない / 〜というものでもない",
+      "meaning": "Không phải cứ ~ là ...",
+      "example": "勉強すればできるというものではない。",
+      "translation": "Không phải cứ học là làm được."
+    },
+    {
+      "id": 137,
+      "structure": "〜というより",
+      "meaning": "Nói đúng hơn là ~",
+      "example": "面白いというより難しいです。",
+      "translation": "Nói đúng hơn là khó hơn là thú vị."
+    },
+    {
+      "id": 138,
+      "structure": "〜にすぎない",
+      "meaning": "Chỉ là ~",
+      "example": "ただの冗談にすぎない。",
+      "translation": "Chỉ là một trò đùa thôi."
+    },
+    {
+      "id": 139,
+      "structure": "〜にほかならない",
+      "meaning": "Chính là ~",
+      "example": "成功の秘訣は努力にほかならない。",
+      "translation": "Bí quyết thành công chính là nỗ lực."
+    },
+    {
+      "id": 140,
+      "structure": "〜に違いない",
+      "meaning": "Chắc chắn ~",
+      "example": "彼は来るに違いない。",
+      "translation": "Anh ấy chắc chắn sẽ đến."
+    }
+  ]
+}
+

@@ -1,0 +1,63 @@
+-- 1. Tạo bảng lesson nếu chưa có
+CREATE TABLE IF NOT EXISTS vocabulary_lesson (
+    lesson INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- 2. Seed dữ liệu
+INSERT INTO vocabulary_lesson (lesson, name)
+SELECT t.lesson, t.name
+FROM (
+    SELECT 1 AS lesson, 'Bài 1' AS name UNION ALL
+    SELECT 2, 'Bài 2' UNION ALL
+    SELECT 3, 'Bài 3' UNION ALL
+    SELECT 4, 'Bài 4' UNION ALL
+    SELECT 5, 'Bài 5' UNION ALL
+    SELECT 6, 'Bài 6' UNION ALL
+    SELECT 7, 'Bài 7' UNION ALL
+    SELECT 8, 'Bài 8' UNION ALL
+    SELECT 9, 'Bài 9' UNION ALL
+    SELECT 10, 'Bài 10' UNION ALL
+    SELECT 11, 'Bài 11' UNION ALL
+    SELECT 12, 'Bài 12' UNION ALL
+    SELECT 13, 'Bài 13' UNION ALL
+    SELECT 14, 'Bài 14' UNION ALL
+    SELECT 15, 'Bài 15' UNION ALL
+    SELECT 16, 'Bài 16' UNION ALL
+    SELECT 17, 'Bài 17' UNION ALL
+    SELECT 18, 'Bài 18' UNION ALL
+    SELECT 19, 'Bài 19' UNION ALL
+    SELECT 20, 'Bài 20' UNION ALL
+    SELECT 21, 'Bài 21' UNION ALL
+    SELECT 22, 'Bài 22' UNION ALL
+    SELECT 23, 'Bài 23' UNION ALL
+    SELECT 24, 'Bài 24' UNION ALL
+    SELECT 25, 'Bài 25' UNION ALL
+    SELECT 26, 'Bài 26' UNION ALL
+    SELECT 27, 'Bài 27' UNION ALL
+    SELECT 28, 'Bài 28' UNION ALL
+    SELECT 29, 'Bài 29' UNION ALL
+    SELECT 30, 'Bài 30' UNION ALL
+    SELECT 31, 'Bài 31' UNION ALL
+    SELECT 32, 'Bài 32' UNION ALL
+    SELECT 33, 'Bài 33' UNION ALL
+    SELECT 34, 'Bài 34' UNION ALL
+    SELECT 35, 'Bài 35' UNION ALL
+    SELECT 36, 'Bài 36' UNION ALL
+    SELECT 37, 'Bài 37' UNION ALL
+    SELECT 38, 'Bài 38' UNION ALL
+    SELECT 39, 'Bài 39' UNION ALL
+    SELECT 40, 'Bài 40' UNION ALL
+    SELECT 41, 'Bài 41' UNION ALL
+    SELECT 42, 'Bài 42' UNION ALL
+    SELECT 43, 'Bài 43' UNION ALL
+    SELECT 44, 'Bài 44' UNION ALL
+    SELECT 45, 'Bài 45' UNION ALL
+    SELECT 46, 'Bài 46' UNION ALL
+    SELECT 47, 'Bài 47' UNION ALL
+    SELECT 48, 'Bài 48' UNION ALL
+    SELECT 49, 'Bài 49' UNION ALL
+    SELECT 50, 'Bài 50'
+) t
+LEFT JOIN vocabulary_lesson vl ON vl.lesson = t.lesson
+WHERE vl.lesson IS NULL; 
