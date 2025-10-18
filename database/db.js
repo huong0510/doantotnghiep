@@ -93,9 +93,23 @@ async function initDatabase() {
         throw error;
     }
 }
+// 🧩 Hàm SELECT
+async function getQuery(sql, params = []) {
+  const [rows] = await pool.query(sql, params);
+  return rows;
+}
 
+// 🧩 Hàm INSERT / UPDATE / DELETE
+async function executeQuery(sql, params = []) {
+  const [result] = await pool.execute(sql, params);
+  return result;
+}
 module.exports = {
-    runQuery,
-    getQuery,
-    initDatabase
-}; 
+  pool,
+  runQuery,
+  getQuery,
+  executeQuery,
+  initDatabase
+};
+
+; 

@@ -1,0 +1,48 @@
+<% exercises.forEach((ex, index) => { %>
+  <div class="mb-4 p-3 border rounded quiz-item" data-answer="<%= ex.correct_answer %>">
+    <p class="fw-bold"><%= index + 1 %>. <%= ex.question %></p>
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="q<%= index %>" value="A">
+      <label class="form-check-label">A. <%= ex.option_a %></label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="q<%= index %>" value="B">
+      <label class="form-check-label">B. <%= ex.option_b %></label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="q<%= index %>" value="C">
+      <label class="form-check-label">C. <%= ex.option_c %></label>
+    </div>
+
+    <button class="btn btn-sm btn-primary mt-2 check-btn">Kiểm tra</button>
+    <div class="result mt-2 fw-semibold"></div>
+  </div>
+<% }); %>
+
+<script>
+document.querySelectorAll(".check-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const quizItem = btn.closest(".quiz-item");
+    const correct = quizItem.dataset.answer;
+    const selected = quizItem.querySelector("input[type='radio']:checked");
+    const result = quizItem.querySelector(".result");
+
+    if (!selected) {
+      result.textContent = "⚠️ Vui lòng chọn một đáp án!";
+      result.className = "result mt-2 fw-semibold text-warning";
+      return;
+    }
+
+    if (selected.value === correct) {
+      result.textContent = "✅ Chính xác!";
+      result.className = "result mt-2 fw-semibold text-success";
+    } else {
+      result.textContent = `❌ Sai rồi. Đáp án đúng là ${correct}.`;
+      result.className = "result mt-2 fw-semibold text-danger";
+    }
+  });
+});
+</script>

@@ -1,18 +1,83 @@
 <%- include('../partials/header') %>
 
 <div class="container py-5">
-  <div class="card shadow border-0 rounded-3">
+  <div class="card shadow border-0 rounded-3 mb-4">
     <div class="card-body">
       <h2 class="text-primary mb-3"><%= grammar.structure %></h2>
       <p class="fs-5"><strong>Ý nghĩa:</strong> <%= grammar.meaning %></p>
       <p class="mb-2"><strong>Ví dụ:</strong></p>
+
       <blockquote class="border-start ps-3 text-dark">
         <p class="mb-1"><%= grammar.example %></p>
         <small class="text-muted">👉 <%= grammar.translation %></small>
       </blockquote>
+
       <a href="/grammar" class="btn btn-outline-primary mt-3">⬅ Quay lại danh sách</a>
+
+      <!-- Nút hiện bài luyện tập -->
+      <button 
+        id="show-exercise-btn" 
+        class="btn btn-outline-success mt-3"
+        data-grammar-id="<%= grammar.id %>"
+      >
+        🧠Quiz
+      </button>
+
+      <!-- Vùng hiển thị bài luyện tập -->
+      <div id="exercise-section" class="mt-4" style="display: none;">
+        <h4 class="text-success mb-3">Bài luyện tập</h4>
+        <div id="exercise-content"></div>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+document.getElementById('show-exercise-btn').addEventListener('click', async (e) => {
+  const grammarId = e.target.dataset.grammarId;
+  const exerciseSection = document.getElementById('exercise-section');
+  const content = document.getElementById('exercise-content');
+  
+  content.innerHTML = '<p>⏳ Đang tải bài luyện tập...</p>';
+  exerciseSection.style.display = 'block';
+  
+  try {
+    const res = await fetch(`/grammar/${grammarId}/exercises`);
+    const html = await res.text();
+    content.innerHTML = html;
+
+    // 🧠 Sau khi HTML được render, gọi lại script kiểm tra quiz
+    initExerciseCheck();
+  } catch (err) {
+    content.innerHTML = '<p class="text-danger">❌ Lỗi khi tải bài luyện tập!</p>';
+    console.error(err);
+  }
+});
+
+function initExerciseCheck() {
+  document.querySelectorAll(".check-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const quizItem = btn.closest(".quiz-item");
+      const correctAnswer = quizItem.dataset.answer.trim();
+      const selected = quizItem.querySelector("input[type='radio']:checked");
+      const resultDiv = quizItem.querySelector(".result");
+
+      if (!selected) {
+        resultDiv.textContent = "⚠️ Vui lòng chọn một đáp án!";
+        resultDiv.className = "result mt-2 fw-semibold text-warning";
+        return;
+      }
+
+      if (selected.value === correctAnswer) {
+        resultDiv.textContent = "✅ Chính xác!";
+        resultDiv.className = "result mt-2 fw-semibold text-success";
+      } else {
+        resultDiv.textContent = `❌ Sai rồi. Đáp án đúng là ${correctAnswer}.`;
+        resultDiv.className = "result mt-2 fw-semibold text-danger";
+      }
+    });
+  });
+}
+</script>
 
 <%- include('../partials/footer') %>
