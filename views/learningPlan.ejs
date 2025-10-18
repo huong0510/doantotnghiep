@@ -77,14 +77,16 @@ document.querySelector("#planForm").addEventListener("submit", async (e) => {
     let planText = data.plan || "❌ Không tạo được kế hoạch học.";
 
     // ✅ Lưu lại kế hoạch hiện tại để có thể lưu DB
-    currentPlan = {
-      student_name: formData.name,
-      level: formData.level,
-      plan: planText
-    };
-
-    // Hiện nút “Lưu kế hoạch”
-    document.getElementById("savePlanBtn").classList.remove("d-none");
+   currentPlan = {
+  student_name: formData.name,
+  level: formData.level,
+  goals: formData.goals,
+  weak_points: formData.weakPoints,
+  available_time: formData.availableTime,
+  plan: planText
+};
+ // ✅ Hiện nút “Lưu kế hoạch”
+document.getElementById("savePlanBtn").classList.remove("d-none");
 
     // Tách kế hoạch theo "Ngày", "Buổi", hoặc "Bài"
     const sections = planText.split(/(?=Ngày\s*\d+|Buổi\s*\d+|Bài\s*\d+)/gi);

@@ -1,0 +1,163 @@
+<%- include('partials/header', { title: title }) %>
+
+<div class="container my-4">
+  <h2 class="fw-bold text-primary mb-4">🤖 Kết quả phân tích năng lực</h2>
+
+  
+
+  <!-- 🧾 Thông tin kế hoạch -->
+  <div class="card shadow-sm p-4">
+    <h5><strong>👤 Học viên:</strong> <%= plan.student_name %></h5>
+    <p><strong>ID kế hoạch:</strong> <%= plan.id %></p>
+    <p><strong>Trình độ:</strong> <%= plan.level %></p>
+    <p><strong>Mục tiêu học tập:</strong> <%= plan.goals || '—' %></p>
+    <p><strong>Kỹ năng yếu:</strong> <%= plan.weak_points || '—' %></p>
+    <p><strong>Thời gian học mỗi ngày:</strong> <%= plan.available_time || '—' %></p>
+    <p><strong>Ngày tạo:</strong> 
+      <%= new Date(plan.created_at).toLocaleTimeString('vi-VN') %> 
+      <%= new Date(plan.created_at).toLocaleDateString('vi-VN') %>
+    </p>
+    <hr>
+    <h6 class="text-primary fw-bold">📘 Kế hoạch học chi tiết:</h6>
+    <pre class="bg-light p-3 rounded" style="white-space: pre-wrap;"><%= plan.plan %></pre>
+  </div>
+
+  <!-- 🧩 Form nhập dữ liệu điểm số -->
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-info text-white fw-bold">
+      📊 Phân tích năng lực học viên từ dữ liệu điểm số
+    </div>
+    <div class="card-body">
+      <form id="analysisForm" onsubmit="analyze(event)">
+          <input type="hidden" id="plan_id" value="<%= plan.id %>">
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label>Ngữ pháp</label>
+            <input type="number" class="form-control" id="grammar" placeholder="0 - 100" required>
+          </div>
+          <div class="col-md-4">
+            <label>Từ vựng</label>
+            <input type="number" class="form-control" id="vocab" placeholder="0 - 100" required>
+          </div>
+          <div class="col-md-4">
+            <label>Nghe hiểu</label>
+            <input type="number" class="form-control" id="listening" placeholder="0 - 100" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label>Nói</label>
+            <input type="number" class="form-control" id="speaking" placeholder="0 - 100" required>
+          </div>
+          <div class="col-md-4">
+            <label>Đọc hiểu</label>
+            <input type="number" class="form-control" id="reading" placeholder="0 - 100" required>
+          </div>
+          <div class="col-md-4">
+            <label>Thời gian học mỗi ngày (giờ)</label>
+            <input type="number" class="form-control" id="studyTime" placeholder="1 - 5" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label>Kỹ năng yếu (nếu có)</label>
+          <input type="text" class="form-control" id="weakSkill" placeholder="Ví dụ: nghe hiểu">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Phân tích năng lực</button>
+      </form>
+<div id="loadingSpinner" class="text-center mt-3" style="display:none;">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="mt-2 text-muted">Đang phân tích vui lòng chờ...</p>
+</div>
+
+      <!-- Hiển thị kết quả -->
+      <div id="analysisSection" style="display:none;">
+        <div id="analysisResult" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="/learning-plan/history-view" class="btn btn-secondary mt-3">← Quay lại</a>
+</div>
+
+<script>
+  // ✅ Xử lý chuyển trang theo ID nhập
+  function viewPlan(event) {
+    event.preventDefault();
+    const id = document.getElementById("planIdInput").value.trim();
+    if (id) window.location.href = `/learning-plan/analysis/${id}`;
+    else alert("Vui lòng nhập ID kế hoạch!");
+  }
+
+  // ✅ Hàm gửi dữ liệu và hiển thị kết quả phân tích năng lực
+  async function analyze(event) {
+  event.preventDefault();
+
+  // Lấy dữ liệu từ form
+  const plan_id = document.getElementById("plan_id").value;
+  const grammar = document.getElementById("grammar").value;
+  const vocab = document.getElementById("vocab").value;
+  const listening = document.getElementById("listening").value;
+  const speaking = document.getElementById("speaking").value;
+  const reading = document.getElementById("reading").value;
+  const studyTime = document.getElementById("studyTime").value;
+  const weakSkill = document.getElementById("weakSkill").value;
+
+  const payload = {
+    plan_id,
+    grammar,
+    vocab,
+    listening,
+    speaking,
+    reading,
+    studyTime,
+    weakSkill
+  };
+
+  console.log("📤 Gửi dữ liệu phân tích:", payload);
+
+  // Hiện hiệu ứng chờ
+  const loadingSpinner = document.getElementById("loadingSpinner");
+  const analysisSection = document.getElementById("analysisSection");
+  const analysisResult = document.getElementById("analysisResult");
+
+  loadingSpinner.style.display = "block";
+  analysisSection.style.display = "none";
+
+  try {
+    const res = await fetch("/learning-plan/analyze-progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+    console.log("📊 Kết quả AI:", result);
+
+    // Ẩn hiệu ứng chờ và hiện kết quả
+    loadingSpinner.style.display = "none";
+    analysisSection.style.display = "block";
+
+    if (result.success) {
+      analysisResult.innerHTML = `
+        <div class="alert alert-success fw-bold">✅ Phân tích hoàn tất!</div>
+        <pre class="p-3 bg-light rounded border">${result.analysis}</pre>
+      `;
+    } else {
+      analysisResult.innerHTML = `
+        <div class="alert alert-danger">${result.message}</div>
+      `;
+    }
+
+  } catch (err) {
+    console.error("❌ Lỗi khi phân tích năng lực:", err);
+    loadingSpinner.style.display = "none";
+    alert("Lỗi khi phân tích: " + err.message);
+  }
+}
+</script>
+
+<%- include('partials/footer') %>

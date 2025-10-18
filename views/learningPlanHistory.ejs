@@ -26,8 +26,32 @@
         </tbody>
     </table>
 
-<a href="/learning-plan" class="btn btn-secondary mt-3">⬅ Quay lại tạo kế hoạch</a>
+<div class="d-flex justify-content-between align-items-center my-3">
+    <a href="/learning-plan" class="btn btn-secondary">← Quay lại tạo kế hoạch</a>
+
+ 
+
+  <div class="d-flex align-items-center gap-2">
+    <input type="number" id="planIdInput" class="form-control" placeholder="Nhập ID kế hoạch..." style="width: 180px;">
+    <button class="btn btn-info fw-bold shadow-sm" 
+            style="background: linear-gradient(90deg, #00bfff, #007bff); border: none;"
+            onclick="goToAnalysis()">
+      🤖 Phân tích năng lực (AI)
+    </button>
+  </div>
 </div>
+
+<script>
+function goToAnalysis() {
+  const id = document.getElementById('planIdInput').value.trim();
+  if (!id) {
+    alert('⚠️ Vui lòng nhập ID kế hoạch trước khi phân tích!');
+    return;
+  }
+  window.location.href = '/learning-plan/analysis/' + id;
+}
+</script>
+
 
 <!-- Modal xem chi tiết kế hoạch -->
 <div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel" aria-hidden="true">

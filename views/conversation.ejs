@@ -28,12 +28,15 @@
 
       <div class="chat-box" id="convBox"></div>
 
-      <form id="convForm" class="d-flex mt-3">
-        <input type="hidden" id="userId" value="<%= user ? user.id : '' %>">
-        <input type="text" id="convInput" class="form-control me-2" placeholder="Nhập câu muốn luyện (VD: こんにちは、私は学生です)" autocomplete="off">
-        <button class="btn btn-primary" id="sendBtn">Gửi</button>
-        <button type="button" class="btn btn-secondary ms-2" id="clearBtn">Xóa</button>
-      </form>
+<form id="convForm" class="d-flex mt-3">
+  <input type="hidden" id="userId" value="<%= user ? user.id : '' %>">
+  <input type="text" id="convInput" class="form-control me-2" placeholder="Nhập hoặc nói câu muốn luyện (VD: こんにちは、私は学生です)" autocomplete="off">
+  <button class="btn btn-primary" id="sendBtn">Gửi</button>
+  <button type="button" class="btn btn-outline-danger ms-2" id="micBtn">🎤</button>
+  <button type="button" class="btn btn-secondary ms-2" id="clearBtn">Xóa</button>
+</form>
+
+
 
       <div class="mt-3 text-muted">
         <small>Gợi ý: Bạn có thể viết bằng tiếng Việt/romaji/từ vựng, AI sẽ phản hồi bằng tiếng Nhật và dịch.</small>
@@ -109,6 +112,7 @@ function appendMessage(role, text) {
     bubble.html(`
       <span>${jpText}</span>
       <button class="btn btn-sm btn-link p-0 ms-2 play-audio" data-text="${jpText}">🔊</button>
+
       ${otherText ? "<div style='margin-top:4px; font-size:0.9em; color:#555'>" + otherText + "</div>" : ""}
     `);
   } else {
@@ -125,38 +129,135 @@ $(document).on('click', '.play-audio', function() {
   speakJapanese(txt);
 });
 
-$('#convForm').on('submit', async function(e) {
-  e.preventDefault();
-  const txt = $('#convInput').val().trim();
-  if (!txt) return;
-  appendMessage('user', txt);
-  $('#convInput').val('');
-  appendMessage('assistant', '<em>Đang suy nghĩ...</em>');
-
-  try {
-    const res = await fetch('/api/conversation', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ scenario: currentScenario, message: txt })
-    });
-    const data = await res.json();
-    convBox.children().last().remove();
-
-    if (data.success && data.reply) {
-      appendMessage('assistant', data.reply);
-    } else if (data.error) {
-      appendMessage('assistant', '<span style="color:crimson">Lỗi: ' + data.error + '</span>');
-    } else {
-      appendMessage('assistant', '<span style="color:crimson">Không nhận được phản hồi</span>');
-    }
-  } catch (err) {
-    convBox.children().last().remove();
-    appendMessage('assistant', '<span style="color:crimson">Lỗi kết nối: ' + err.message + '</span>');
-  }
-});
+$('#convForm').on('submit', async function(e)
+ { e.preventDefault();
+   const txt = $('#convInput').val().trim();
+    if (!txt) return; appendMessage('user', txt);
+     $('#convInput').val(''); appendMessage('assistant', '<em>Đang suy nghĩ...</em>');
+      try {
+        const res = await fetch('/api/conversation', {
+           method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ scenario: currentScenario, message: txt }) });
+              const data = await res.json(); 
+              convBox.children().last().remove();
+              if (data.success && data.reply) { appendMessage('assistant', data.reply); } else if (data.error) { appendMessage('assistant', '<span style="color:crimson">Lỗi: ' + data.error + '</span>'); } else { appendMessage('assistant', '<span style="color:crimson">Không nhận được phản hồi</span>'); } } catch (err) { convBox.children().last().remove(); appendMessage('assistant', '<span style="color:crimson">Lỗi kết nối: ' + err.message + '</span>'); } });
 
 $('#clearBtn').click(function() {
   $('#convBox').empty();
+});
+// 🎙️ Nhận giọng nói tiếng Nhật (Speech-to-Text)
+let recognizing = false;
+let recognition;
+
+if ('webkitSpeechRecognition' in window) {
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = 'ja-JP';//'vi-VN' nếu muốn nói tiếng việt
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    recognizing = true;
+    $('#micBtn').text('🛑 Dừng').removeClass('btn-outline-danger').addClass('btn-danger');
+  };
+
+  recognition.onend = () => {
+    recognizing = false;
+    $('#micBtn').text('🎤 Nói').removeClass('btn-danger').addClass('btn-outline-danger');
+  };
+recognition.onresult = (event) => {
+  const spokenText = event.results[0][0].transcript.trim();
+  $('#convInput').val(spokenText);
+
+  // 🔍 Lấy nội dung phản hồi AI mới nhất
+  const lastAssistantBubble = $('#convBox .msg.assistant .bubble').last().html() || "";
+  let jpSample = "";
+
+  // 1️⃣ Ưu tiên tìm câu trong ngoặc 「」 (chuẩn tiếng Nhật)
+  const bracketMatch = lastAssistantBubble.match(/「([^」]+)」/);
+  if (bracketMatch) {
+    jpSample = bracketMatch[1].trim();
+  } else {
+    // 2️⃣ Nếu không có 「」, thử tìm các mẫu khác có romaji
+    const romanjiHintMatch = lastAssistantBubble.match(/([ぁ-んァ-ン一-龯ー・]+)[^<]*\([A-Za-z\s]+\)/);
+    if (romanjiHintMatch) {
+      jpSample = romanjiHintMatch[1].trim();
+    } else {
+      // 3️⃣ Nếu vẫn không có, lấy dòng tiếng Nhật dài nhất trong câu trả lời
+      const japaneseMatches = lastAssistantBubble.match(/[ぁ-んァ-ン一-龯ー・「」]+/g);
+      if (japaneseMatches && japaneseMatches.length > 0) {
+        jpSample = japaneseMatches.reduce((a, b) => (b.length > a.length ? b : a), "");
+      }
+    }
+  }
+
+  // Nếu vẫn không tìm được câu mẫu
+  if (!jpSample) {
+    appendMessage('assistant', `<small>⚠️ Không tìm thấy câu mẫu để chấm điểm.</small>`);
+    return;
+  }
+
+  // 🧮 Tính điểm phát âm
+  const score = stringSimilarity(spokenText, jpSample);
+  let color = score > 85 ? 'green' : score > 60 ? 'orange' : 'red';
+
+  appendMessage(
+    'assistant',
+    `🎯 <b>Điểm phát âm:</b> <span style="color:${color}">${score}%</span><br>
+     <small>🗣️ Câu mẫu: ${jpSample}<br>
+     📢 Bạn nói: ${spokenText}</small>`
+  );
+
+  // ⏩ Gửi câu vừa nói cho AI tiếp tục phản hồi
+  $('#convForm').submit();
+};
+
+
+
+
+  recognition.onerror = (event) => {
+    console.error('Lỗi nhận giọng nói:', event.error);
+    alert('Lỗi nhận giọng nói: ' + event.error);
+  };
+} else {
+  alert('⚠️ Trình duyệt không hỗ trợ nhận giọng nói (hãy dùng Chrome).');
+}
+// 📏 Hàm tính độ giống giữa hai câu (Levenshtein)
+function stringSimilarity(s1, s2) {
+  s1 = s1.toLowerCase().trim();
+  s2 = s2.toLowerCase().trim();
+
+  const len1 = s1.length;
+  const len2 = s2.length;
+  const dp = Array(len1 + 1)
+    .fill(null)
+    .map(() => Array(len2 + 1).fill(0));
+
+  for (let i = 0; i <= len1; i++) dp[i][0] = i;
+  for (let j = 0; j <= len2; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1, // xóa
+        dp[i][j - 1] + 1, // thêm
+        dp[i - 1][j - 1] + cost // thay thế
+      );
+    }
+  }
+
+  const distance = dp[len1][len2];
+  const maxLen = Math.max(len1, len2);
+  return ((1 - distance / maxLen) * 100).toFixed(1); // phần trăm giống
+}
+
+$('#micBtn').click(function() {
+  if (recognizing) {
+    recognition.stop();
+    return;
+  }
+  recognition.start();
 });
 
 loadScenarios();
