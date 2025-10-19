@@ -24,29 +24,47 @@
       </button>
 
       <!-- Vùng hiển thị bài luyện tập -->
-      <div id="exercise-section" class="mt-4" style="display: none;">
-        <h4 class="text-success mb-3">Bài luyện tập</h4>
-        <div id="exercise-content"></div>
-      </div>
-    </div>
-  </div>
+<div id="exercise-section" class="mt-4" style="display: none;">
+  <h4 class="text-success mb-3">Bài luyện tập</h4>
+  <div id="exercise-content"></div>
+
+<!-- Nút phân tích đặt ngay dưới bài tập -->
+<div class="text-start mt-3">
+  <button 
+    id="analyze-btn" 
+    class="btn btn-info d-flex align-items-center gap-2"
+    style="display: none;"
+  >
+    <span id="loading-spinner" class="spinner-border spinner-border-sm me-2" style="display: none;"></span>
+    <span id="analyze-text">🤖 Phân tích điểm yếu</span>
+  </button>
 </div>
+
+
+
+<!-- Kết quả phân tích AI -->
+<div id="aiAnalysis" class="mt-4 p-4 border rounded bg-light shadow-sm" style="display:none;">
+  <h5 class="text-primary mb-3">🤖 kết quả phân tích</h5>
+  <div id="aiResult" class="text-dark" style="white-space: pre-line;"></div>
+</div>
+
 
 <script>
 document.getElementById('show-exercise-btn').addEventListener('click', async (e) => {
   const grammarId = e.target.dataset.grammarId;
-  const exerciseSection = document.getElementById('exercise-section');
+  const section = document.getElementById('exercise-section');
   const content = document.getElementById('exercise-content');
-  
+  const analyzeBtn = document.getElementById("analyze-btn");
+
   content.innerHTML = '<p>⏳ Đang tải bài luyện tập...</p>';
-  exerciseSection.style.display = 'block';
-  
+  section.style.display = 'block';
+  analyzeBtn.style.display = 'none';
+  document.getElementById("aiAnalysis").style.display = "none";
+
   try {
     const res = await fetch(`/grammar/${grammarId}/exercises`);
     const html = await res.text();
     content.innerHTML = html;
-
-    // 🧠 Sau khi HTML được render, gọi lại script kiểm tra quiz
     initExerciseCheck();
   } catch (err) {
     content.innerHTML = '<p class="text-danger">❌ Lỗi khi tải bài luyện tập!</p>';
@@ -55,12 +73,14 @@ document.getElementById('show-exercise-btn').addEventListener('click', async (e)
 });
 
 function initExerciseCheck() {
+  const analyzeBtn = document.getElementById("analyze-btn");
+  analyzeBtn.style.display = "none"; // ẩn ban đầu
+
   document.querySelectorAll(".check-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const quizItem = btn.closest(".quiz-item");
-      const correctAnswer = quizItem.dataset.answer.trim();
-      const selected = quizItem.querySelector("input[type='radio']:checked");
-      const resultDiv = quizItem.querySelector(".result");
+      const quizDiv = btn.closest(".quiz-item");
+      const selected = quizDiv.querySelector("input[type='radio']:checked");
+      const resultDiv = quizDiv.querySelector(".result");
 
       if (!selected) {
         resultDiv.textContent = "⚠️ Vui lòng chọn một đáp án!";
@@ -68,6 +88,7 @@ function initExerciseCheck() {
         return;
       }
 
+      const correctAnswer = quizDiv.dataset.answer?.trim();
       if (selected.value === correctAnswer) {
         resultDiv.textContent = "✅ Chính xác!";
         resultDiv.className = "result mt-2 fw-semibold text-success";
@@ -75,9 +96,82 @@ function initExerciseCheck() {
         resultDiv.textContent = `❌ Sai rồi. Đáp án đúng là ${correctAnswer}.`;
         resultDiv.className = "result mt-2 fw-semibold text-danger";
       }
+
+      // ✅ Kiểm tra xem tất cả quiz-item đều đã có câu trả lời
+      const allAnswered = [...document.querySelectorAll(".quiz-item")].every((item) => {
+        return item.querySelector("input[type='radio']:checked");
+      });
+
+      if (allAnswered) {
+        const grammarId = document.getElementById("show-exercise-btn").dataset.grammarId;
+        enableAIButton(grammarId);
+      }
     });
   });
 }
+
+// 🧠 Gọi AI
+async function analyzeWeakness(grammarId, quizResults) {
+  const res = await fetch("/grammar/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ grammarId, quizResults })
+  });
+
+  const data = await res.json();
+  const aiDiv = document.getElementById("aiAnalysis");
+  const aiResult = document.getElementById("aiResult");
+
+  aiDiv.style.display = "block";
+
+  if (data.success) {
+    const formatted = data.analysis
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\* (.*?)\n/g, "• $1<br>")
+      .replace(/\n\n/g, "<br><br>")
+      .replace(/\n/g, "<br>");
+    aiResult.innerHTML = `<div class="p-3 bg-white rounded shadow-sm border-start border-4 border-primary">${formatted}</div>`;
+  } else {
+    aiResult.innerHTML = `<span class="text-danger">❌ Phân tích thất bại!</span>`;
+  }
+}
+
+// ✅ Hiện nút AI đúng lúc & có hiệu ứng chờ
+function enableAIButton(grammarId) {
+  const btn = document.getElementById("analyze-btn");
+  btn.style.display = "inline-flex";
+
+  btn.onclick = async () => {
+    const quizResults = [];
+    document.querySelectorAll(".quiz-item").forEach(item => {
+      const question = item.querySelector(".question-text")?.textContent?.trim();
+      const selected = item.querySelector("input[type='radio']:checked");
+      const correctAnswer = item.dataset.answer?.trim();
+      if (question && correctAnswer) {
+        quizResults.push({
+          question,
+          userAnswer: selected ? selected.value : null,
+          correctAnswer
+        });
+      }
+    });
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Đang phân tích...`;
+
+    try {
+      await analyzeWeakness(grammarId, quizResults);
+    } catch (err) {
+      alert("❌ Lỗi khi phân tích");
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = "🤖 Phân tích điểm yếu";
+    }
+  };
+}
 </script>
+
+
 
 <%- include('../partials/footer') %>
