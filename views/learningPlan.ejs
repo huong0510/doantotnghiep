@@ -1,7 +1,7 @@
 <%- include('partials/header', { title: 'Kế hoạch học tập AI' }) %>
 
 <div class="container mt-5">
-  <h1 class="text-center mb-4" style="font-family: 'Playfair Display', serif;">🧠 Kế hoạch học tập AI</h1>
+  <h1 class="text-center mb-4" style="font-family: 'Playfair Display', serif;">🧠 Kế hoạch học tập</h1>
 
   <form id="planForm" class="card p-4 shadow-sm">
     <div class="mb-3">
@@ -46,7 +46,14 @@
     <!-- ✅ Thêm nút lưu và xem lịch sử -->
     <div class="text-center mt-4">
       <button id="savePlanBtn" class="btn btn-success d-none">💾 Lưu kế hoạch</button>
-<a href="/learning-plan/history-view" class="btn btn-info">📜 Xem lịch sử</a>
+<!-- Nút Xem lịch sử -->
+<div class="text-center mt-5 mb-5">
+  <a href="/learning-plan/history-view" 
+     class="btn btn-info fw-bold px-4 py-2 shadow-sm"
+     style="background: linear-gradient(90deg, #00bfff, #007bff); border: none; border-radius: 8px;">
+    📘 Xem lịch sử
+  </a>
+</div>
     </div>
   </div>
 </div>
@@ -73,11 +80,11 @@ document.querySelector("#planForm").addEventListener("submit", async (e) => {
       body: JSON.stringify(formData)
     });
 
-    const data = await res.json();
-    let planText = data.plan || "❌ Không tạo được kế hoạch học.";
+   const data = await res.json();
+let planText = data.plan || "❌ Không tạo được kế hoạch học.";
 
-    // ✅ Lưu lại kế hoạch hiện tại để có thể lưu DB
-   currentPlan = {
+// ✅ Lưu kế hoạch hiện tại để có thể lưu DB
+currentPlan = {
   student_name: formData.name,
   level: formData.level,
   goals: formData.goals,
@@ -85,37 +92,27 @@ document.querySelector("#planForm").addEventListener("submit", async (e) => {
   available_time: formData.availableTime,
   plan: planText
 };
- // ✅ Hiện nút “Lưu kế hoạch”
+
+// ✅ Hiện nút “Lưu kế hoạch”
 document.getElementById("savePlanBtn").classList.remove("d-none");
-
     // Tách kế hoạch theo "Ngày", "Buổi", hoặc "Bài"
-    const sections = planText.split(/(?=Ngày\s*\d+|Buổi\s*\d+|Bài\s*\d+)/gi);
+// ✅ Xử lý markdown -> HTML
+let formatted = planText
+  .replace(/^### (.*$)/gim, '<h3 class="fw-bold mt-3 text-primary">$1</h3>')
+  .replace(/^## (.*$)/gim, '<h4 class="fw-semibold mt-3 text-primary">$1</h4>')
+  .replace(/^# (.*$)/gim, '<h5 class="fw-semibold mt-3 text-primary">$1</h5>')
+  .replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>')
+  .replace(/\*(.*?)\*/gim, '<i>$1</i>')
+  .replace(/\n/g, '<br>')
+  .replace(/\[(.*?)\]\((.*?)\)/g, `<a href="$2" target="_blank" class="text-decoration-underline text-info">$1</a>`);
 
-    if (sections.length <= 1) {
-      // Nếu không tách được → hiển thị dạng văn bản
-      cardContainer.innerHTML = `<div class="alert alert-info">${planText.replace(/\n/g, "<br>")}</div>`;
-    } else {
-      sections.forEach((section, index) => {
-        const titleMatch = section.match(/(Ngày\s*\d+|Buổi\s*\d+|Bài\s*\d+)/i);
-        const title = titleMatch ? titleMatch[0] : `Phần ${index + 1}`;
-        const content = section
-          .replace(title, "")
-          .replace(/\n/g, "<br>")
-          .replace(/\[(.*?)\]\((.*?)\)/g, `<a href="$2" target="_blank">$1</a>`)
-          .replace(/\b(ngữ pháp|từ vựng|nghe|nói|đọc hiểu|ôn tập|mục tiêu)\b/gi,
-                   `<span class="fw-bold text-success">$1</span>`);
-
-        const cardHTML = `
-          <div class="col-md-6">
-            <div class="card shadow-sm h-100">
-              <div class="card-header bg-primary text-white fw-bold">${title}</div>
-              <div class="card-body">${content}</div>
-            </div>
-          </div>
-        `;
-        cardContainer.insertAdjacentHTML("beforeend", cardHTML);
-      });
-    }
+// ✅ Hiển thị dạng thẻ đẹp
+cardContainer.innerHTML = `
+  <div class="card shadow-sm p-4">
+    <h4 class="text-center text-success mb-3">📋 Chi tiết kế hoạch học</h4>
+    <div class="text-dark" style="white-space: normal; line-height: 1.7;">${formatted}</div>
+  </div>
+`;
   } catch (err) {
     console.error(err);
     cardContainer.innerHTML = `<div class="alert alert-danger">❌ Lỗi khi gọi AI hoặc server không phản hồi.</div>`;
@@ -155,6 +152,27 @@ a {
 a:hover {
   text-decoration: underline;
 }
+#planCards h3, #planCards h4, #planCards h5 {
+  color: #0d6efd;
+  margin-top: 1rem;
+}
+
+#planCards b {
+  color: #212529;
+}
+
+#planCards i {
+  color: #555;
+}
+
+#planCards a {
+  color: #0dcaf0;
+  text-decoration: underline;
+}
+.text-center.mt-5.mb-5 {
+    margin-top: 60px !important;
+    margin-bottom: 60px !important;
+  }
 </style>
 
 <%- include('partials/footer') %>

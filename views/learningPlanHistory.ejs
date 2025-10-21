@@ -1,126 +1,358 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Lịch sử kế hoạch học</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Lịch sử kế hoạch học</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f7f9fc;
+    }
+
+    .card-day {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .card-day:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-day h5 {
+      color: #007bff;
+      font-weight: 600;
+    }
+
+    .modal-body {
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .progress {
+      background-color: #e9ecef;
+      border-radius: 10px;
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, #00bfff, #007bff);
+      font-weight: 600;
+    }
+
+    .btn-status {
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body class="bg-light">
-<div class="container py-5">
+<body>
+  <div class="container py-5">
     <h2 class="text-center mb-4">📜 Lịch sử kế hoạch học</h2>
 
     <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Tên học viên</th>
-                <th>Trình độ</th>
-                <th>Ngày tạo</th>
-                <th>Chi tiết</th>
-                <th>Hành động</th>
-
-            </tr>
-        </thead>
-        <tbody id="planList">
-            <tr><td colspan="5" class="text-center">Đang tải dữ liệu...</td></tr>
-        </tbody>
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Tên học viên</th>
+          <th>Trình độ</th>
+          <th>Ngày tạo</th>
+          <th>Chi tiết</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="planList">
+        <tr><td colspan="6" class="text-center">Đang tải dữ liệu...</td></tr>
+      </tbody>
     </table>
 
-<div class="d-flex justify-content-between align-items-center my-3">
-    <a href="/learning-plan" class="btn btn-secondary">← Quay lại tạo kế hoạch</a>
+    <div class="d-flex justify-content-between align-items-center my-3">
+      <a href="/learning-plan" class="btn btn-secondary">← Quay lại tạo kế hoạch</a>
 
- 
-
-  <div class="d-flex align-items-center gap-2">
-    <input type="number" id="planIdInput" class="form-control" placeholder="Nhập ID kế hoạch..." style="width: 180px;">
-    <button class="btn btn-info fw-bold shadow-sm" 
-            style="background: linear-gradient(90deg, #00bfff, #007bff); border: none;"
-            onclick="goToAnalysis()">
-      🤖 Phân tích năng lực (AI)
-    </button>
-  </div>
-</div>
-
-<script>
-function goToAnalysis() {
-  const id = document.getElementById('planIdInput').value.trim();
-  if (!id) {
-    alert('⚠️ Vui lòng nhập ID kế hoạch trước khi phân tích!');
-    return;
-  }
-  window.location.href = '/learning-plan/analysis/' + id;
-}
-</script>
-
-
-<!-- Modal xem chi tiết kế hoạch -->
-<div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="planModalLabel">Chi tiết kế hoạch học</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="d-flex align-items-center gap-2">
+        <input type="number" id="planIdInput" class="form-control" placeholder="Nhập ID kế hoạch..." style="width: 180px;">
+        <button class="btn btn-info fw-bold shadow-sm"
+          style="background: linear-gradient(90deg, #00bfff, #007bff); border: none;"
+          onclick="goToAnalysis()">
+          🤖 Phân tích năng lực (AI)
+        </button>
       </div>
-      <div class="modal-body" id="planDetail">Đang tải...</div>
     </div>
   </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-async function loadPlans() {
-    const res = await fetch('/learning-plan/history');
-    const plans = await res.json();
-    const tbody = document.getElementById('planList');
-    tbody.innerHTML = '';
+  <!-- Modal chi tiết kế hoạch -->
+  <div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="planModalLabel">Chi tiết kế hoạch học</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="planDetail">Đang tải...</div>
+      </div>
+    </div>
+  </div>
 
-    if (plans.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Chưa có kế hoạch nào.</td></tr>';
-        return;
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script>
+    // 🎯 Chuyển đến trang phân tích năng lực
+    function goToAnalysis() {
+      const id = document.getElementById('planIdInput').value.trim();
+      if (!id) return alert('⚠️ Vui lòng nhập ID kế hoạch trước khi phân tích!');
+      window.location.href = '/learning-plan/analysis/' + id;
     }
 
-    plans.forEach(plan => {
+    // 📜 Load danh sách kế hoạch học
+    async function loadPlans() {
+      const res = await fetch('/learning-plan/history');
+      const plans = await res.json();
+      const tbody = document.getElementById('planList');
+      tbody.innerHTML = '';
+
+      if (plans.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Chưa có kế hoạch nào.</td></tr>';
+        return;
+      }
+
+      plans.forEach(plan => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-    <td>${plan.id}</td>
-    <td>${plan.student_name}</td>
-    <td>${plan.level}</td>
-    <td>${new Date(plan.created_at).toLocaleString()}</td>
-    <td>
-        <button class="btn btn-sm btn-primary" onclick="viewPlan(${plan.id})">Xem</button>
-    </td>
-    <td>
-        <button class="btn btn-sm btn-danger" onclick="deletePlan(${plan.id})">🗑 Xóa</button>
-    </td>
-`;
+          <td>${plan.id}</td>
+          <td>${plan.student_name}</td>
+          <td>${plan.level}</td>
+          <td>${new Date(plan.created_at).toLocaleString()}</td>
+          <td><button class="btn btn-sm btn-primary" onclick="viewPlan(${plan.id})">👀 Xem</button></td>
+          <td><button class="btn btn-sm btn-danger" onclick="deletePlan(${plan.id})">🗑 Xóa</button></td>
+        `;
         tbody.appendChild(tr);
-    });
-}
-
-async function viewPlan(id) {
-    const res = await fetch('/learning-plan/' + id);
-    const plan = await res.json();
-    document.getElementById('planDetail').innerText = plan.plan || 'Không có nội dung.';
-    const modal = new bootstrap.Modal(document.getElementById('planModal'));
-    modal.show();
-}
-async function deletePlan(id) {
-    if (!confirm('Bạn có chắc muốn xóa kế hoạch này không?')) return;
-
-    const res = await fetch('/learning-plan/' + id, {
-        method: 'DELETE'
-    });
-
-    if (res.ok) {
-        alert('✅ Đã xóa kế hoạch thành công!');
-        loadPlans(); // tải lại danh sách
-    } else {
-        alert('❌ Lỗi khi xóa kế hoạch.');
+      });
     }
+
+    // 👀 Xem chi tiết kế hoạch + tiến độ
+    async function viewPlan(id) {
+      const res = await fetch('/learning-plan/' + id);
+      const plan = await res.json();
+      const content = plan.plan || 'Không có nội dung.';
+
+      // 🟩 Khối hiển thị tiến độ
+      const progressSection = `
+        <div class="my-4">
+          <h5>📊 Tiến độ học</h5>
+          <div class="progress mb-3">
+            <div id="progress-bar" class="progress-bar bg-success" style="width: 0%">0%</div>
+          </div>
+          <div id="progress-list" class="list-group small mb-3"></div>
+          <div id="init-progress-div" class="text-center d-none">
+            <button class="btn btn-outline-primary btn-sm" id="init-progress-btn">⚡ Khởi tạo tiến độ</button>
+          </div>
+        </div>
+      `;
+
+      // Chuyển markdown → HTML
+      const html = marked.parse(content);
+      const sections = html.split(/<h3.*?>/g).filter(s => s.trim() !== '');
+      let rendered = '';
+
+      if (sections.length > 1) {
+        sections.forEach((section, index) => {
+          rendered += `
+            <div class="card-day">
+              <h5>Ngày ${index + 1}</h5>
+              <div>${section}</div>
+            </div>`;
+        });
+      } else {
+        rendered = `<div class="card-day">${html}</div>`;
+      }
+
+      // Render toàn bộ nội dung vào modal
+      document.getElementById('planDetail').innerHTML = progressSection + rendered;
+
+      // ⚡ Gán sự kiện khởi tạo tiến độ
+      document.getElementById('init-progress-btn').onclick = () => initProgress(id);
+
+      const modal = new bootstrap.Modal(document.getElementById('planModal'));
+      modal.show();
+
+      // 🔄 Tải tiến độ học
+      loadProgress(id);
+    }
+// 📊 Render progress từ server
+// 🔄 Render progress
+function renderProgress(progress, planId) {
+  const modalBody = document.getElementById('planDetail');
+  const listDiv = modalBody.querySelector('#progress-list');
+  const bar = modalBody.querySelector('#progress-bar');
+
+  listDiv.innerHTML = '';
+
+  const totalDays = progress.length;
+  const completedDays = progress.filter(p => p.status === 'completed').length;
+  const percent = Math.round((completedDays / totalDays) * 100);
+
+  bar.style.width = percent + '%';
+  bar.innerText = percent + '%';
+
+  progress.forEach(p => {
+    const stageLabel = `Giai đoạn ${p.day_number}`;
+    const icon =
+      p.status === 'completed' ? '✅' :
+      p.status === 'in_progress' ? '⚙️' : '⏳';
+    const bg =
+      p.status === 'completed' ? 'bg-success-subtle' :
+      p.status === 'in_progress' ? 'bg-warning-subtle' : 'bg-light';
+
+    listDiv.innerHTML += `
+      <div class="list-group-item d-flex justify-content-between align-items-center ${bg}">
+        <span class="fw-bold">${icon} ${stageLabel}</span>
+        <div>
+<button class="btn btn-sm btn-outline-success btn-status me-1" onclick="updateStatus(${planId}, ${p.day_number}, 'completed')">Hoàn thành</button>
+<button class="btn btn-sm btn-outline-warning btn-status me-1" onclick="updateStatus(${planId}, ${p.day_number}, 'in_progress')">Đang học</button>
+<button class="btn btn-sm btn-outline-secondary btn-status" onclick="updateStatus(${planId}, ${p.day_number}, 'not_started')">Chưa học</button>
+
+         
+        </div>
+      </div>`;
+  });
 }
 
-// Load danh sách khi trang mở
-loadPlans();
-</script>
+
+   // 📊 Load progress từ server
+async function loadProgress(planId) {
+  try {
+    const res = await fetch(`/progress/${planId}`);
+    if (!res.ok) throw new Error('Lỗi server khi lấy tiến độ');
+    const progress = await res.json();
+
+    const modalBody = document.getElementById('planDetail');
+    const btnDiv = modalBody.querySelector('#init-progress-div');
+    
+    if (!progress || progress.length === 0) {
+      btnDiv.classList.remove('d-none');
+      modalBody.querySelector('#progress-list').innerHTML =
+        `<div class="alert alert-secondary text-center">📊 Chưa khởi tạo tiến độ cho kế hoạch này.</div>`;
+      modalBody.querySelector('#progress-bar').style.width = "0%";
+      modalBody.querySelector('#progress-bar').innerText = "0%";
+      return;
+    } else {
+      btnDiv.classList.add('d-none');
+    }
+
+    renderProgress(progress, planId);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('progress-list').innerHTML =
+      `<div class="alert alert-danger text-center">⚠️ Lỗi khi tải tiến độ học!</div>`;
+  }
+}
+async function updateStatus(planId, dayNumber, clickedStatus) {
+  try {
+    const modalBody = document.getElementById('planDetail');
+    const listDiv = modalBody.querySelector('#progress-list');
+    const bar = modalBody.querySelector('#progress-bar');
+
+    const item = listDiv.children[dayNumber - 1];
+    if (!item) return;
+
+    const span = item.querySelector('span');
+    // Lấy trạng thái hiện tại từ icon
+    let currentStatus;
+    if (span.innerText.startsWith('✅')) currentStatus = 'completed';
+    else if (span.innerText.startsWith('⚙️')) currentStatus = 'in_progress';
+    else currentStatus = 'not_started';
+
+    // 🔄 Logic toggle
+    let newStatus;
+    if (clickedStatus === 'completed') {
+      // nếu đã completed thì toggle về not_started
+      newStatus = currentStatus === 'completed' ? 'not_started' : 'completed';
+    } else {
+      // bấm "Đang học" hoặc "Chưa học" → đặt trực tiếp
+      newStatus = clickedStatus;
+    }
+
+    // Cập nhật UI ngay
+    span.innerText =
+      newStatus === 'completed' ? `✅ Giai đoạn ${dayNumber}` :
+      newStatus === 'in_progress' ? `⚙️ Giai đoạn ${dayNumber}` :
+      `⏳ Giai đoạn ${dayNumber}`;
+
+    item.className = 'list-group-item d-flex justify-content-between align-items-center ' +
+      (newStatus === 'completed' ? 'bg-success-subtle' :
+       newStatus === 'in_progress' ? 'bg-warning-subtle' : 'bg-light');
+
+    // Cập nhật % chỉ dựa trên completed
+    const totalDays = listDiv.children.length;
+    let completedDays = 0;
+    Array.from(listDiv.children).forEach(li => {
+      if (li.querySelector('span').innerText.startsWith('✅')) completedDays++;
+    });
+    const percent = Math.round((completedDays / totalDays) * 100);
+    bar.style.width = percent + '%';
+    bar.innerText = percent + '%';
+
+    // Gửi lên server
+    const res = await fetch('/progress/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId, dayNumber, status: newStatus })
+    });
+
+    if (!res.ok) alert('❌ Lỗi server khi cập nhật tiến độ');
+
+  } catch (err) {
+    console.error(err);
+    alert('❌ Có lỗi khi cập nhật tiến độ!');
+  }
+}
+
+
+    // ⚡ Khởi tạo tiến độ
+async function initProgress(planId) {
+  const btn = document.getElementById('init-progress-btn');
+  btn.disabled = true;
+  btn.innerText = "Đang khởi tạo...";
+
+  try {
+    const res = await fetch('/progress/init', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId, totalDays: 10 })
+    });
+
+    const data = await res.json();
+    alert(data.message || "Khởi tạo thành công!");
+    loadProgress(planId);
+  } catch (err) {
+    console.error(err);
+    alert('❌ Lỗi khi khởi tạo tiến độ!');
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "⚡ Khởi tạo tiến độ";
+  }
+}
+
+   
+
+    // 🗑 Xóa kế hoạch
+    async function deletePlan(id) {
+      if (!confirm('Bạn có chắc muốn xóa kế hoạch này không?')) return;
+      const res = await fetch('/learning-plan/' + id, { method: 'DELETE' });
+      if (res.ok) {
+        alert('✅ Đã xóa kế hoạch thành công!');
+        loadPlans();
+      } else {
+        alert('❌ Lỗi khi xóa kế hoạch.');
+      }
+    }
+
+    // 🚀 Khởi chạy
+    loadPlans();
+  </script>
 </body>
 </html>

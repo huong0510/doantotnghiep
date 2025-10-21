@@ -90,27 +90,40 @@ ${lessons.map((l, i) => `${i + 1}. ${l.structure}: ${l.meaning}`).join("\n")}
 // 📥 Lưu kế hoạch học thủ công (khi bấm nút 💾)
 router.post("/save", async (req, res) => {
   try {
-    // 🟢 Lấy tất cả dữ liệu cần thiết từ request body
     const { student_name, level, goals, weak_points, available_time, plan } = req.body;
 
-    // 🟠 Kiểm tra dữ liệu bắt buộc
     if (!student_name || !level || !plan) {
       return res.status(400).json({ message: "Thiếu dữ liệu để lưu kế hoạch." });
     }
 
     // 🟢 Lưu vào DB
-    await runQuery(
+    const result = await runQuery(
       `INSERT INTO learning_plan_history (student_name, level, goals, weak_points, available_time, plan, created_at)
        VALUES (?, ?, ?, ?, ?, ?, NOW())`,
       [student_name, level, goals || "", weak_points || "", available_time || "", plan]
     );
 
-    res.json({ message: "✅ Lưu kế hoạch thành công!" });
+    // 🔍 Đếm số buổi học thực tế trong kế hoạch (dựa vào từ "Buổi")
+    const totalDays = (plan.match(/Buổi\s+\d+/gi) || []).length || 7; // mặc định 7 nếu không đếm được
+
+    // ⚙️ Gọi API khởi tạo tiến độ học tương ứng
+    const planId = result.insertId;
+    const fetch = await import("node-fetch");
+    await fetch.default("http://localhost:9113/progress/init", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ planId, totalDays }),
+    });
+
+    res.json({
+      message: `✅ Lưu kế hoạch và khởi tạo ${totalDays} ngày tiến độ thành công!`,
+    });
   } catch (error) {
     console.error("❌ Lỗi khi lưu kế hoạch:", error);
     res.status(500).json({ message: "Lỗi server khi lưu kế hoạch.", error: error.message });
   }
 });
+
 
 
 // 📄 Giao diện xem lịch sử kế hoạch
@@ -159,6 +172,8 @@ router.delete("/:id", async (req, res) => {
         res.json({ message: "🗑️ Đã xóa kế hoạch thành công!" });
     } catch (error) {
         console.error("❌ Lỗi khi xóa kế hoạch:", error);
+
+        
         res.status(500).json({ message: "Lỗi server khi xóa kế hoạch" });
     }
 });

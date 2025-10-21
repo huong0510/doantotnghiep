@@ -1,11 +1,13 @@
 <%- include('partials/header', { title: title }) %>
 
 <div class="container my-4">
-  <h2 class="fw-bold text-primary mb-4">🤖 Kết quả phân tích năng lực</h2>
+  <h2 class="fw-bold text-primary mb-4">Thông tin học viên 👤</h2>
 
   
 
-  <!-- 🧾 Thông tin kế hoạch -->
+  <!-- 🧾 Thông tin kế hoạch 
+   <h6 class="text-primary fw-bold">📘 Kế hoạch học chi tiết:</h6>
+    <pre class="bg-light p-3 rounded" style="white-space: pre-wrap;"><%= plan.plan %></pre>-->
   <div class="card shadow-sm p-4">
     <h5><strong>👤 Học viên:</strong> <%= plan.student_name %></h5>
     <p><strong>ID kế hoạch:</strong> <%= plan.id %></p>
@@ -17,9 +19,7 @@
       <%= new Date(plan.created_at).toLocaleTimeString('vi-VN') %> 
       <%= new Date(plan.created_at).toLocaleDateString('vi-VN') %>
     </p>
-    <hr>
-    <h6 class="text-primary fw-bold">📘 Kế hoạch học chi tiết:</h6>
-    <pre class="bg-light p-3 rounded" style="white-space: pre-wrap;"><%= plan.plan %></pre>
+
   </div>
 
   <!-- 🧩 Form nhập dữ liệu điểm số -->
