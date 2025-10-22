@@ -29,6 +29,7 @@ const learningPlanRoutes = require('./routes/learningplan');
 const viewPlanRoute = require("./routes/viewPlan");
 const evaluateRoutes = require("./routes/evaluate");
 const progressRoutes = require('./routes/progress');
+const journalRoutes = require("./routes/journal");
 
 const app = express();
 
@@ -80,6 +81,7 @@ app.use("/learning-plan", requireAuth, learningPlanRoutes);
 app.use("/view-plan", viewPlanRoute);
 app.use("/api", evaluateRoutes);
 app.use('/progress', progressRoutes);
+app.use("/journal", journalRoutes);
 
 
 

@@ -140,18 +140,44 @@
       const content = plan.plan || 'Không có nội dung.';
 
       // 🟩 Khối hiển thị tiến độ
-      const progressSection = `
-        <div class="my-4">
-          <h5>📊 Tiến độ học</h5>
-          <div class="progress mb-3">
-            <div id="progress-bar" class="progress-bar bg-success" style="width: 0%">0%</div>
-          </div>
-          <div id="progress-list" class="list-group small mb-3"></div>
-          <div id="init-progress-div" class="text-center d-none">
-            <button class="btn btn-outline-primary btn-sm" id="init-progress-btn">⚡ Khởi tạo tiến độ</button>
-          </div>
-        </div>
-      `;
+     // 🟩 Khối hiển thị tiến độ + nhật ký
+const progressSection = `
+  <div class="my-4">
+    <h5>📊 Tiến độ học</h5>
+    <div class="progress mb-3">
+      <div id="progress-bar" class="progress-bar bg-success" style="width: 0%">0%</div>
+    </div>
+    <div id="progress-list" class="list-group small mb-3"></div>
+    <div id="init-progress-div" class="text-center d-none">
+      <button class="btn btn-outline-primary btn-sm" id="init-progress-btn">⚡ Khởi tạo tiến độ</button>
+    </div>
+  </div>
+
+  <!-- 📘 Nhật ký học tập -->
+  <div class="my-4">
+    <h5>📝 Nhật ký học tập</h5>
+    <div class="mb-2">
+      <label class="form-label small fw-bold text-muted">Chọn giai đoạn:</label>
+      <select id="journalStage" class="form-select form-select-sm w-auto d-inline-block">
+  <option disabled selected>Đang tải...</option>
+</select>
+
+    </div>
+
+   <textarea id="journalNote" class="form-control mb-2" rows="3" placeholder="✍️ Ghi chú cảm nhận, tiến bộ hoặc khó khăn..."></textarea>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <button class="btn btn-sm btn-success px-3" onclick="saveJournal(${id})">💾 Lưu nhật ký</button>
+  <button class="btn btn-outline-primary btn-sm px-3" onclick="toggleJournalView(${id})">📖 Xem nhật ký</button>
+</div>
+
+<div id="journalHistory" class="mt-3" style="display: none;"></div>
+
+
+`;
+
+      
+      
 
       // Chuyển markdown → HTML
       const html = marked.parse(content);
@@ -198,6 +224,19 @@ function renderProgress(progress, planId) {
   bar.style.width = percent + '%';
   bar.innerText = percent + '%';
 
+  // 🧠 Cập nhật danh sách giai đoạn trong Nhật ký học tập
+  const stageSelect = document.getElementById('journalStage');
+  if (stageSelect) {
+    stageSelect.innerHTML = ''; // Xóa cũ
+    progress.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.day_number;
+      opt.textContent = `Giai đoạn ${p.day_number}`;
+      stageSelect.appendChild(opt);
+    });
+  }
+
+  // 🟩 Hiển thị tiến độ từng giai đoạn
   progress.forEach(p => {
     const stageLabel = `Giai đoạn ${p.day_number}`;
     const icon =
@@ -211,15 +250,15 @@ function renderProgress(progress, planId) {
       <div class="list-group-item d-flex justify-content-between align-items-center ${bg}">
         <span class="fw-bold">${icon} ${stageLabel}</span>
         <div>
-<button class="btn btn-sm btn-outline-success btn-status me-1" onclick="updateStatus(${planId}, ${p.day_number}, 'completed')">Hoàn thành</button>
-<button class="btn btn-sm btn-outline-warning btn-status me-1" onclick="updateStatus(${planId}, ${p.day_number}, 'in_progress')">Đang học</button>
-<button class="btn btn-sm btn-outline-secondary btn-status" onclick="updateStatus(${planId}, ${p.day_number}, 'not_started')">Chưa học</button>
-
-         
+          <button class="btn btn-sm btn-outline-success btn-status me-1" onclick="updateStatus(${planId}, ${p.day_number}, 'completed')">Hoàn thành</button>
+          <button class="btn btn-sm btn-outline-warning btn-status me-1" onclick="updateStatus(${planId}, ${p.day_number}, 'in_progress')">Đang học</button>
+          <button class="btn btn-sm btn-outline-secondary btn-status" onclick="updateStatus(${planId}, ${p.day_number}, 'not_started')">Chưa học</button>
         </div>
       </div>`;
   });
 }
+
+
 
 
    // 📊 Load progress từ server
@@ -350,6 +389,123 @@ async function initProgress(planId) {
         alert('❌ Lỗi khi xóa kế hoạch.');
       }
     }
+// 🧠 Lưu nhật ký học tập
+async function saveJournal(planId) {
+  const stage = document.getElementById('journalStage').value;
+  const note = document.getElementById('journalNote').value.trim();
+  if (!note) return alert('⚠️ Vui lòng nhập nội dung ghi chú!');
+
+  try {
+    const res = await fetch('/journal/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId, stageNumber: stage, note })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      alert('✅ Đã lưu nhật ký!');
+      document.getElementById('journalNote').value = '';
+      loadJournal(planId);
+    } else {
+      alert('❌ ' + (data.error || 'Lỗi khi lưu nhật ký'));
+    }
+  } catch (err) {
+    console.error(err);
+    alert('❌ Lỗi kết nối khi lưu nhật ký!');
+  }
+}
+let journalVisible = false;
+
+async function toggleJournalView(planId) {
+  const container = document.getElementById('journalHistory');
+  if (!container) {
+    console.error("❌ Không tìm thấy #journalHistory trong DOM!");
+    return;
+  }
+
+  const isHidden = container.style.display === 'none';
+  container.style.display = isHidden ? 'block' : 'none';
+
+  if (isHidden) {
+    await loadJournal(planId);
+  }
+}
+
+// 📖 Tải lịch sử nhật ký
+// 📖 Tải lịch sử nhật ký (có nút sửa & xóa)
+async function loadJournal(planId) {
+  const container = document.getElementById('journalHistory');
+  if (!container) return console.error("❌ Không tìm thấy phần hiển thị nhật ký!");
+  
+  container.innerHTML = `<div class="text-muted small text-center py-2">⌛ Đang tải nhật ký...</div>`;
+  
+  try {
+    const res = await fetch(`/journal/${planId}`);
+    const journals = await res.json();
+
+    if (!journals || journals.length === 0) {
+      container.innerHTML = `<div class="text-muted small text-center py-2">📭 Chưa có nhật ký nào.</div>`;
+      return;
+    }
+
+    container.innerHTML = journals.map(j => `
+      <div class="border-bottom py-2 d-flex justify-content-between align-items-start">
+        <div>
+          <div class="small text-muted">
+            🗓️ ${new Date(j.created_at).toLocaleString()} — Giai đoạn ${j.stage_number}
+          </div>
+          <div>${j.note}</div>
+        </div>
+        <div class="ms-2">
+          <button class="btn btn-sm btn-warning me-1" 
+            onclick="editJournal(${j.id}, '${j.note.replace(/'/g, "\\'")}', ${planId})">✏️</button>
+          <button class="btn btn-sm btn-danger" 
+            onclick="deleteJournal(${j.id}, ${planId})">🗑️</button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error('❌ Lỗi khi tải nhật ký:', err);
+    container.innerHTML = `<div class="text-danger small text-center py-2">⚠️ Lỗi khi tải nhật ký!</div>`;
+  }
+}
+
+
+// chỉnh sửa nhật ký
+async function editJournal(id, oldNote, planId) {
+  const newNote = prompt("✏️ Nhập nội dung mới:", oldNote);
+  if (!newNote || newNote.trim() === "") return;
+
+  const res = await fetch(`/journal/update/${id}`, {   // ✅ Đúng URL
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ note: newNote })
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    alert(data.message);
+    loadJournal(planId);
+  } else {
+    alert("❌ Lỗi khi cập nhật nhật ký");
+  }
+}
+
+
+// 🗑️ Xóa nhật ký
+async function deleteJournal(id, planId) {
+  if (!confirm("🗑️ Bạn có chắc muốn xóa nhật ký này?")) return;
+
+  const res = await fetch(`/journal/delete/${id}`, { method: "DELETE" }); // ✅ Đúng URL
+  const data = await res.json();
+  if (res.ok) {
+    alert(data.message);
+    loadJournal(planId);
+  } else {
+    alert("❌ Lỗi khi xóa nhật ký");
+  }
+}
+
 
     // 🚀 Khởi chạy
     loadPlans();
