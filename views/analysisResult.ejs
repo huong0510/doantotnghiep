@@ -137,20 +137,131 @@
     const result = await res.json();
     console.log("📊 Kết quả AI:", result);
 
-    // Ẩn hiệu ứng chờ và hiện kết quả
-    loadingSpinner.style.display = "none";
-    analysisSection.style.display = "block";
+   // Ẩn hiệu ứng chờ và hiện kết quả
+loadingSpinner.style.display = "none";
+analysisSection.style.display = "block";
 
-    if (result.success) {
-      analysisResult.innerHTML = `
-        <div class="alert alert-success fw-bold">✅ Phân tích hoàn tất!</div>
-        <pre class="p-3 bg-light rounded border">${result.analysis}</pre>
-      `;
-    } else {
-      analysisResult.innerHTML = `
-        <div class="alert alert-danger">${result.message}</div>
-      `;
+if (result.success) {
+  const converter = new showdown.Converter();
+  const htmlContent = converter.makeHtml(result.analysis);
+
+  // ✅ render nội dung phân tích + canvas
+  analysisResult.innerHTML = `
+    <div class="alert alert-success fw-bold mb-3">✅ Phân tích hoàn tất!</div>
+
+    <div id="analysisText" class="p-4 bg-white rounded shadow-sm border" 
+         style="line-height: 1.7; font-size: 1rem;">
+      ${htmlContent}
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+      <button id="copyResult" class="btn btn-outline-secondary">📋 Sao chép nội dung</button>
+      <button id="downloadText" class="btn btn-outline-primary">📄 Tải nội dung (TXT)</button>
+    </div>
+
+    <h5 class="mt-4 fw-bold text-primary">📊 Biểu đồ tiến độ học</h5>
+    <canvas id="progressChart" width="600" height="250" style="max-width:100%;"></canvas>
+    <div class="mt-2">
+      <button id="downloadChart" class="btn btn-success">📸 Tải biểu đồ (PNG)</button>
+    </div>
+  `;
+  if (result.success) {
+  const converter = new showdown.Converter();
+  const htmlContent = converter.makeHtml(result.analysis);
+
+  // ✅ render nội dung phân tích + canvas
+  analysisResult.innerHTML = `
+    <div class="alert alert-success fw-bold mb-3">✅ Phân tích hoàn tất!</div>
+
+    <div id="analysisText" class="p-4 bg-white rounded shadow-sm border" 
+         style="line-height: 1.7; font-size: 1rem;">
+      ${htmlContent}
+    </div>
+
+    <div class="mt-3 d-flex gap-2">
+      <button id="copyResult" class="btn btn-outline-secondary">📋 Sao chép nội dung</button>
+      <button id="downloadText" class="btn btn-outline-primary">📄 Tải nội dung (TXT)</button>
+    </div>
+
+    <h5 class="mt-4 fw-bold text-primary">📊 Biểu đồ tiến độ học</h5>
+    <canvas id="progressChart" width="600" height="250" style="max-width:100%;"></canvas>
+    <div class="mt-2">
+      <button id="downloadChart" class="btn btn-success">📸 Tải biểu đồ (PNG)</button>
+    </div>
+  `;
+
+  // 🧩 --- chuẩn bị dữ liệu cho biểu đồ ---
+  let labels = ['Ngữ pháp', 'Từ vựng', 'Nghe', 'Nói', 'Đọc'];
+  let data = [
+    Number(grammar),
+    Number(vocab),
+    Number(listening),
+    Number(speaking),
+    Number(reading)
+  ];
+
+  // --- tạo chart bằng Chart.js ---
+  const ctx = document.getElementById('progressChart').getContext('2d');
+
+  if (window._progressChartInstance) {
+    window._progressChartInstance.destroy();
+  }
+
+  window._progressChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Điểm (%)',
+        data,
+        backgroundColor: [
+          '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true, max: 100 }
+      },
+      plugins: {
+        legend: { display: false }
+      }
     }
+  });
+
+  // --- Nút tải biểu đồ ---
+  document.getElementById('downloadChart').addEventListener('click', () => {
+    const url = window._progressChartInstance.toBase64Image();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `bieu-do-${Date.now()}.png`;
+    link.click();
+  });
+
+  // --- Nút sao chép và tải txt ---
+  document.getElementById('copyResult').addEventListener('click', async () => {
+    const text = document.getElementById('analysisText').innerText;
+    await navigator.clipboard.writeText(text);
+    alert('✅ Đã sao chép nội dung phân tích!');
+  });
+
+  document.getElementById('downloadText').addEventListener('click', () => {
+    const text = document.getElementById('analysisText').innerText;
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `phan-tich-${Date.now()}.txt`;
+    link.click();
+    link.remove();
+  });
+}
+
+// canvas để tải biểu đồ
+  // --- sau khi innerHTML đặt xong, khởi tạo các handlers & chart (đoạn tiếp theo) ---
+}
+
 
   } catch (err) {
     console.error("❌ Lỗi khi phân tích năng lực:", err);
@@ -158,6 +269,9 @@
     alert("Lỗi khi phân tích: " + err.message);
   }
 }
+  
+  
+  
 </script>
 
 <%- include('partials/footer') %>

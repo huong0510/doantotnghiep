@@ -182,3 +182,402 @@ h1, h2 {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
+#analysisText h3, #analysisText h4 {
+  color: #007bff;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+#analysisText ul {
+  margin: 8px 0;
+  padding-left: 25px;
+}
+
+#analysisText p {
+  margin-bottom: 8px;
+}
+
+#analysisText strong {
+  color: #d63384;
+}
+/* ==== Toàn trang ==== */
+body {
+  background-color: #f8f9fc;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: #333;
+}
+
+/* ==== Tiêu đề ==== */
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+
+
+/* ==== Select bài ==== */
+
+
+
+
+
+
+/* ==== Hiệu ứng cho chatbot nổi góc phải ==== */
+#chatbot-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #0d6efd;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#chatbot-btn:hover {
+  transform: scale(1.1);
+  background-color: #0056d2;
+}
+  #result .answer span {
+    transition: 0.2s;
+  }
+  #result .answer span[style*="color:red"] {
+    background: #ffe5e5;
+  }
+  #result-box {
+  animation: fadeInUp 0.7s ease;
+}
+
+#result-box .card-body {
+  background: #fdfdfd;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.table td {
+  background-color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9fbff;
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+/* 🌈 CHỈ ÁP DỤNG CHO TRANG LUYỆN NGHE */
+
+
+.page-listening {
+  font-family: "Poppins", sans-serif;
+  background: #f9f9f9;
+  padding: 20px 0 60px;
+  text-align: center;
+}
+
+/* Tiêu đề */
+.page-listening h1 {
+  color: #e53935;
+  font-size: 2.4rem;
+  font-weight: bold;
+  position: relative;
+  display: inline-block;
+  margin-bottom: 35px;
+}
+.page-listening h1::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background: #e53935;
+  border-radius: 2px;
+}
+
+/* Dropdown chọn bài */
+.custom-select-wrapper {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.custom-select {
+  font-size: 16px;
+  padding: 8px 14px;
+  border: 2px solid #e53935;
+  border-radius: 10px;
+  background: #fff;
+  color: #e53935;
+  font-weight: 600;
+  outline: none;
+  transition: 0.2s;
+}
+.custom-select:hover {
+  background: #fff5f5;
+  cursor: pointer;
+}
+
+/* Bọc audio để loại bỏ góc trắng dư */
+.audio-wrapper {
+  width: 80%;
+  max-width: 800px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(229, 57, 53, 0.15);
+  overflow: hidden; /* CẮT góc thừa trắng */
+}
+
+.audio-wrapper {
+  width: 70%;
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 15px 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(229, 57, 53, 0.15);
+  border: 1px solid rgba(229, 57, 53, 0.1);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+/* Thu gọn thanh audio */
+audio {
+  width: 50%;              /* Chiều rộng 50% */
+  height: 40px;
+  display: block;
+  margin: 0 auto;          /* ✅ Căn giữa */
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* Gỡ các góc trắng mặc định */
+audio::-webkit-media-controls-panel {
+  background-color: #fff !important;
+  border-radius: 10px !important;
+}
+
+audio::-webkit-media-controls-enclosure {
+  background-color: transparent !important;
+  border-radius: 10px !important;
+}
+
+/* Hiệu ứng hover */
+.audio-wrapper:hover {
+  box-shadow: 0 6px 14px rgba(229, 57, 53, 0.25);
+  transition: 0.3s ease;
+  transform: scale(1.01);
+}
+
+
+/* Ô nhập transcript */
+textarea.form-control {
+  width: 80% !important;
+  max-width: 800px;
+  margin: 15px auto;
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  padding: 15px;
+  font-size: 16px;
+  resize: none;
+  outline: none;
+  transition: border 0.2s;
+}
+textarea.form-control:focus {
+  border-color: #e53935;
+  box-shadow: 0 0 6px rgba(229, 57, 53, 0.3);
+}
+
+/* Nút nộp bài */
+.submit-btn {
+  background: #e53935;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: 0.25s;
+}
+.submit-btn:hover {
+  background: #c62828;
+  transform: translateY(-1px);
+}
+
+/* Thẻ card kết quả */
+#result-box {
+  width: 85%;
+  margin: 25px auto;
+  border-radius: 12px !important;
+  border: 1px solid #eee;
+}
+
+/* Thanh tiến độ điểm */
+.progress {
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Highlight lỗi */
+mark.bg-danger {
+  background: #ff6b6b !important;
+  color: white;
+}
+/* === Tổng thể trang === */
+body {
+  background: linear-gradient(to bottom right, #f7f9fc, #e3f2fd);
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+/* === Áp dụng cho 3 nút học === */
+.card .btn {
+  background-color: white;        /* nền trắng như hiện tại */
+  color: #212529;                 /* chữ đen */
+  border: 2px solid #212529;      /* viền đen */
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* === Hiệu ứng khi rê chuột === */
+.card .btn:hover {
+  background-color: #e53935;      /* nền đỏ */
+  color: white;                   /* chữ trắng */
+  border-color: #e53935;          /* viền cũng đỏ */
+  transform: translateY(-3px);    /* hơi nổi lên */
+  box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3);
+}
+
+
+
+/* === Animation mượt === */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Nút đỏ đẹp hơn, có hiệu ứng hover và nhấp nháy */
+#startBtn {
+  background-color: #e53935 !important; /* ép đỏ tươi */
+  border: none !important;
+  color: #fff !important;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  animation: pulse 2s infinite;
+}
+
+/* Nhấp nháy mềm */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(229, 57, 53, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
+}
+
+/* Hover: phóng nhẹ và đậm hơn */
+#startBtn:hover {
+  background-color: #c62828 !important; /* đậm hơn khi hover */
+  transform: scale(1.08);
+}
+/* hội thoại Al */
+.chat-container {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 25px;
+  margin-top: 20px;
+  min-height: 350px;
+  transition: all 0.3s ease;
+}
+.roleplay-tabs .btn {
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.roleplay-tabs .btn:hover {
+  background-color: #f5f5f5;
+}
+
+.roleplay-tabs .btn.active {
+  background-color: #e53935;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(229, 57, 53, 0.3);
+}
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

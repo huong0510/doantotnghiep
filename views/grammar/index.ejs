@@ -5,13 +5,20 @@
 
   <!-- Dropdown chọn level -->
   <div class="mb-4 text-center">
-    <form id="levelForm" method="get" action="/grammar">
-      <select name="level" id="levelSelect" class="form-select w-auto d-inline-block">
-        <option value="n5" <%= level === 'N5' ? 'selected' : '' %>>N5</option>
-        <option value="n4" <%= level === 'N4' ? 'selected' : '' %>>N4</option>
-        <option value="n3" <%= level === 'N3' ? 'selected' : '' %>>N3</option>
-      </select>
-    </form>
+    <!-- Custom centered dropdown -->
+<div id="levelSelectWrap" class="custom-select-wrap">
+  <button id="csToggle" class="cs-btn" aria-haspopup="listbox" aria-expanded="false">
+    <span id="csLabel"><%= level ? level : 'N5' %></span>
+    <span class="cs-arrow">▾</span>
+  </button>
+
+  <ul id="csOptions" class="cs-options" role="listbox" tabindex="-1" aria-labelledby="csToggle" hidden>
+    <li role="option" data-value="n5" class="cs-option">N5</li>
+    <li role="option" data-value="n4" class="cs-option">N4</li>
+    <li role="option" data-value="n3" class="cs-option">N3</li>
+  </ul>
+</div>
+
   </div>
 
   <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -31,10 +38,162 @@
 </div>
 
 <script>
-  // submit form khi chọn level
-  document.getElementById('levelSelect').addEventListener('change', function() {
-    window.location.href = '/grammar/' + this.value;
-  });
+  (function(){
+    const wrap = document.getElementById('levelSelectWrap');
+    const toggle = document.getElementById('csToggle');
+    const label = document.getElementById('csLabel');
+    const options = document.getElementById('csOptions');
+    const items = Array.from(options.querySelectorAll('.cs-option'));
+
+    // mở/đóng dropdown
+    toggle.addEventListener('click', () => {
+      const opened = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', !opened);
+      options.hidden = opened;
+    });
+
+    // click bên ngoài -> đóng
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target)) {
+        options.hidden = true;
+        toggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    // chọn option
+    items.forEach(it => {
+      it.addEventListener('click', () => {
+        const value = it.dataset.value;
+        const text = it.textContent.trim();
+        label.textContent = text;
+        options.hidden = true;
+        toggle.setAttribute('aria-expanded', false);
+        // điều hướng
+        window.location.href = '/grammar/' + value;
+      });
+    });
+  })();
 </script>
+<style>
+  /* custom centered select */
+.custom-select-wrap {
+  width: 100px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+}
+
+/* nút chính */
+.cs-btn {
+  width: 100%;
+  background: #fff;
+  border: 2px solid #dc3545;
+  color: #dc3545;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(220, 53, 69, 0.15);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+}
+
+.cs-btn:hover {
+  background: #dc3545;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* icon mũi tên */
+.cs-arrow {
+  font-size: 0.85em;
+  color: inherit;
+}
+
+/* popup danh sách */
+.cs-options {
+  list-style: none;
+  margin: 8px 0 0 0;
+  padding: 6px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100% + 6px);
+  width: max-content;
+  min-width: 100px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+  box-shadow: 0 8px 24px rgba(220, 53, 69, 0.15);
+  z-index: 2000;
+}
+
+/* từng lựa chọn */
+.cs-option {
+  padding: 8px 14px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #dc3545;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.cs-option:hover,
+.cs-option[aria-selected="true"] {
+  background: #ffe6e6;
+  color: #b52b39;
+}
+
+/* mobile responsive */
+@media (max-width: 480px) {
+  .custom-select-wrap {
+    width: 140px;
+  }
+  .cs-options {
+    min-width: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+/* 🎨 Chuyển màu chữ tiếng Nhật sang đỏ */
+.card-title, 
+h5.text-primary, 
+h4.text-primary, 
+a.text-primary {
+  color: #dc3545 !important;
+}
+
+/* Khi hover (rê chuột vào) thì đỏ đậm hơn một chút */
+.card-title:hover,
+a.text-primary:hover {
+  color: #b52b39 !important;
+}
+
+/* Nếu các thẻ ngữ pháp đang dùng class riêng (ví dụ grammar-title) */
+.grammar-title {
+  color: #dc3545 !important;
+  font-weight: 600;
+}
+
+/* Nếu có icon hay border màu xanh dương, đổi luôn sang đỏ */
+.text-primary, 
+.border-primary {
+  color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+/* Giữ nền trắng để tone đỏ nổi bật */
+body, .card {
+  background-color: #fff;
+}
+
+
+</style>
+
 
 <%- include('../partials/footer') %>

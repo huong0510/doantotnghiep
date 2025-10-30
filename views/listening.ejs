@@ -1,35 +1,52 @@
-<h1><%= title %></h1>
 
-<!-- Form chọn bài -->
-<form method="get" action="">
-  <div class="custom-select-wrapper">
-    <select name="lesson" id="lesson" class="custom-select" onchange="this.form.submit()">
-      <% for (let i = 1; i <= totalLessons; i++) { %>
-        <option value="<%= i %>" <%= i == currentLesson ? 'selected' : '' %>>
-          Bài <%= i %>
-        </option>
-      <% } %>
-    </select>
+
+<div class="page-listening">  <!-- ✅ Thêm dòng này -->
+  <h1><%= title %></h1>
+
+  <div class="listening-page">
+    <!-- Form chọn bài -->
+    <form method="get" action="">
+      <div class="custom-select-wrapper">
+        <select name="lesson" id="lesson" class="custom-select" onchange="this.form.submit()">
+          <% for (let i = 1; i <= totalLessons; i++) { %>
+            <option value="<%= i %>" <%= i == currentLesson ? 'selected' : '' %>>
+              Bài <%= i %>
+            </option>
+          <% } %>
+        </select>
+      </div>
+    </form>
   </div>
-</form>
 
-<!-- Audio -->
-<audio controls style="margin-top:10px;">
-  <source src="<%= lessons[0].audio %>" type="audio/mpeg">
-  Trình duyệt không hỗ trợ audio.
-</audio>
+ 
+</div>
+
+
+
+<!-- HTML: wrap audio trong 1 div -->
+<div class="audio-wrap">
+  <audio controls preload="metadata">
+    <source src="<%= lessons[0].audio %>" type="audio/mpeg">
+    Trình duyệt không hỗ trợ audio.
+  </audio>
+</div>
 
 <!-- Nhập transcript -->
 <textarea id="userAnswer" class="form-control" placeholder="Nhập transcript..." rows="8" style="width: 100%;"></textarea>
 
-<!-- Progress (feedback %) -->
-<div class="progress" style="height: 30px; margin-top: 20px;">
-  <div id="progress" class="progress-bar" style="width:0%">0%</div>
+<div class="page-listening">
+  <!-- Progress (feedback %) -->
+  <div class="progress" style="height: 30px; margin-top: 20px;">
+    <div id="progress" class="progress-bar" style="width:0%">0%</div>
+  </div>
+
+ 
+
+  <button id="submitBtn" class="submit-btn mt-2">Nộp bài</button>
+  <audio id="submitSound" src="/sounds/bubble-pop-389501.mp3"></audio>
+
 </div>
 
-<div id="feedback" style="margin-top: 15px; font-weight: bold; color: #444;"></div>
-
-<button id="submitBtn" class="btn btn-primary mt-2">Nộp bài</button>
 
 <!-- Highlight đáp án -->
 <div id="result" style="margin-top: 20px; font-size: 18px;"></div>
@@ -47,22 +64,56 @@
 </div>
 
 <!-- Box kết quả -->
-<div id="result-box" class="card mt-4" style="display:none;">
+<div id="result-box" class="card mt-4 shadow-sm" style="display:none; border-radius:12px;">
   <div class="card-body">
-    <h5 class="card-title">Kết quả</h5>
+    <h4 class="card-title text-center text-primary fw-bold mb-3">
+      🎧 Kết quả phân tích phần nghe
+    </h4>
+
     <div class="mb-3">
-      <label><strong>Điểm:</strong></label>
-      <div class="progress" style="height: 25px;">
-        <div id="score-bar" class="progress-bar bg-success" role="progressbar" 
-             style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <label><strong>Điểm tổng:</strong></label>
+      <div class="progress" style="height: 25px; border-radius:10px; overflow:hidden;">
+        <div id="score-bar" class="progress-bar bg-success fw-bold" 
+             role="progressbar" style="width: 0%;" 
+             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
           0/100
         </div>
       </div>
     </div>
-    <p><strong>Feedback:</strong> <span id="feedback-text"></span></p>
-    <p><strong>Highlight:</strong> <span id="highlight-text"></span></p>
+
+    <p><strong>Feedback:</strong></p>
+    <div id="feedback-text" class="p-3 bg-light rounded border"></div>
+
+    <p class="mt-3"><strong>Highlight lỗi:</strong></p>
+    <div id="highlight-text" class="p-3 bg-white rounded border" style="white-space: pre-line;"></div>
+
+    <!-- 🧾 Phân tích chi tiết lỗi -->
+    <div id="errorDetails" class="mt-4" style="display:none;">
+      <h5 class="fw-bold text-primary mb-3">📋 Phân tích chi tiết lỗi</h5>
+
+      <div class="d-flex justify-content-between mb-2">
+        <p><b>Tổng số lỗi:</b> <span id="errorCount" class="text-danger">0</span></p>
+        <p><b>Tỉ lệ đúng:</b> <span id="accuracyRate" class="text-success">0%</span></p>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle shadow-sm">
+          <thead class="table-primary text-center">
+            <tr>
+              <th>STT</th>
+              <th>Câu gốc</th>
+              <th>Câu bạn nói</th>
+              <th>Loại lỗi</th>
+              <th>Gợi ý sửa</th>
+            </tr>
+          </thead>
+          <tbody id="errorTableBody"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
+
 
 <script>
   const correctAnswer = `<%= lessons[0].answer %>`; // transcript chuẩn
@@ -75,25 +126,30 @@ function normalizeText(text) {
     .trim();
 }
 
-  // Highlight từ sai
- function highlightMistakes(userText, correctText) {
-  userText = normalizeText(userText);
-  correctText = normalizeText(correctText);
+// 🔹 Highlight thông minh — so sánh theo từ / cụm kana
+function highlightMistakes(userText, correctText) {
+  // Cắt từ hoặc cụm bằng dấu câu / khoảng trắng
+  const userWords = userText.split(/[\s。、！!？?・]/).filter(Boolean);
+  const correctWords = correctText.split(/[\s。、！!？?・]/).filter(Boolean);
 
   let result = "";
-  const maxLen = Math.max(userText.length, correctText.length);
+  let userIdx = 0;
 
-  for (let i = 0; i < maxLen; i++) {
-    if (userText[i] === correctText[i]) {
-      result += correctText[i] || "";
+  for (let i = 0; i < correctWords.length; i++) {
+    const word = correctWords[i];
+    const match = userWords[userIdx];
+
+    if (match === word) {
+      result += `<span style="color:black;">${word}</span> `;
+      userIdx++;
     } else {
-      if (correctText[i]) {
-        result += `<span style="color:red">${correctText[i]}</span>`;
-      }
+      result += `<span style="color:red; background:#ffe5e5; border-radius:6px; padding:2px 4px;">${word}</span> `;
     }
   }
-  return result;
+
+  return result.trim();
 }
+
 
 
   // Render đáp án chuẩn + highlight lỗi
@@ -129,9 +185,16 @@ function normalizeText(text) {
   }
 
   // ✅ Hàm submit cũ (giữ nguyên, dùng cho /listening/feedback)
-  async function submitAnswerOld() {
-    const userAnswer = document.querySelector("#userAnswer").value;
-    const correctAnswer = "<%= lessons[0].text %>"; // lấy từ server render
+ async function submitAnswerOld() {
+  const resultDiv = document.getElementById("errorDetails");
+  resultDiv.innerHTML = "<p class='text-muted'>⏳ Đang chấm điểm...</p>";
+  document.getElementById("score").innerText = "-";
+  document.getElementById("feedback").innerText = "-";
+  document.getElementById("highlight").innerText = "-";
+  
+  const userAnswer = document.querySelector("#userAnswer").value;
+  const correctAnswer = document.getElementById("correctAnswer").value;
+
 
     const res = await fetch("/listening/feedback", {
       method: "POST",
@@ -151,13 +214,42 @@ if (typeof data === "string") {
 }
 
     if (data.success) {
-      const match = data.feedback.match(/(\d{1,3})\/?100?/);
-      let score = match ? parseInt(match[1]) : 0;
+  document.getElementById("score").innerText = data.score + "%";
+  document.getElementById("feedback").innerText = data.feedback;
+  document.getElementById("highlight").innerText = data.highlight;
 
-      document.querySelector("#feedback").innerText = data.feedback;
-      document.querySelector("#progress").style.width = score + "%";
-      document.querySelector("#progress").innerText = score + "%";
-    }
+  const detailDiv = document.getElementById("errorDetails");
+  detailDiv.innerHTML = ""; // xóa cũ
+
+  if (data.errors && data.errors.length > 0) {
+    let table = `
+      <table class="table table-bordered mt-3">
+        <thead class="table-light">
+          <tr>
+            <th>Phần gốc</th>
+            <th>Phần học viên</th>
+            <th>Loại lỗi</th>
+            <th>Gợi ý</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+    data.errors.forEach(err => {
+      table += `
+        <tr>
+          <td>${err.original || ""}</td>
+          <td>${err.user || ""}</td>
+          <td><span class="badge bg-${err.typeColor || "secondary"}">${err.type || ""}</span></td>
+          <td>${err.suggestion || ""}</td>
+        </tr>
+      `;
+    });
+    table += "</tbody></table>";
+    detailDiv.innerHTML = table;
+  } else {
+    detailDiv.innerHTML = "<p class='text-muted'>Không có lỗi nào được phát hiện.</p>";
+  }
+}
   }
 // ✅ Hàm submit mới (chấm điểm AI + highlight)
 async function submitAnswerNew() {
@@ -165,14 +257,15 @@ async function submitAnswerNew() {
   renderAnswer(userAnswerRaw); // render highlight so sánh với đáp án
 
   // 🧠 Không chuẩn hóa khi gửi lên AI — giữ nguyên bản gốc
-  const res = await fetch("/api/evaluate-answer", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      userAnswer: userAnswerRaw,
-      correctAnswer: correctAnswer
-    })
-  });
+  const res = await fetch("/listening/feedback", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    userAnswer: userAnswerRaw,
+    correctAnswer: correctAnswer
+  })
+});
+
 
   let data;
   try {
@@ -183,14 +276,47 @@ async function submitAnswerNew() {
       `<div class="alert alert-danger">Lỗi đọc phản hồi từ server.</div>`;
     return;
   }
+  // ✅ Kiểm tra dữ liệu trả về
+console.log("✅ Kết quả từ AI:", data);
+// ✅ Nếu AI không có mảng errors, tự tạo
+if (!data.errors || !Array.isArray(data.errors)) {
+  data.errors = [];
+
+  const matches = (data.highlight || "").match(/\[\*(.*?)\*\]/g);
+  if (matches && matches.length > 0) {
+    matches.forEach((m) => {
+      const wrong = m.replace(/\[\*|\*\]/g, "");
+      data.errors.push({
+        original: correctAnswer,
+        user: wrong,
+        type: "Ngữ pháp",
+        suggestion: `Phần "${wrong}" có thể sai ngữ pháp.`,
+      });
+    });
+  } 
+}
+  // ❌ Đừng luôn push lỗi mặc định
+  // ✅ Chỉ thêm nếu điểm < 80 (tức AI chấm kém)
+  
 
   // 🧩 Kiểm tra nếu AI trả JSON thô (bị lỗi)
-  if (!data.success || typeof data.score !== "number") {
-    document.getElementById("aiResult").innerHTML =
-      `<div class="alert alert-warning">⚠️ AI chưa chấm được. Thử lại sau.</div>`;
-    console.warn("Dữ liệu AI trả về:", data);
-    return;
+// 🧩 Nếu AI trả chuỗi JSON thô (ví dụ như "{...}" hoặc có text kèm JSON)
+if (!data.success || typeof data.score !== "number") {
+  // Nếu data là chuỗi, thử tách JSON trong đó
+  if (typeof data === "string") {
+    const jsonMatch = data.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try {
+        const parsed = JSON.parse(jsonMatch[0]);
+        data = parsed;
+        data.success = true;
+      } catch (err) {
+        console.warn("⚠️ Không parse được JSON:", err);
+      }
+    }
   }
+}
+
 
 /// ✅ Nếu thành công → hiển thị kết quả
 if (data.success) {
@@ -203,6 +329,34 @@ if (data.success) {
 
   const fbEl = document.getElementById("feedback-text");
   const hlEl = document.getElementById("highlight-text");
+  // Feedback & highlight
+fbEl.innerText = data.feedback || "Không có nhận xét.";
+hlEl.innerHTML = (data.highlight || "Không có lỗi.")
+  .replaceAll("[*", '<mark class="bg-danger text-white rounded px-1">')
+  .replaceAll("*]", '</mark>');
+
+// 🧠 Nếu AI trả kèm danh sách lỗi chi tiết
+if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
+  const tbody = document.getElementById("errorTableBody");
+  tbody.innerHTML = data.errors.map((err, i) => `
+    <tr>
+      <td class="text-center">${i + 1}</td>
+      <td>${err.original || ""}</td>
+      <td>${err.user || ""}</td>
+      <td class="text-center">
+        <span class="badge bg-${err.typeColor || 'danger'}">${err.type || 'Lỗi'}</span>
+      </td>
+      <td>${err.suggestion || "—"}</td>
+    </tr>
+  `).join("");
+
+  document.getElementById("errorCount").innerText = data.errors.length;
+  const accuracy = Math.max(0, 100 - data.errors.length * 5); // ví dụ: mỗi lỗi trừ 5%
+  document.getElementById("accuracyRate").innerText = `${accuracy}%`;
+  document.getElementById("errorDetails").style.display = "block";
+} else {
+  document.getElementById("errorDetails").style.display = "none";
+}
 
   // Helper: escape HTML
   function escapeHtml(str) {
@@ -246,7 +400,10 @@ if (data.success) {
     hl = cleanLabel(hl);
 
     // --- Gán nội dung sau khi xử lý ---
-    fbEl.innerHTML = `<strong>Điểm:</strong> ${data.score}/100<br>${escapeHtml(fb)}`;
+    fbEl.innerHTML = `
+  <p style="margin:0"><strong>Điểm:</strong> ${data.score}/100</p>
+  <p style="white-space:pre-line; margin-top:5px;">${escapeHtml(fb)}</p>
+`;
     if (/<[^>]+>/.test(hl)) {
       hlEl.innerHTML = hl;
     } else {
@@ -260,14 +417,7 @@ if (data.success) {
   }
 
   // Progress bar nhỏ phía trên
-  const scoreBarWrapper = document.getElementById("scoreBarWrapper");
-  scoreBarWrapper.style.display = "block";
-  const scoreBar2 = document.getElementById("scoreBar");
-  scoreBar2.style.width = data.score + "%";
-  scoreBar2.innerText = data.score + "%";
-} else {
-  document.getElementById("aiResult").innerHTML =
-    `<div class="alert alert-danger">❌ Lỗi AI: ${data.error || 'Không chấm được'}</div>`;
+  
 }
 
 }
@@ -277,4 +427,28 @@ if (data.success) {
     e.preventDefault();
     submitAnswerNew();
   });
+ document.addEventListener("DOMContentLoaded", function () {
+    const submitBtn = document.getElementById("submitBtn");
+    const submitSound = document.getElementById("submitSound");
+
+    if (submitBtn) {
+      submitBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        // 🔊 Phát âm thanh "nộp bài"
+        if (submitSound) {
+          submitSound.currentTime = 0;
+          try {
+            await submitSound.play();
+          } catch (err) {
+            console.warn("Không thể phát âm thanh:", err);
+          }
+        }
+
+        // 🧠 Gọi hàm chấm điểm AI
+        submitAnswerNew();
+      });
+    }
+  });
+
 </script>

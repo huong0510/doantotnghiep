@@ -4,87 +4,241 @@
   <meta charset="utf-8">
   <title>AI Dạy Hội Thoại</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
-    .chat-box { height: 60vh; overflow-y: auto; background:#fbfbfe; padding:12px; border-radius:8px; border:1px solid #eee; }
-    .msg.user { text-align: right; }
-    .msg.assistant { text-align: left; }
-    .bubble { display:inline-block; padding:10px 12px; border-radius:14px; margin:6px 0; max-width:82%; }
-    .bubble.user { background:#0084ff; color:white; border-bottom-right-radius:4px; }
-    .bubble.assistant { background:#f1f1f1; color:#111; border-bottom-left-radius:4px; }
-    .scenario-btn { cursor:pointer; }
+/* --- Vùng chat --- */
+.chat-box {
+  height: 60vh;
+  overflow-y: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+/* --- Tin nhắn --- */
+.msg.user { text-align: right; }
+.msg.assistant { text-align: left; }
+
+.bubble {
+  display: inline-block;
+  padding: 12px 16px;
+  border-radius: 18px;
+  margin: 8px 0;
+  max-width: 80%;
+  line-height: 1.5;
+  word-wrap: break-word;
+  animation: fadeIn 0.4s ease;
+}
+
+.bubble.user {
+  background: #e53935;
+  color: #fff;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 2px 6px rgba(229, 57, 53, 0.2);
+}
+
+.bubble.assistant {
+  background: #f8f9fa;
+  color: #222;
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Nút tình huống --- */
+#scenario-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.scenario-btn {
+  cursor: pointer;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #333;
+  padding: 10px 20px;
+}
+
+.scenario-btn:hover {
+  background: #fff5f5;
+  color: #e53935;
+  border-color: #e53935;
+}
+
+.scenario-btn.active {
+  background: #e53935 !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 0 8px rgba(229, 57, 53, 0.3);
+}
+
+/* --- Ô nhập --- */
+#convInput {
+  border-radius: 30px;
+  padding: 12px 20px;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease;
+}
+#convInput:focus {
+  outline: none;
+  border-color: #e53935;
+  box-shadow: 0 0 6px rgba(229, 57, 53, 0.3);
+}
+
+/* --- Nút gửi --- */
+#sendBtn {
+  background-color: #e53935;
+  border: none;
+  color: #fff;
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+#sendBtn:hover {
+  background-color: #c62828;
+  transform: scale(1.05);
+}
+
+/* --- Mic --- */
+#micBtn {
+  border: 2px solid #e53935;
+  color: #e53935;
+  background: #fff;
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+#micBtn:hover {
+  background: #fff5f5;
+  transform: scale(1.05);
+}
+#micBtn.listening {
+  background: #e53935;
+  color: #fff;
+}
+
+/* --- Xóa --- */
+#clearBtn {
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  padding: 10px 24px;
+  transition: all 0.2s ease;
+}
+#clearBtn:hover {
+  background: #fff5f5;
+  border-color: #e53935;
+  color: #e53935;
+}
+/* 💬 Hiệu ứng chat mượt */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bubble {
+  animation: slideUp 0.4s ease-out;
+}
+.msg.ai {
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
   </style>
 </head>
-<body class="p-4">
 
-<div class="container">
-  <div class="row">
+<body class="p-4 bg-light">
+  <div class="container text-center">
     <div class="col-md-8 offset-md-2">
-      <h3>AI Dạy Hội Thoại — Roleplay</h3>
-      <p>Chọn tình huống, nhập câu bạn muốn nói và thực hành. AI sẽ trả lời bằng tiếng Nhật + dịch + chỉnh sửa ngắn.</p>
+      <h3 class="fw-bold mb-3 text-danger">🎓 AI Dạy Hội Thoại — Roleplay</h3>
+      <p class="text-muted">Chọn tình huống, nhập câu bạn muốn nói và thực hành. AI sẽ trả lời bằng tiếng Nhật + dịch + chỉnh sửa ngắn.</p>
 
-      <!-- 🔥 Tạo nút động -->
-      <div id="scenario-buttons" class="btn-group" role="group"></div>
-      <small class="text-muted ms-2" id="currentScenarioLabel">Tình huống: ...</small>
+      <!-- 🔥 Nút tình huống -->
+      <div id="scenario-buttons"></div>
+      <small class="text-muted d-block mb-3" id="currentScenarioLabel">Tình huống: ...</small>
 
-      <div class="chat-box" id="convBox"></div>
+      <!-- Chat box -->
+      <div class="chat-box mb-3" id="convBox"></div>
 
-<form id="convForm" class="d-flex mt-3">
-  <input type="hidden" id="userId" value="<%= user ? user.id : '' %>">
-  <input type="text" id="convInput" class="form-control me-2" placeholder="Nhập hoặc nói câu muốn luyện (VD: こんにちは、私は学生です)" autocomplete="off">
-  <button class="btn btn-primary" id="sendBtn">Gửi</button>
-  <button type="button" class="btn btn-outline-danger ms-2" id="micBtn">🎤</button>
-  <button type="button" class="btn btn-secondary ms-2" id="clearBtn">Xóa</button>
-</form>
+      <!-- Form nhập -->
+      <form id="convForm" class="d-flex justify-content-center align-items-center gap-2">
+        <input type="text" id="convInput" class="form-control" placeholder="Nhập hoặc nói câu muốn luyện (VD: こんにちは)" autocomplete="off">
+        <button type="submit" id="sendBtn">Gửi</button>
+        <button type="button" id="micBtn">🎤</button>
+        <button type="button" id="clearBtn">Xóa</button>
+      </form>
 
-
-
-      <div class="mt-3 text-muted">
-        <small>Gợi ý: Bạn có thể viết bằng tiếng Việt/romaji/từ vựng, AI sẽ phản hồi bằng tiếng Nhật và dịch.</small>
+      <div class="mt-3 text-muted small">
+        💡 Gợi ý: Bạn có thể viết bằng tiếng Việt/romaji/từ vựng, AI sẽ phản hồi bằng tiếng Nhật và dịch.
       </div>
     </div>
   </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-let currentScenario = 'greeting';
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  let currentScenario = 'greeting';
 
-async function loadScenarios() {
-  try {
-    const res = await fetch('/api/conversation/scenarios');
-    const data = await res.json();
-    if (!data.success) return;
+  async function loadScenarios() {
+    try {
+      const res = await fetch('/api/conversation/scenarios');
+      const data = await res.json();
+      if (!data.success) return;
 
-    const container = document.getElementById('scenario-buttons');
-    container.innerHTML = '';
+      const container = document.getElementById('scenario-buttons');
+      container.innerHTML = '';
 
-    data.scenarios.forEach(sc => {
-      const btn = document.createElement('button');
-      btn.className = 'btn btn-outline-primary';
-      btn.innerText = sc.title;
-      btn.dataset.scenario = sc.key;
-      if (sc.key === currentScenario) btn.classList.add('active');
+      data.scenarios.forEach(sc => {
+        const btn = document.createElement('button');
+        btn.className = 'scenario-btn';
+        btn.innerText = sc.title;
+        btn.dataset.scenario = sc.key;
+        if (sc.key === currentScenario) btn.classList.add('active');
 
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#scenario-buttons button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentScenario = sc.key;
-        document.getElementById('currentScenarioLabel').textContent = 'Tình huống: ' + sc.title;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentScenario = sc.key;
+          document.getElementById('currentScenarioLabel').textContent = 'Tình huống: ' + sc.title;
 
-        // Xóa hội thoại khi đổi tình huống
-        fetch('/api/conversation/clear', { method: 'POST' });
-        document.getElementById('convBox').innerHTML = '';
+          fetch('/api/conversation/clear', { method: 'POST' });
+          document.getElementById('convBox').innerHTML = '';
+        });
+
+        container.appendChild(btn);
       });
 
-      container.appendChild(btn);
-    });
-
-    document.getElementById('currentScenarioLabel').textContent =
-      'Tình huống: ' + (data.scenarios.find(s => s.key === currentScenario)?.title || '');
-  } catch (e) {
-    console.error('Không tải được danh sách tình huống:', e);
+      document.getElementById('currentScenarioLabel').textContent =
+        'Tình huống: ' + (data.scenarios.find(s => s.key === currentScenario)?.title || '');
+    } catch (e) {
+      console.error('Không tải được danh sách tình huống:', e);
+    }
   }
-}
 
 function speakJapanese(text) {
   if ('speechSynthesis' in window) {
@@ -129,18 +283,27 @@ $(document).on('click', '.play-audio', function() {
   speakJapanese(txt);
 });
 
-$('#convForm').on('submit', async function(e)
- { e.preventDefault();
-   const txt = $('#convInput').val().trim();
-    if (!txt) return; appendMessage('user', txt);
-     $('#convInput').val(''); appendMessage('assistant', '<em>Đang suy nghĩ...</em>');
+$('#convForm').on('submit', async function(e) {
+  e.preventDefault();
+  const txt = $('#convInput').val().trim();
+  if (!txt) return;
+
+  // 🔊 Phát âm “ting~” khi gửi tin nhắn
+  const sendSound = document.getElementById('sendSound');
+  if (sendSound) {
+    sendSound.currentTime = 0;
+    sendSound.play().catch(() => {});
+  }
+  appendMessage('user', txt);
+  $('#convInput').val('');
+
       try {
         const res = await fetch('/api/conversation', {
            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
              body: JSON.stringify({ scenario: currentScenario, message: txt }) });
               const data = await res.json(); 
-              convBox.children().last().remove();
+           
               if (data.success && data.reply) { appendMessage('assistant', data.reply); } else if (data.error) { appendMessage('assistant', '<span style="color:crimson">Lỗi: ' + data.error + '</span>'); } else { appendMessage('assistant', '<span style="color:crimson">Không nhận được phản hồi</span>'); } } catch (err) { convBox.children().last().remove(); appendMessage('assistant', '<span style="color:crimson">Lỗi kết nối: ' + err.message + '</span>'); } });
 
 $('#clearBtn').click(function() {
@@ -163,7 +326,7 @@ if ('webkitSpeechRecognition' in window) {
 
   recognition.onend = () => {
     recognizing = false;
-    $('#micBtn').text('🎤 Nói').removeClass('btn-danger').addClass('btn-outline-danger');
+    $('#micBtn').text('🎤 ').removeClass('btn-danger').addClass('btn-outline-danger');
   };
 recognition.onresult = (event) => {
   const spokenText = event.results[0][0].transcript.trim();
@@ -260,7 +423,48 @@ $('#micBtn').click(function() {
   recognition.start();
 });
 
+
+// Khi người dùng nhấn "Gửi"
+sendBtn.addEventListener("click", async () => {
+  const msg = inputMsg.value.trim();
+  if (!msg) return;
+
+  // 🔊 Phát âm "ting~" khi gửi
+  sendSound.currentTime = 0;
+  sendSound.play();
+
+  // Gửi tin nhắn lên server
+  const res = await fetch("/chat/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  });
+
+  const data = await res.json();
+  
+  // Hiển thị phản hồi
+  showMessage("ai", data.reply);
+
+  // 🔊 Phát âm "pling~" khi AI trả lời
+  replySound.currentTime = 0;
+  replySound.play();
+
+  inputMsg.value = "";
+});
+
+function showMessage(sender, text) {
+  const chatBox = document.getElementById("chatBox");
+  const div = document.createElement("div");
+  div.className = sender === "ai" ? "msg ai" : "msg user";
+  div.textContent = text;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 loadScenarios();
 </script>
+<!-- Âm thanh gửi & phản hồi -->
+<audio id="sendSound" src="/sounds/bubble-254777.mp3"></audio>
+<audio id="replySound" src="/sounds/bubble-pop-06-351337.mp3"></audio>
+
 </body>
 </html>

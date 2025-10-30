@@ -82,6 +82,7 @@ app.use("/view-plan", viewPlanRoute);
 app.use("/api", evaluateRoutes);
 app.use('/progress', progressRoutes);
 app.use("/journal", journalRoutes);
+app.use(express.static('public'));
 
 
 

@@ -3,14 +3,120 @@
 <div class="container py-5">
   <div class="card shadow border-0 rounded-3 mb-4">
     <div class="card-body">
-      <h2 class="text-primary mb-3"><%= grammar.structure %></h2>
-      <p class="fs-5"><strong>Ý nghĩa:</strong> <%= grammar.meaning %></p>
-      <p class="mb-2"><strong>Ví dụ:</strong></p>
+    <!-- 📘 Flashcard hiệu ứng lật + âm thanh + tự lật -->
+<div class="flashcard mx-auto my-4" id="grammarCard">
+  <div class="card-inner">
+    <!-- Mặt trước -->
+    <div class="card-face card-front">
+      <h2 class="fw-bold text-primary"><%= grammar.structure %></h2>
+      <p class="text-muted mt-3">💡 Nhấn để xem ý nghĩa & ví dụ</p>
+    </div>
 
+    <!-- Mặt sau -->
+    <div class="card-face card-back text-center">
+      <p class="fs-5"><strong>Ý nghĩa:</strong> <%= grammar.meaning %></p>
       <blockquote class="border-start ps-3 text-dark">
         <p class="mb-1"><%= grammar.example %></p>
         <small class="text-muted">👉 <%= grammar.translation %></small>
       </blockquote>
+    </div>
+  </div>
+</div>
+
+<style>
+  .flashcard {
+    width: 100%;
+    max-width: 600px;
+    height: 250px;
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  .flashcard.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    backface-visibility: hidden;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+  }
+
+  .card-front {
+    background: linear-gradient(135deg, #e3f2fd, #f8fafc);
+    color: #0d47a1;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+    background: #f9fafb;
+    color: #111827;
+  }
+
+  /* 🌟 Hiệu ứng glow khi hover */
+  .flashcard:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(0, 123, 255, 0.2);
+  }
+
+  /* 🎶 Animation lật */
+  @keyframes flipSoundGlow {
+    0% { box-shadow: 0 0 0px rgba(33,150,243,0.4); }
+    50% { box-shadow: 0 0 30px rgba(33,150,243,0.7); }
+    100% { box-shadow: 0 0 0px rgba(33,150,243,0.4); }
+  }
+</style>
+
+<script>
+ const grammarCard = document.getElementById("grammarCard");
+
+// 🔊 Nạp âm thanh khi lật (đặt trong thư mục public/sounds)
+const flipSound = new Audio("/sounds/pop-94319.mp3");
+
+// Khi nhấp để lật
+grammarCard.addEventListener("click", () => {
+  grammarCard.classList.toggle("flipped");
+
+  // Phát âm thanh (reset nếu đang phát)
+  flipSound.currentTime = 0;
+  flipSound.play().catch(err => console.warn("Không phát được âm thanh:", err));
+
+  // Hiệu ứng sáng nhẹ khi lật
+  grammarCard.style.animation = "flipGlow 0.5s ease";
+  setTimeout(() => grammarCard.style.animation = "", 500);
+});
+
+// ⏳ Tự lật sau 3 giây nếu chưa lật
+setTimeout(() => {
+  if (!grammarCard.classList.contains("flipped")) {
+    grammarCard.classList.add("flipped");
+    flipSound.currentTime = 0;
+    flipSound.play();
+  }
+}, 3000);
+</script>
+
+
+    
 
       <a href="/grammar" class="btn btn-outline-primary mt-3">⬅ Quay lại danh sách</a>
 

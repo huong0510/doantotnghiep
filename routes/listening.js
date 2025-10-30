@@ -39,45 +39,73 @@ router.post('/feedback', requireAuth, async (req, res) => {
   try {
     const { userAnswer, correctAnswer } = req.body;
 
+    // 🔹 Prompt hoàn chỉnh (có dữ liệu thực tế)
     const prompt = `
-Bạn là một giáo viên tiếng Nhật. Hãy chấm câu trả lời nghe của học viên.
+Bạn là giáo viên tiếng Nhật phụ trách kỹ năng NGHE HIỂU.
+Hãy chấm câu trả lời của học viên dựa trên mức độ hiểu đúng nội dung.
 
-- Đáp án gốc: "${correctAnswer}"
-- Câu học viên: "${userAnswer}"
+Dưới đây là dữ liệu:
+- Câu hỏi / đoạn nghe (đáp án đúng): "${correctAnswer}"
+- Câu học viên nghe và trả lời: "${userAnswer}"
 
-Hãy trả về kết quả dưới dạng JSON với 3 trường:
+1️⃣ **Chấm điểm chính xác** (0–100) dựa trên mức độ hiểu và truyền tải đúng ý.
+2️⃣ **Phát hiện lỗi chi tiết** gồm:
+   - "Từ vựng": dùng sai hoặc nghe nhầm từ.
+   - "Cấu trúc": sai ngữ pháp, chia động từ, hoặc thiếu thành phần ngữ pháp bắt buộc.
+   - "Thiếu ý": chỉ khi học viên bỏ sót một phần quan trọng trong ý chính (KHÔNG được tự suy diễn vì câu ngắn hơn).
+   - "Nghe nhầm": nếu dùng từ hoặc cụm hoàn toàn khác nghĩa với bản gốc.
+3️⃣ **Đưa ra gợi ý ngắn gọn** để cải thiện cho từng lỗi.
+4️⃣ **Không tạo lỗi giả** nếu câu trả lời vẫn đúng ngữ pháp hoặc hợp nghĩa.
+5️⃣ Trả về đúng định dạng JSON, không kèm thêm văn bản thừa:
+
+Trả về đúng định dạng JSON (không thêm văn bản thừa):
+
 {
-  "score": số_điểm_0_đến_100,
-  "highlight": "highlight phần sai (nếu có), nếu đúng hoàn toàn ghi 'Không có lỗi'",
-  "feedback": "nhận xét ngắn gọn bằng tiếng Việt"
+  "score": <số nguyên 0-100>,
+  "highlight": "<câu học viên, đánh dấu phần sai bằng [*...*]>",
+  "feedback": "<nhận xét ngắn bằng tiếng Việt>",
+  "errors": [
+    {
+      "original": "<phần đúng hoặc ý đúng>",
+      "user": "<phần sai hoặc thiếu>",
+      "type": "<Từ vựng / Cấu trúc / Thiếu ý / Nghe nhầm>",
+      "typeColor": "<warning hoặc danger>",
+      "suggestion": "<Cách nói hoặc diễn đạt đúng hơn>"
+    }
+  ]
 }
-    `;
+`;
 
     const aiRes = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.3
+      messages: [
+        { role: "system", content: "Bạn là giáo viên tiếng Nhật chuyên về kỹ năng nghe hiểu." },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.4,
     });
 
-    let resultText = aiRes.choices[0].message.content;
-
-    // Parse JSON an toàn
+    let raw = aiRes.choices[0].message.content.trim();
     let parsed;
+
     try {
-      parsed = JSON.parse(resultText);
-    } catch (e) {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      console.warn("⚠️ JSON parse lỗi:", raw);
       parsed = {
         score: 0,
-        highlight: "Không phân tích được",
-        feedback: resultText
+        highlight: "Không thể phân tích câu trả lời.",
+        feedback: "AI không trả đúng định dạng JSON.",
+        errors: []
       };
     }
 
     res.json({ success: true, ...parsed });
   } catch (error) {
-    console.error("❌ Lỗi AI:", error);
+    console.error("❌ Lỗi AI (Listening):", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 module.exports = router;
