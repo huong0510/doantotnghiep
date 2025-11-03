@@ -30,6 +30,10 @@ const viewPlanRoute = require("./routes/viewPlan");
 const evaluateRoutes = require("./routes/evaluate");
 const progressRoutes = require('./routes/progress');
 const journalRoutes = require("./routes/journal");
+const adminRoutes = require('./routes/admin');
+const adminVocabularyRoutes = require("./routes/adminVocabulary");
+const userRoutes = require('./routes/userRoutes');
+
 
 const app = express();
 
@@ -42,13 +46,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-// --- Session: phải đặt TRƯỚC khi dùng req.session ---
-app.use(session({
-  secret: 'smv-nihongo-secret',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // chạy localhost thì false
-}));
+app.use(
+  session({
+    name: "vku_session",       // 🔑 thêm dòng này để dùng 1 cookie chung
+    secret: "smv-nihongo-secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,           // để true nếu chạy HTTPS
+      maxAge: 1000 * 60 * 60,  // 1h
+    },
+  })
+);
+
 
 // --- View engine ---
 app.set('view engine', 'ejs');
@@ -83,6 +94,11 @@ app.use("/api", evaluateRoutes);
 app.use('/progress', progressRoutes);
 app.use("/journal", journalRoutes);
 app.use(express.static('public'));
+app.use("/admin", adminRoutes);
+app.use("/admin/vocabulary", adminVocabularyRoutes);
+app.use('/user', userRoutes);
+
+
 
 
 

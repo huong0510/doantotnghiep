@@ -1,0 +1,39 @@
+<%- include('../partials/header', { title: 'Trang quản trị' }) %>
+
+<div class="container py-5 text-center">
+  <div class="card shadow-lg border-0 rounded-4 p-4" style="background: #fff0f6;">
+    <h1 class="mb-4 text-danger fw-bold">👑 Xin chào, <%= user.username %>!</h1>
+    <p class="lead text-secondary">Chào mừng bạn đến với trang quản trị hệ thống.</p>
+
+    <!-- Các nút chức năng -->
+    <div class="mt-4 d-flex justify-content-center flex-wrap gap-3" style="position: relative; z-index: 10;">
+      <a href="/admin/users" class="btn btn-outline-danger fw-bold px-4 py-2 shadow-sm">
+        👥 Quản lý người dùng
+      </a>
+
+      <a href="/admin/vocabulary" class="btn btn-outline-danger fw-bold px-4 py-2 shadow-sm">
+        📘 Quản lý từ vựng
+      </a>
+
+      <a href="/admin/progress" class="btn btn-outline-success fw-bold px-4 py-2 shadow-sm">
+        📊 Tiến độ học tập
+      </a>
+<a href="/admin/games" class="btn btn-outline-dark">
+  🎮 Quản lý Trò chơi
+</a>
+        
+
+      <a href="/admin/logout" class="btn btn-danger fw-bold px-4 py-2 shadow-sm">
+        🚪 Đăng xuất
+      </a>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<%- include('../partials/footer') %>
+
+

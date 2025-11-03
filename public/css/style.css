@@ -556,13 +556,154 @@ body {
   color: #fff;
   box-shadow: 0 0 10px rgba(229, 57, 53, 0.3);
 }
+.navbar .nav-item .admin-link {
+  color: #d63384 !important;
+  background-color: #fff0f5 !important;
+  padding: 6px 14px !important;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1;
+  font-weight: 600;
+  text-decoration: none !important;
+  height: 100%;
+}
 
+.navbar .nav-item .admin-link:hover {
+  background-color: #ffd6e0 !important;
+  color: #c2255c !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(255, 105, 180, 0.3);
+}
+/* ==============================
+   🌸 Giao diện Đăng nhập / Đăng ký Admin
+   ============================== */
+/* 🌸 Giao diện trắng - hồng cho form đăng nhập / đăng ký */
+body {
+  background: linear-gradient(135deg, #fffafc, #ffe6ef);
+  font-family: "Inter", sans-serif;
+}
 
+.card {
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  border: 1px solid #ffd6e0;
+  box-shadow: 0 4px 12px rgba(255, 182, 193, 0.25);
+  border-radius: 1rem;
+}
 
+.card-body {
+  padding: 2rem;
+}
 
+h2.text-danger {
+  color: #e75480 !important; /* Hồng đậm */
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
 
-  
-  
+.btn-danger {
+  background-color: #ff6b9d;
+  border: none;
+  transition: 0.3s;
+}
+.btn-danger:hover {
+  background-color: #ff4f85;
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 1px solid #ffc5d1;
+  transition: 0.2s;
+}
+.form-control:focus {
+  border-color: #ff8fb1;
+  box-shadow: 0 0 5px rgba(255, 143, 177, 0.5);
+}
+
+a.text-danger {
+  color: #ff5c8a !important;
+}
+a.text-danger:hover {
+  text-decoration: underline;
+}
+
+.alert-danger {
+  background-color: #ffe0ea;
+  color: #b03060;
+  border: none;
+  border-radius: 8px;
+}
+
+/* 🌸 Tùy chỉnh nhỏ cho button và spacing */
+.btn {
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 10px;
+}
+/* 🌸 Tiêu đề hồng pastel cho trang đăng nhập/đăng ký */
+h2.text-primary,
+h2.text-danger,
+h2 {
+  color: #ff4f85 !important; /* Hồng nổi bật */
+  font-weight: 700;
+  text-align: center;
+}
+
+h2 i,
+h2 span,
+h2 .icon {
+  color: #ff8fb1 !important;
+}
+/* 🌸 Liên kết trong form đăng nhập/đăng ký (Đăng nhập ngay / Đăng ký ngay) */
+.card-body p a,
+.text-danger.fw-semibold,
+p a.text-danger {
+  color: #ff4f85 !important;        /* Hồng pastel */
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.card-body p a:hover,
+.text-danger.fw-semibold:hover,
+p a.text-danger:hover {
+  color: #ff2e70 !important;        /* Hồng đậm hơn khi hover */
+  text-shadow: 0 0 6px rgba(255, 79, 133, 0.3);
+}
+/* 🌸 Tone trắng hồng cho toàn trang */
+body {
+  background-color: #fff5f8 !important;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 1rem;
+}
+
+.btn-danger {
+  background-color: #ff4b6e !important;
+  border: none;
+}
+
+.btn-outline-danger {
+  border-color: #ff4b6e !important;
+  color: #ff4b6e !important;
+}
+
+.btn-outline-danger:hover {
+  background-color: #ff4b6e !important;
+  color: white !important;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 
 
 

@@ -1,0 +1,49 @@
+<%- include('../partials/header', { title: 'Thông tin cá nhân' }) %>
+
+<div class="container py-5">
+  <div class="card shadow-lg border-0 rounded-4 p-4 mx-auto" style="max-width: 800px;">
+    <div class="text-center mb-4">
+      <% if (user.avatar) { %>
+        <img src="<%= user.avatar %>" alt="Avatar" class="rounded-circle shadow" width="150" height="150">
+      <% } else { %>
+        <img src="/images/default-avatar.png" alt="Avatar mặc định" class="rounded-circle shadow" width="150" height="150">
+      <% } %>
+      <h2 class="mt-3 text-primary fw-bold"><%= user.fullname %></h2>
+      <p class="text-muted mb-1">@<%= user.username %></p>
+      <a href="/user/profile/edit" class="btn btn-outline-primary btn-sm mt-2">
+        ✏️ Chỉnh sửa thông tin
+      </a>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>📧 Email:</strong> <%= user.email || 'Chưa cập nhật' %></p>
+        <p><strong>📞 Số điện thoại:</strong> <%= user.phone || 'Chưa cập nhật' %></p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>🏠 Địa chỉ:</strong> <%= user.address || 'Chưa cập nhật' %></p>
+        <p><strong>🎂 Ngày sinh:</strong> 
+          <%= user.date_of_birth ? new Date(user.date_of_birth).toLocaleDateString('vi-VN') : 'Chưa cập nhật' %>
+        </p>
+      </div>
+    </div>
+
+    <hr>
+
+    <div>
+      <h5 class="text-primary">📝 Giới thiệu bản thân</h5>
+      <p class="mt-2" style="white-space: pre-line;">
+        <%= user.bio ? user.bio : 'Bạn chưa thêm phần giới thiệu nào.' %>
+      </p>
+    </div>
+
+    <hr>
+    <p class="text-muted small text-end">
+      ⏱️ Cập nhật gần nhất: <%= user.last_password_change ? new Date(user.last_password_change).toLocaleString('vi-VN') : 'Không rõ' %>
+    </p>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <h2 class="text-center text-success fw-bold mb-4">➕ Thêm người dùng mới</h2>
+
+  <form action="/admin/users/add" method="POST" class="shadow p-4 bg-white rounded">
+    <div class="mb-3">
+      <label class="form-label fw-bold">Tên đăng nhập</label>
+      <input type="text" name="username" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Mật khẩu</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Họ và tên</label>
+      <input type="text" name="fullname" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Số điện thoại</label>
+      <input type="text" name="phone" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Email</label>
+      <input type="email" name="email" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Vai trò</label>
+      <select name="role" class="form-select">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success px-4 fw-bold">💾 Lưu</button>
+      <a href="/admin/users" class="btn btn-secondary px-4">⬅ Quay lại</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

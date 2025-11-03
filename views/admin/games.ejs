@@ -1,0 +1,156 @@
+<%- include('../partials/header', { title: 'Quản lý Trò chơi' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="container mt-4 pt-3"> <!-- 🩷 thêm khoảng cách trên -->
+  <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 15px;">
+
+  <!-- Nút quay lại -->
+<div class="d-flex justify-content-center mt-4 gap-3">
+<button 
+  class="btn btn-secondary fw-bold rounded-4 px-4 py-2"
+  onclick="window.location.href = '/admin/games'"
+>
+  🔁 Làm mới
+</button>
+
+
+  <a 
+    href="/admin" 
+    class="btn fw-bold text-white rounded-4 px-3 py-2" 
+    style="background-color: #ff5c8d; border: none; font-size: 15px;"
+  >
+    ⬅️ Quay lại trang Admin
+  </a>
+</div>
+
+
+
+  <!-- Tiêu đề -->
+ <h1 class="text-center fw-bold text-danger" style="margin-top: -15px;">👥 Quản lý trò chơi</h1>
+
+
+  <!-- Thanh tìm kiếm -->
+  <form class="d-flex" method="GET" action="/admin/games">
+    <input
+      class="form-control me-2 border border-danger rounded-4"
+      type="search"
+      name="userSearch"
+      placeholder="Tìm người chơi..."
+      value="<%= typeof userSearch !== 'undefined' ? userSearch : '' %>"
+      style="width: 220px;"
+    >
+    <button
+      class="btn fw-bold text-white rounded-4"
+      type="submit"
+      style="background-color: #ff5c8d; border: none; padding: 8px 18px;"
+    >
+      🔍 Tìm
+    </button>
+  </form>
+</div>
+
+
+  <div class="card shadow-sm mb-5">
+    <div class="card-header bg-info text-white fw-bold">📈 Thống kê người chơi</div>
+    <div class="card-body table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Tên người dùng</th>
+            <th>Tổng trò chơi</th>
+            <th>Tổng điểm</th>
+            <th>Lần đăng nhập cuối</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (stats.length > 0) { %>
+            <% stats.forEach((s, i) => { %>
+              <tr>
+                <td><%= i + 1 %></td>
+                <td><%= s.username %></td>
+                <td><%= s.total_games_played %></td>
+                <td><%= s.total_score %></td>
+                <td><%= new Date(s.last_login).toLocaleString('vi-VN') %></td>
+                <td>
+  <a href="/admin/users/edit/<%= s.id %>" class="btn btn-sm btn-warning me-1">✏️ Sửa</a>
+  <a href="/admin/users/delete/<%= s.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa người chơi này?');">🗑️ Xóa</a>
+</td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="5" class="text-center text-muted">Chưa có dữ liệu người chơi</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 🕹️ Lịch sử điểm trò chơi -->
+   <!-- Thanh tìm kiếm người chơi -->
+<div class="d-flex justify-content-end mb-3">
+  <form class="d-flex" method="GET" action="/admin/games">
+    <input
+      class="form-control me-2 border border-danger rounded-4"
+      type="search"
+      name="gameSearch"
+      placeholder="Tìm người chơi..."
+      value="<%= typeof gameSearch !== 'undefined' ? gameSearch : '' %>"
+      style="width: 220px;"
+    >
+    <button
+      class="btn fw-bold text-white rounded-4"
+      type="submit"
+      style="background-color: #ff5c8d; border: none; padding: 8px 18px;"
+    >
+      🔍 Tìm
+    </button>
+  </form>
+</div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-success text-white fw-bold">🕹️ Lịch sử điểm trò chơi</div>
+    <div class="card-body table-responsive">
+      <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Người chơi</th>
+            <th>Loại game</th>
+            <th>Điểm</th>
+            <th>Đúng</th>
+            <th>Sai</th>
+            <th>Combo cao nhất</th>
+            <th>Cấp độ</th>
+            <th>Ngày chơi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (scores.length > 0) { %>
+            <% scores.forEach((g, i) => { %>
+              <tr>
+                <td><%= i + 1 %></td>
+                <td><%= g.username %></td>
+                <td><%= g.game_type %></td>
+                <td><%= g.score %></td>
+                <td><%= g.correct_answers %></td>
+                <td><%= g.wrong_answers %></td>
+                <td><%= g.max_combo %></td>
+                <td><%= g.level %></td>
+                <td><%= new Date(g.created_at).toLocaleString('vi-VN') %></td>
+                <td>
+  <a href="/admin/games/edit/<%= g.id %>" class="btn btn-sm btn-warning me-1">✏️ Sửa</a>
+  <a href="/admin/games/delete/<%= g.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa bản ghi game này?');">🗑️ Xóa</a>
+</td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr><td colspan="9" class="text-center text-muted">Chưa có dữ liệu điểm game</td></tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,23 @@
+<%- include('../partials/header', { title: 'Sửa Người chơi' }) %>
+
+<div class="container py-5">
+  <h2 class="text-center mb-4">✏️ Sửa Người chơi</h2>
+  <form method="POST" action="/admin/users/edit/<%= user.id %>">
+    <div class="mb-3">
+      <label class="form-label">Tên người dùng</label>
+      <input type="text" class="form-control" name="username" value="<%= user.username %>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Tổng trò chơi</label>
+      <input type="number" class="form-control" name="total_games_played" value="<%= user.total_games_played %>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Tổng điểm</label>
+      <input type="number" class="form-control" name="total_score" value="<%= user.total_score %>" required>
+    </div>
+    <button type="submit" class="btn btn-primary">💾 Lưu</button>
+    <a href="/admin/games" class="btn btn-secondary ms-2">❌ Hủy</a>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

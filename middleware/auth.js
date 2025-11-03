@@ -1,22 +1,28 @@
-// Middleware kiểm tra đăng nhập
+// middleware/auth.js
+
+// 🧩 Cho phép user hoặc admin đều được truy cập
 exports.requireAuth = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/auth/login');
-    }
-    next();
+  if (!req.session.user && !req.session.admin) {
+    console.log("🚫 Không có session hợp lệ, chuyển hướng về login");
+    return res.redirect("/auth/login"); // hoặc "/admin/login" tùy loại tài khoản
+  }
+  next();
 };
 
-// Middleware kiểm tra admin
-exports.requireAdmin = (req, res, next) => {
-    if (!req.session.user || req.session.user.role !== 'admin') {
-        return res.status(403).json({ error: 'Không có quyền truy cập' });
-    }
-    next();
-}; 
-exports.requireAuth = (req, res, next) => {
-    if (!req.session || !req.session.user) {
-        return res.redirect('/auth/login'); // chưa login thì đưa về login
-    }
-    next();
+// 👤 Chỉ cho phép user (học viên)
+exports.requireUser = (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect("/auth/login");
+  }
+  next();
 };
+
+// 🧑‍💼 Chỉ cho phép admin
+exports.requireAdmin = (req, res, next) => {
+  if (!req.session.admin) {
+    return res.redirect("/admin/login");
+  }
+  next();
+};
+
 

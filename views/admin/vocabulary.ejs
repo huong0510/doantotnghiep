@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>📘 Quản lý từ vựng</h3>
+<form action="/admin/vocabulary" method="GET" class="search-bar">
+
+    <input
+      type="text"
+      name="search"
+      class="form-control me-2"
+      placeholder="🔍 Tìm theo từ, nghĩa hoặc bài học..."
+      value="<%= search %>"
+    />
+    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    <a href="/admin/vocabulary" class="btn btn-secondary ms-2">🔄 Làm mới</a>
+
+  </form>
+</div>
+
+
+  <div class="text-end mb-3">
+    <a href="/admin" class="btn btn-secondary">⬅ Quay lại trang Admin</a>
+  </div>
+<style>
+    /* 🌸 TONE HỒNG - TRẮNG MỀM MẠI */
+    body {
+      background-color: #ffeef2;
+      font-family: "Poppins", sans-serif;
+    }
+
+    h3 {
+      color: #ff4d6d;
+      font-weight: 600;
+    }
+    /* 🩷 Thêm khoảng cách cho toàn bộ phần nội dung chính */
+.container, 
+div.mb-3, 
+.search-bar {
+  margin-top: 15px !important; /* đẩy toàn bộ nội dung xuống dưới */
+}
+
+h3 {
+  color: #ff4d79;
+  font-weight: 700;
+}
+
+    /* 🔍 Thanh tìm kiếm */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-bar input {
+      width: 280px;
+      border-radius: 25px;
+      padding: 8px 14px;
+      background-color: #fff;
+      border: 1.5px solid#ff5c8d;
+      transition: 0.3s;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: #ff4d6d;
+      box-shadow: 0 0 6px rgba(255, 77, 109, 0.4);
+    }
+
+    .search-bar button {
+      border-radius: 20px;
+      background-color: #ff4d6d;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .search-bar button:hover {
+      background-color:#ff5c8d;
+    }
+
+    .search-bar a.btn {
+      background-color: #ff5c8d;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      transition: 0.3s;
+    }
+
+    .search-bar a.btn:hover {
+      background-color: #ff5c8d;
+    }
+
+    /* 📘 Form thêm từ */
+    .card {
+      background-color: #fff;
+      border-radius: 15px;
+      border: 2px solid#ff5c8d;
+    }
+
+    .btn-primary {
+      background-color: #ff4d6d;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #ff5c8d;
+    }
+
+    /* 📋 Bảng dữ liệu */
+    table {
+      background-color: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    thead {
+      background-color: #ff5c8d!important;
+      color: #fff;
+    }
+
+    tbody tr:hover {
+      background-color: #fff0f5;
+      transition: 0.3s;
+    }
+
+    .btn-danger {
+      background-color: #ff4d6d;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background-color: #ff5c8d;
+    }
+
+    .btn-warning {
+      background-color: #ffd966;
+      border: none;
+      color: #333;
+    }
+
+    .btn-warning:hover {
+      background-color: #ffe484;
+    }
+
+    /* ⬅ Nút quay lại */
+    .back-btn {
+      background-color: #ff5c8d;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 8px 18px;
+      transition: 0.3s;
+    }
+
+    .back-btn:hover {
+      background-color: #ff4d6d;
+    }
+
+    /* ✏️ MODAL CHỈNH SỬA */
+    .modal-content {
+      border-radius: 20px;
+      border: 2px solid #ff5c8d;
+      background-color: #fff5f7;
+    }
+
+    .modal-header {
+      background-color: #ff5c8d;
+      color: white;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .modal-title {
+      font-weight: 600;
+    }
+
+    .modal-footer {
+      background-color: #fff0f5;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .btn-success {
+      background-color: #ff4d6d;
+      border: none;
+    }
+
+    .btn-success:hover {
+      background-color: #ff6b81;
+    }
+
+    .btn-secondary {
+      background-color:#ff5c8d;
+      color: white;
+      border: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ff5c8d;;
+    }
+
+  </style>
+  <!-- Form thêm từ vựng -->
+  <form action="/admin/vocabulary/add" method="POST" class="card p-3 mb-4 shadow-sm">
+    <h5>➕ Thêm từ vựng</h5>
+    <div class="row g-2">
+      <div class="col-md-2">
+        <label>Bài học</label>
+        <select name="lesson" class="form-select" required>
+          <% lessons.forEach(l => { %>
+            <option value="<%= l.lesson %>"><%= l.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label>Từ</label>
+        <input name="word" class="form-control" required>
+      </div>
+      <div class="col-md-2">
+        <label>Romaji</label>
+        <input name="romaji" class="form-control">
+      </div>
+      <div class="col-md-2">
+        <label>Loại</label>
+        <input name="type" class="form-control">
+      </div>
+      <div class="col-md-2">
+        <label>Kanji</label>
+        <input name="kanji" class="form-control">
+      </div>
+      <div class="col-md-2">
+        <label>Đọc Kanji</label>
+        <input name="kanji_reading" class="form-control">
+      </div>
+      <div class="col-12 mt-2">
+        <label>Nghĩa</label>
+        <textarea name="meaning" class="form-control" required></textarea>
+      </div>
+    </div>
+    <div class="text-end mt-3">
+      <button type="submit" class="btn btn-primary">💾 Lưu</button>
+    </div>
+  </form>
+
+  <!-- Bảng danh sách -->
+  <table class="table table-bordered table-striped shadow-sm">
+    <thead class="table-primary text-center">
+      <tr>
+        <th>ID</th>
+        <th>Bài học</th>
+        <th>Từ</th>
+        <th>Romaji</th>
+        <th>Loại</th>
+        <th>Kanji</th>
+        <th>Đọc Kanji</th>
+        <th>Nghĩa</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% vocabularies.forEach(v => { %>
+        <tr>
+          <td><%= v.id %></td>
+          <td><%= v.lesson_name || 'Không rõ' %></td>
+          <td><%= v.word %></td>
+          <td><%= v.romaji %></td>
+          <td><%= v.type %></td>
+          <td><%= v.kanji %></td>
+          <td><%= v.kanji_reading %></td>
+          <td><%= v.meaning %></td>
+          <td class="text-center">
+            <form action="/admin/vocabulary/delete/<%= v.id %>" method="POST" style="display:inline">
+              <button class="btn btn-danger btn-sm" onclick="return confirm('Xóa từ này?')">🗑</button>
+            </form>
+<button 
+  class="btn btn-warning btn-sm edit-btn"
+  data-id="<%= v.id %>"
+  data-word="<%- v.word %>"
+  data-romaji="<%- v.romaji %>"
+  data-type="<%- v.type %>"
+  data-meaning="<%- v.meaning %>"
+  data-kanji="<%- v.kanji %>"
+  data-kanji_reading="<%- v.kanji_reading %>"
+  data-lesson_name="<%- v.lesson_name %>"
+>
+  ✏️
+</button>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal chỉnh sửa -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="editForm" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title">✏️ Sửa từ vựng</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body row g-2 p-3">
+          <div class="col-md-2">
+            <label>Bài học</label>
+            <select name="lesson" class="form-select" id="editLesson">
+              <% lessons.forEach(l => { %>
+                <option value="<%= l.lesson %>"><%= l.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="col-md-2"><label>Từ</label><input id="editWord" name="word" class="form-control"></div>
+          <div class="col-md-2"><label>Romaji</label><input id="editRomaji" name="romaji" class="form-control"></div>
+          <div class="col-md-2"><label>Loại</label><input id="editType" name="type" class="form-control"></div>
+          <div class="col-md-2"><label>Kanji</label><input id="editKanji" name="kanji" class="form-control"></div>
+          <div class="col-md-2"><label>Đọc Kanji</label><input id="editKanjiReading" name="kanji_reading" class="form-control"></div>
+          <div class="col-12 mt-2"><label>Nghĩa</label><textarea id="editMeaning" name="meaning" class="form-control"></textarea></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-success">💾 Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function openEditModal(id, word, romaji, type, meaning, kanji, kanji_reading, lessonName) {
+  document.getElementById('editWord').value = word;
+  document.getElementById('editRomaji').value = romaji;
+  document.getElementById('editType').value = type;
+  document.getElementById('editMeaning').value = meaning;
+  document.getElementById('editKanji').value = kanji;
+  document.getElementById('editKanjiReading').value = kanji_reading;
+  document.getElementById('editForm').action = '/admin/vocabulary/edit/' + id;
+  new bootstrap.Modal(document.getElementById('editModal')).show();
+}
+document.querySelectorAll('.edit-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const id = this.dataset.id;
+    const word = this.dataset.word;
+    const romaji = this.dataset.romaji;
+    const type = this.dataset.type;
+    const meaning = this.dataset.meaning;
+    const kanji = this.dataset.kanji;
+    const kanji_reading = this.dataset.kanji_reading;
+    const lesson_name = this.dataset.lesson_name;
+
+    openEditModal(id, word, romaji, type, meaning, kanji, kanji_reading, lesson_name);
+  });
+});
+</script>
+</body>
+</html>

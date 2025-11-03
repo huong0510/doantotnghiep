@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <h2 class="text-center text-warning fw-bold mb-4">✏️ Sửa thông tin người dùng</h2>
+
+  <form action="/admin/users/edit/<%= user.id %>" method="POST" class="shadow p-4 bg-white rounded">
+    <div class="mb-3">
+      <label class="form-label fw-bold">Tên đăng nhập</label>
+      <input type="text" class="form-control" value="<%= user.username %>" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Họ và tên</label>
+      <input type="text" name="fullname" value="<%= user.fullname %>" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Số điện thoại</label>
+      <input type="text" name="phone" value="<%= user.phone %>" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Email</label>
+      <input type="email" name="email" value="<%= user.email %>" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-bold">Vai trò</label>
+      <select name="role" class="form-select">
+        <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+        <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+      </select>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-warning px-4 fw-bold">💾 Cập nhật</button>
+      <a href="/admin/users" class="btn btn-secondary px-4">⬅ Quay lại</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

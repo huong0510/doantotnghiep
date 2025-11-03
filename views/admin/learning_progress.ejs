@@ -1,0 +1,55 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="container mt-5">
+  <h1 class="text-center mb-4 text-success"><%= title %></h1>
+
+  <!-- Bộ lọc cấp độ -->
+  <form method="get" action="/admin/progress" class="text-center mb-4">
+    <label for="level" class="fw-bold me-2">Chọn cấp độ:</label>
+    <select name="level" id="level" class="form-select d-inline-block w-auto">
+      <option value="">Tất cả</option>
+      <option value="N5" <%= selectedLevel === "N5" ? "selected" : "" %>>N5</option>
+      <option value="N4" <%= selectedLevel === "N4" ? "selected" : "" %>>N4</option>
+      <option value="N3" <%= selectedLevel === "N3" ? "selected" : "" %>>N3</option>
+    </select>
+    <button type="submit" class="btn btn-danger ms-2">Lọc</button>
+  </form>
+
+  <!-- Bảng tiến độ -->
+  <table class="table table-hover shadow-sm">
+    <thead class="table-danger">
+      <tr>
+        <th>#</th>
+        <th>Tên người học</th>
+        <th>Trình độ</th>
+        <th>Hoàn thành</th>
+        <th>Tổng bài</th>
+        <th>Tiến độ (%)</th>
+        <th>Cập nhật gần nhất</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (progress.length === 0) { %>
+        <tr>
+          <td colspan="7" class="text-center">Không có dữ liệu tiến độ nào.</td>
+        </tr>
+      <% } else { %>
+        <% progress.forEach((p, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= p.student_name %></td>
+            <td><%= p.level %></td>
+            <td><%= p.completed_lessons %></td>
+            <td><%= p.total_lessons %></td>
+            <td><%= p.progress_percent %> %</td>
+            <td><%= p.last_update ? new Date(p.last_update).toLocaleString('vi-VN') : "Chưa cập nhật" %></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+
+  <div class="text-center mt-4">
+    <a href="/admin" class="btn btn-outline-danger">⬅ Quay lại trang Admin</a>
+  </div>
+</div>

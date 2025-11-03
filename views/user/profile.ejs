@@ -1,0 +1,67 @@
+<%- include('../partials/header', { title: 'Chỉnh sửa thông tin cá nhân' }) %>
+
+<div class="container mt-5">
+  <div class="card shadow border-0 rounded-4">
+    <div class="card-body p-4">
+      <h2 class="mb-4 text-primary">✏️ Chỉnh sửa thông tin cá nhân</h2>
+
+      <form action="/user/profile" method="POST" enctype="multipart/form-data">
+        <div class="text-center mb-4">
+          <img 
+            src="<%= user.avatar || '/images/default-avatar.png' %>" 
+            alt="Avatar" 
+            class="rounded-circle shadow-sm"
+            style="width: 120px; height: 120px; object-fit: cover;"
+          >
+          <div class="mt-2">
+            <input type="file" name="avatar" accept="image/*" class="form-control form-control-sm w-50 mx-auto">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="username" class="form-label">Tên đăng nhập</label>
+          <input type="text" id="username" name="username" class="form-control" value="<%= user.username %>" readonly>
+        </div>
+
+        <div class="mb-3">
+          <label for="fullname" class="form-label">Họ và tên</label>
+          <input type="text" id="fullname" name="fullname" class="form-control" value="<%= user.fullname || '' %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" name="email" class="form-control" value="<%= user.email || '' %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Số điện thoại</label>
+          <input type="text" id="phone" name="phone" class="form-control" value="<%= user.phone || '' %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="address" class="form-label">Địa chỉ</label>
+          <input type="text" id="address" name="address" class="form-control" value="<%= user.address || '' %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="bio" class="form-label">Giới thiệu</label>
+          <textarea id="bio" name="bio" class="form-control" rows="3"><%= user.bio || '' %></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Mật khẩu mới (nếu muốn đổi)</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Để trống nếu không đổi">
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <a href="/user/profile" class="btn btn-secondary">⬅️ Quay lại</a>
+          <button type="submit" class="btn btn-success fw-bold">💾 Lưu</button>
+        </div>
+      </form>
+
+      <% if (message) { %>
+        <div class="alert alert-info mt-3"><%= message %></div>
+      <% } %>
+    </div>
+  </div>
+</div>

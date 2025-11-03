@@ -1,0 +1,35 @@
+<%- include('../partials/header', { title: 'Sửa Điểm Game' }) %>
+
+<div class="container py-5">
+  <h2 class="text-center mb-4">✏️ Sửa Điểm Game</h2>
+  <form method="POST" action="/admin/games/edit/<%= game.id %>">
+    <div class="mb-3">
+      <label class="form-label">Người chơi</label>
+      <input type="text" class="form-control" value="<%= game.username %>" disabled>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Điểm</label>
+      <input type="number" class="form-control" name="score" value="<%= game.score %>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Đúng</label>
+      <input type="number" class="form-control" name="correct_answers" value="<%= game.correct_answers %>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Sai</label>
+      <input type="number" class="form-control" name="wrong_answers" value="<%= game.wrong_answers %>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Combo cao nhất</label>
+      <input type="number" class="form-control" name="max_combo" value="<%= game.max_combo %>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Cấp độ</label>
+      <input type="text" class="form-control" name="level" value="<%= game.level %>" required>
+    </div>
+    <button type="submit" class="btn btn-primary">💾 Lưu</button>
+    <a href="/admin/games" class="btn btn-secondary ms-2">❌ Hủy</a>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

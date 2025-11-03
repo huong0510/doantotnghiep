@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h2 class="text-center fw-bold mb-4">🏆 BẢNG XẾP HẠNG</h2>
+    <table class="table table-striped table-bordered shadow-sm">
+      <thead class="table-danger text-center">
+        <tr>
+          <th>Hạng</th>
+          <th>Người chơi</th>
+          <th>Điểm cao nhất</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% ranking.forEach((item, index) => { %>
+          <tr class="text-center">
+            <td><%= index + 1 %></td>
+            <td><%= item.player_name %></td>
+            <td><%= item.best_score %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
